@@ -1,0 +1,6 @@
+items	price	site	market
+orange	3.45	Kuching	TRUE
+apple	7.12	Kota Samarahan 	FALSE
+pineapple	12.32	Kota Samarahan	TRUE
+mango	5	Kuching	FALSE
+banana	7	Kuching	FALSE
