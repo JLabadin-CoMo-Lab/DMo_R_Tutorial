@@ -1,0 +1,1251 @@
+<!DOCTYPE html>
+
+<html>
+
+<head>
+
+<meta charset="utf-8" />
+<meta name="generator" content="pandoc" />
+<meta http-equiv="X-UA-Compatible" content="IE=EDGE" />
+
+
+
+
+<title>Fundamentals of R</title>
+
+<script src="site_libs/jquery-1.11.3/jquery.min.js"></script>
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<link href="site_libs/bootstrap-3.3.5/css/cosmo.min.css" rel="stylesheet" />
+<script src="site_libs/bootstrap-3.3.5/js/bootstrap.min.js"></script>
+<script src="site_libs/bootstrap-3.3.5/shim/html5shiv.min.js"></script>
+<script src="site_libs/bootstrap-3.3.5/shim/respond.min.js"></script>
+<style>h1 {font-size: 34px;}
+       h1.title {font-size: 38px;}
+       h2 {font-size: 30px;}
+       h3 {font-size: 24px;}
+       h4 {font-size: 18px;}
+       h5 {font-size: 16px;}
+       h6 {font-size: 12px;}
+       code {color: inherit; background-color: rgba(0, 0, 0, 0.04);}
+       pre:not([class]) { background-color: white }</style>
+<script src="site_libs/navigation-1.1/tabsets.js"></script>
+<link href="site_libs/highlightjs-9.12.0/textmate.css" rel="stylesheet" />
+<script src="site_libs/highlightjs-9.12.0/highlight.js"></script>
+
+<style type="text/css">
+  code{white-space: pre-wrap;}
+  span.smallcaps{font-variant: small-caps;}
+  span.underline{text-decoration: underline;}
+  div.column{display: inline-block; vertical-align: top; width: 50%;}
+  div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+  ul.task-list{list-style: none;}
+    </style>
+
+<style type="text/css">code{white-space: pre;}</style>
+<script type="text/javascript">
+if (window.hljs) {
+  hljs.configure({languages: []});
+  hljs.initHighlightingOnLoad();
+  if (document.readyState && document.readyState === "complete") {
+    window.setTimeout(function() { hljs.initHighlighting(); }, 0);
+  }
+}
+</script>
+
+
+
+
+
+
+
+
+<style type = "text/css">
+.main-container {
+  max-width: 940px;
+  margin-left: auto;
+  margin-right: auto;
+}
+img {
+  max-width:100%;
+}
+.tabbed-pane {
+  padding-top: 12px;
+}
+.html-widget {
+  margin-bottom: 20px;
+}
+button.code-folding-btn:focus {
+  outline: none;
+}
+summary {
+  display: list-item;
+}
+pre code {
+  padding: 0;
+}
+</style>
+
+
+<style type="text/css">
+.dropdown-submenu {
+  position: relative;
+}
+.dropdown-submenu>.dropdown-menu {
+  top: 0;
+  left: 100%;
+  margin-top: -6px;
+  margin-left: -1px;
+  border-radius: 0 6px 6px 6px;
+}
+.dropdown-submenu:hover>.dropdown-menu {
+  display: block;
+}
+.dropdown-submenu>a:after {
+  display: block;
+  content: " ";
+  float: right;
+  width: 0;
+  height: 0;
+  border-color: transparent;
+  border-style: solid;
+  border-width: 5px 0 5px 5px;
+  border-left-color: #cccccc;
+  margin-top: 5px;
+  margin-right: -10px;
+}
+.dropdown-submenu:hover>a:after {
+  border-left-color: #adb5bd;
+}
+.dropdown-submenu.pull-left {
+  float: none;
+}
+.dropdown-submenu.pull-left>.dropdown-menu {
+  left: -100%;
+  margin-left: 10px;
+  border-radius: 6px 0 6px 6px;
+}
+</style>
+
+<script type="text/javascript">
+// manage active state of menu based on current page
+$(document).ready(function () {
+  // active menu anchor
+  href = window.location.pathname
+  href = href.substr(href.lastIndexOf('/') + 1)
+  if (href === "")
+    href = "index.html";
+  var menuAnchor = $('a[href="' + href + '"]');
+
+  // mark it active
+  menuAnchor.tab('show');
+
+  // if it's got a parent navbar menu mark it active as well
+  menuAnchor.closest('li.dropdown').addClass('active');
+
+  // Navbar adjustments
+  var navHeight = $(".navbar").first().height() + 15;
+  var style = document.createElement('style');
+  var pt = "padding-top: " + navHeight + "px; ";
+  var mt = "margin-top: -" + navHeight + "px; ";
+  var css = "";
+  // offset scroll position for anchor links (for fixed navbar)
+  for (var i = 1; i <= 6; i++) {
+    css += ".section h" + i + "{ " + pt + mt + "}\n";
+  }
+  style.innerHTML = "body {" + pt + "padding-bottom: 40px; }\n" + css;
+  document.head.appendChild(style);
+});
+</script>
+
+<!-- tabsets -->
+
+<style type="text/css">
+.tabset-dropdown > .nav-tabs {
+  display: inline-table;
+  max-height: 500px;
+  min-height: 44px;
+  overflow-y: auto;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+}
+
+.tabset-dropdown > .nav-tabs > li.active:before {
+  content: "";
+  font-family: 'Glyphicons Halflings';
+  display: inline-block;
+  padding: 10px;
+  border-right: 1px solid #ddd;
+}
+
+.tabset-dropdown > .nav-tabs.nav-tabs-open > li.active:before {
+  content: "&#xe258;";
+  border: none;
+}
+
+.tabset-dropdown > .nav-tabs.nav-tabs-open:before {
+  content: "";
+  font-family: 'Glyphicons Halflings';
+  display: inline-block;
+  padding: 10px;
+  border-right: 1px solid #ddd;
+}
+
+.tabset-dropdown > .nav-tabs > li.active {
+  display: block;
+}
+
+.tabset-dropdown > .nav-tabs > li > a,
+.tabset-dropdown > .nav-tabs > li > a:focus,
+.tabset-dropdown > .nav-tabs > li > a:hover {
+  border: none;
+  display: inline-block;
+  border-radius: 4px;
+  background-color: transparent;
+}
+
+.tabset-dropdown > .nav-tabs.nav-tabs-open > li {
+  display: block;
+  float: none;
+}
+
+.tabset-dropdown > .nav-tabs > li {
+  display: none;
+}
+</style>
+
+<!-- code folding -->
+
+
+
+
+</head>
+
+<body>
+
+
+<div class="container-fluid main-container">
+
+
+
+
+<div class="navbar navbar-default  navbar-fixed-top" role="navigation">
+  <div class="container">
+    <div class="navbar-header">
+      <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar">
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+      <a class="navbar-brand" href="index.html">DMo Workshop 2021</a>
+    </div>
+    <div id="navbar" class="navbar-collapse collapse">
+      <ul class="nav navbar-nav">
+        <li>
+  <a href="index.html">Home</a>
+</li>
+<li>
+  <a href="Fundamentals_R.html">Fundamental of R</a>
+</li>
+      </ul>
+      <ul class="nav navbar-nav navbar-right">
+        
+      </ul>
+    </div><!--/.nav-collapse -->
+  </div><!--/.container -->
+</div><!--/.navbar -->
+
+<div id="header">
+
+
+
+<h1 class="title toc-ignore">Fundamentals of R</h1>
+
+</div>
+
+<div id="TOC">
+<ul>
+<li><a href="#installation-r-cran-and-r-studio">Installation R CRAN and R Studio</a></li>
+<li><a href="#r-console">R Console</a><ul>
+<li><a href="#integrating-with-r-the-command-line">Integrating with R: the command line</a></li>
+<li><a href="#r-as-a-caculator">R as a caculator</a></li>
+</ul></li>
+<li><a href="#variables">Variables</a><ul>
+<li><a href="#naming-convention">Naming Convention</a></li>
+<li><a href="#exercise-1">Exercise 1</a></li>
+</ul></li>
+<li><a href="#data-types">Data Types</a><ul>
+<li><a href="#vector">Vector</a></li>
+<li><a href="#matrices">Matrices</a></li>
+<li><a href="#list">List</a></li>
+<li><a href="#data-frame">Data Frame</a></li>
+</ul></li>
+<li><a href="#basic-data-processing-in-r">Basic Data processing in R</a><ul>
+<li><a href="#read-data">Read data</a></li>
+<li><a href="#run-statstical-test">Run statstical test</a></li>
+</ul></li>
+</ul>
+</div>
+
+<div id="installation-r-cran-and-r-studio" class="section level2">
+<h2>Installation R CRAN and R Studio</h2>
+<p>Download and install R from <a href="https://cran.r-project.org/">https://cran.r-project.org/</a></p>
+<p>Download and install RStudio from<a href="https://www.rstudio.com/products/rstudio/download/#download">https://www.rstudio.com/</a></p>
+</div>
+<div id="r-console" class="section level2">
+<h2>R Console</h2>
+<div id="integrating-with-r-the-command-line" class="section level3">
+<h3>Integrating with R: the command line</h3>
+<ul>
+<li><strong>&gt;|</strong> indicates R is ready for user to enter an instruction to execute</li>
+<li>Press <strong>Enter</strong> to execute the instruction after key in the instruction</li>
+<li><strong>+</strong> means previous instruction was incomplete and R is waiting for user to complete it</li>
+<li><strong>#</strong> means comment, R will ignore the following instruction, it is a notes for other users.</li>
+</ul>
+</div>
+<div id="r-as-a-caculator" class="section level3">
+<h3>R as a caculator</h3>
+<pre class="r"><code>13+5</code></pre>
+<pre><code>## [1] 18</code></pre>
+<pre class="r"><code>10-9</code></pre>
+<pre><code>## [1] 1</code></pre>
+<pre class="r"><code>10*4</code></pre>
+<pre><code>## [1] 40</code></pre>
+<pre class="r"><code>10/2</code></pre>
+<pre><code>## [1] 5</code></pre>
+<pre class="r"><code>2^3</code></pre>
+<pre><code>## [1] 8</code></pre>
+<pre class="r"><code>18%%5</code></pre>
+<pre><code>## [1] 3</code></pre>
+</div>
+</div>
+<div id="variables" class="section level2">
+<h2>Variables</h2>
+<p>Creating variables: Assign value</p>
+<pre class="r"><code>a &lt;- 100</code></pre>
+<p>Store results of calculations</p>
+<pre class="r"><code>a &lt;- 50*2</code></pre>
+<p>To see the content of the object, type its name at the command line then <strong>Enter</strong></p>
+<pre class="r"><code>a</code></pre>
+<pre><code>## [1] 100</code></pre>
+<p>Use the variable as a shortcut to its value for any sort of instruction</p>
+<pre class="r"><code>b &lt;- 5
+c &lt;- b+a</code></pre>
+<p>List all variable in the environment</p>
+<pre class="r"><code>ls()</code></pre>
+<pre><code>## [1] &quot;a&quot; &quot;b&quot; &quot;c&quot;</code></pre>
+<p>Remove variables</p>
+<pre class="r"><code>rm(c) #remove single variable
+ls()</code></pre>
+<pre><code>## [1] &quot;a&quot; &quot;b&quot;</code></pre>
+<pre class="r"><code>rm(a,b) #remove multiple variables at once
+ls()</code></pre>
+<pre><code>## character(0)</code></pre>
+<div id="naming-convention" class="section level3">
+<h3>Naming Convention</h3>
+<ul>
+<li>cannot start with a numeric value or symbol</li>
+<li>do not contains space</li>
+<li>no special character eg. !, @, $,/, &amp; and etc</li>
+<li>case sensitive</li>
+</ul>
+</div>
+<div id="exercise-1" class="section level3">
+<h3>Exercise 1</h3>
+<div class="line-block">Aaron wishes to take out a loan, today, of <em>P</em>,<strong>RM 1500</strong> at a monthly interest rate <em>i</em>, 1<em>%</em>. The loan is to be paid back in <em>n</em>, <strong>12</strong> monthly installments, <em>R</em> amount each month. Calculate <em>R</em>, the monthly payment for this particular loan.</div>
+<div class="line-block">Equating the present value, <em>P</em> to the future (discounted) value of the <em>n</em> monthly payments <em>R</em>, we have:</div>
+<p><span class="math inline">\(P = R(1+i)^{-1}+R(1+i)^{-2}+R(1+i)^{-3}+\dotsm+R(1+i)^{-n}\)</span><br />
+or<br />
+<span class="math inline">\(P = R(\frac{1-(1+i)^{-n}}{i})\)</span><br />
+Thus,<br />
+<span class="math inline">\(R = P(\frac{i}{1-(1+i)^{-n}})\)</span></p>
+<p>Solution:</p>
+<pre class="r"><code>intRate &lt;- 0.01 #i
+n &lt;- 12
+principal &lt;- 1500 #P
+monthly_payment &lt;- principal*intRate/(1-(1+intRate)^(-n)) #R
+monthly_payment</code></pre>
+<pre><code>## [1] 133.2732</code></pre>
+</div>
+</div>
+<div id="data-types" class="section level2">
+<h2>Data Types</h2>
+<ol style="list-style-type: decimal">
+<li>Vectors</li>
+<li>Matrices</li>
+<li>Lists</li>
+<li>Data Frames</li>
+</ol>
+<div id="vector" class="section level3">
+<h3>Vector</h3>
+<ul>
+<li>Vector is a fundamental data object in R.</li>
+<li>It is a list of elements.</li>
+<li>Any data object in R can be thought of as a vector.</li>
+<li>2 types of vectors: the <strong>atomic vector</strong> and the <strong>lists</strong>.</li>
+<li>Atomic: contains element of same type nature.</li>
+<li>List: can contain element of any type nature and structure.</li>
+</ul>
+<p><strong>Atomic Vectors</strong><br />
+- Use concatenate function <strong>c()</strong> to combine the elements into a vector - It can concatenate 3 different basic types: numerical, character or logical values.</p>
+<pre class="r"><code>##Integer
+int_vec &lt;- c(8,10,2,4,6)
+int_vec</code></pre>
+<pre><code>## [1]  8 10  2  4  6</code></pre>
+<pre class="r"><code>typeof(int_vec)</code></pre>
+<pre><code>## [1] &quot;double&quot;</code></pre>
+<pre class="r"><code>##Floating number
+num_vec &lt;- c(3.23,-5.25,1032.33)
+num_vec</code></pre>
+<pre><code>## [1]    3.23   -5.25 1032.33</code></pre>
+<pre class="r"><code>typeof(num_vec)</code></pre>
+<pre><code>## [1] &quot;double&quot;</code></pre>
+<pre class="r"><code>##Character
+char_vec &lt;- c(&quot;apple&quot;,&quot;banana&quot;,&quot;durian&quot;,&quot;Orange&quot;)
+char_vec</code></pre>
+<pre><code>## [1] &quot;apple&quot;  &quot;banana&quot; &quot;durian&quot; &quot;Orange&quot;</code></pre>
+<pre class="r"><code>typeof(char_vec)</code></pre>
+<pre><code>## [1] &quot;character&quot;</code></pre>
+<pre class="r"><code>##Character
+log_vec &lt;- c(T, F, F, TRUE, T, T, FALSE)
+log_vec</code></pre>
+<pre><code>## [1]  TRUE FALSE FALSE  TRUE  TRUE  TRUE FALSE</code></pre>
+<pre class="r"><code>typeof(log_vec)</code></pre>
+<pre><code>## [1] &quot;logical&quot;</code></pre>
+<p>Direct query the nature of the vectors</p>
+<pre class="r"><code>is.numeric(int_vec)</code></pre>
+<pre><code>## [1] TRUE</code></pre>
+<pre class="r"><code>is.character(int_vec)</code></pre>
+<pre><code>## [1] FALSE</code></pre>
+<pre class="r"><code>is.logical(int_vec)</code></pre>
+<pre><code>## [1] FALSE</code></pre>
+<p>Length of the vector</p>
+<pre class="r"><code>length(int_vec)</code></pre>
+<pre><code>## [1] 5</code></pre>
+<pre class="r"><code>length(char_vec)</code></pre>
+<pre><code>## [1] 4</code></pre>
+<pre class="r"><code>length(log_vec)</code></pre>
+<pre><code>## [1] 7</code></pre>
+<p>Convert from type to type</p>
+<pre class="r"><code>as.character(int_vec)</code></pre>
+<pre><code>## [1] &quot;8&quot;  &quot;10&quot; &quot;2&quot;  &quot;4&quot;  &quot;6&quot;</code></pre>
+<pre class="r"><code>as.logical(int_vec)</code></pre>
+<pre><code>## [1] TRUE TRUE TRUE TRUE TRUE</code></pre>
+<p>Merge vector of different natures, there will be automatic conversion.</p>
+<pre class="r"><code>merged &lt;- c(int_vec,c(num_vec,int_vec))
+merged</code></pre>
+<pre><code>##  [1]    8.00   10.00    2.00    4.00    6.00    3.23   -5.25 1032.33    8.00
+## [10]   10.00    2.00    4.00    6.00</code></pre>
+<pre class="r"><code>c(int_vec,char_vec)</code></pre>
+<pre><code>## [1] &quot;8&quot;      &quot;10&quot;     &quot;2&quot;      &quot;4&quot;      &quot;6&quot;      &quot;apple&quot;  &quot;banana&quot; &quot;durian&quot;
+## [9] &quot;Orange&quot;</code></pre>
+<p><strong>Metadata</strong><br />
+Information about the data</p>
+<pre class="r"><code>attributes(int_vec)</code></pre>
+<pre><code>## NULL</code></pre>
+<pre class="r"><code>names(int_vec)</code></pre>
+<pre><code>## NULL</code></pre>
+<pre class="r"><code>names(int_vec) &lt;- c(&quot;a&quot;,&quot;b&quot;,&quot;c&quot;,&quot;d&quot;,&quot;e&quot;)
+names(int_vec)</code></pre>
+<pre><code>## [1] &quot;a&quot; &quot;b&quot; &quot;c&quot; &quot;d&quot; &quot;e&quot;</code></pre>
+<pre class="r"><code>attributes(int_vec)</code></pre>
+<pre><code>## $names
+## [1] &quot;a&quot; &quot;b&quot; &quot;c&quot; &quot;d&quot; &quot;e&quot;</code></pre>
+<p>Define the name alternatively</p>
+<pre class="r"><code>int_vec2 &lt;- c(A=3,B=5,C=3,G=8)
+int_vec2</code></pre>
+<pre><code>## A B C G 
+## 3 5 3 8</code></pre>
+<p>Remove the names</p>
+<pre class="r"><code>unname(int_vec2)</code></pre>
+<pre><code>## [1] 3 5 3 8</code></pre>
+<pre class="r"><code>int_vec2</code></pre>
+<pre><code>## A B C G 
+## 3 5 3 8</code></pre>
+<p><strong>Factor</strong><br />
+Factor is qualitative value, and for categorical variables</p>
+<pre class="r"><code>gender &lt;- c(4,5,4,4,4,5,5,4,5,5)
+gender</code></pre>
+<pre><code>##  [1] 4 5 4 4 4 5 5 4 5 5</code></pre>
+<pre class="r"><code>typeof(gender)</code></pre>
+<pre><code>## [1] &quot;double&quot;</code></pre>
+<pre class="r"><code>attributes(gender)</code></pre>
+<pre><code>## NULL</code></pre>
+<pre class="r"><code>gender &lt;- as.factor(gender)
+gender</code></pre>
+<pre><code>##  [1] 4 5 4 4 4 5 5 4 5 5
+## Levels: 4 5</code></pre>
+<pre class="r"><code>attributes(gender)</code></pre>
+<pre><code>## $levels
+## [1] &quot;4&quot; &quot;5&quot;
+## 
+## $class
+## [1] &quot;factor&quot;</code></pre>
+<pre class="r"><code>levels(gender)</code></pre>
+<pre><code>## [1] &quot;4&quot; &quot;5&quot;</code></pre>
+<pre class="r"><code>levels(gender) &lt;- c(&quot;male&quot;,&quot;female&quot;)
+gender</code></pre>
+<pre><code>##  [1] male   female male   male   male   female female male   female female
+## Levels: male female</code></pre>
+<pre class="r"><code>as.numeric(gender)</code></pre>
+<pre><code>##  [1] 1 2 1 1 1 2 2 1 2 2</code></pre>
+<pre class="r"><code>as.character(gender)</code></pre>
+<pre><code>##  [1] &quot;male&quot;   &quot;female&quot; &quot;male&quot;   &quot;male&quot;   &quot;male&quot;   &quot;female&quot; &quot;female&quot; &quot;male&quot;  
+##  [9] &quot;female&quot; &quot;female&quot;</code></pre>
+<p>Define more attributes</p>
+<pre class="r"><code>attributes(int_vec)</code></pre>
+<pre><code>## $names
+## [1] &quot;a&quot; &quot;b&quot; &quot;c&quot; &quot;d&quot; &quot;e&quot;</code></pre>
+<pre class="r"><code>attr(int_vec,&quot;source&quot;) &lt;- &quot;www.unimas.my&quot;
+attributes(int_vec)</code></pre>
+<pre><code>## $names
+## [1] &quot;a&quot; &quot;b&quot; &quot;c&quot; &quot;d&quot; &quot;e&quot;
+## 
+## $source
+## [1] &quot;www.unimas.my&quot;</code></pre>
+<p>Retrieve any specific attribute with the same function</p>
+<pre class="r"><code>attributes(int_vec)</code></pre>
+<pre><code>## $names
+## [1] &quot;a&quot; &quot;b&quot; &quot;c&quot; &quot;d&quot; &quot;e&quot;
+## 
+## $source
+## [1] &quot;www.unimas.my&quot;</code></pre>
+<pre class="r"><code>attr(int_vec,&quot;source&quot;)</code></pre>
+<pre><code>## [1] &quot;www.unimas.my&quot;</code></pre>
+<pre class="r"><code>names(int_vec)</code></pre>
+<pre><code>## [1] &quot;a&quot; &quot;b&quot; &quot;c&quot; &quot;d&quot; &quot;e&quot;</code></pre>
+<pre class="r"><code>attr(int_vec,&quot;name&quot;)</code></pre>
+<pre><code>## [1] &quot;a&quot; &quot;b&quot; &quot;c&quot; &quot;d&quot; &quot;e&quot;</code></pre>
+<p><strong>Retrieving Elements</strong><br />
+By specific the index or list of indexes of the elements</p>
+<pre class="r"><code>int_vec</code></pre>
+<pre><code>##  a  b  c  d  e 
+##  8 10  2  4  6 
+## attr(,&quot;source&quot;)
+## [1] &quot;www.unimas.my&quot;</code></pre>
+<pre class="r"><code>int_vec[2]</code></pre>
+<pre><code>##  b 
+## 10</code></pre>
+<pre class="r"><code>int_vec[c(1,3)]</code></pre>
+<pre><code>## a c 
+## 8 2</code></pre>
+<p>By specify the list of the names of the elements(provided that names are defined)</p>
+<pre class="r"><code>int_vec[c(&quot;a&quot;,&quot;c&quot;)]</code></pre>
+<pre><code>## a c 
+## 8 2</code></pre>
+<p>By specify for each element of the object whether want to select it or not with a logical value</p>
+<pre class="r"><code>int_vec[c(T,F,T,F,F)]</code></pre>
+<pre><code>## a c 
+## 8 2</code></pre>
+<p>Selection Criteria</p>
+<pre class="r"><code>int_vec</code></pre>
+<pre><code>##  a  b  c  d  e 
+##  8 10  2  4  6 
+## attr(,&quot;source&quot;)
+## [1] &quot;www.unimas.my&quot;</code></pre>
+<pre class="r"><code>sel &lt;- int_vec &gt;5
+sel</code></pre>
+<pre><code>##     a     b     c     d     e 
+##  TRUE  TRUE FALSE FALSE  TRUE</code></pre>
+<pre class="r"><code>int_vec[sel]</code></pre>
+<pre><code>##  a  b  e 
+##  8 10  6</code></pre>
+<p>Or can be done ine single line</p>
+<pre class="r"><code>int_vec[int_vec&gt;5]</code></pre>
+<pre><code>##  a  b  e 
+##  8 10  6</code></pre>
+</div>
+<div id="matrices" class="section level3">
+<h3>Matrices</h3>
+<p>Matrix is a vector with dimension attributes by giving number of rows and columns.</p>
+<pre class="r"><code>vec &lt;- c(3,2,5,5,4,7,7,9,7,5,3,1)
+vec</code></pre>
+<pre><code>##  [1] 3 2 5 5 4 7 7 9 7 5 3 1</code></pre>
+<pre class="r"><code>attributes(vec)</code></pre>
+<pre><code>## NULL</code></pre>
+<pre class="r"><code>mat &lt;- matrix(vec,ncol = 4)
+mat</code></pre>
+<pre><code>##      [,1] [,2] [,3] [,4]
+## [1,]    3    5    7    5
+## [2,]    2    4    9    3
+## [3,]    5    7    7    1</code></pre>
+<pre class="r"><code>attributes(mat)</code></pre>
+<pre><code>## $dim
+## [1] 3 4</code></pre>
+<p>Matrix is internally a vector, can access the matrix like vector.</p>
+<pre class="r"><code>typeof(mat)</code></pre>
+<pre><code>## [1] &quot;double&quot;</code></pre>
+<pre class="r"><code>length(mat)</code></pre>
+<pre><code>## [1] 12</code></pre>
+<pre class="r"><code>typeof(vec)</code></pre>
+<pre><code>## [1] &quot;double&quot;</code></pre>
+<pre class="r"><code>length(vec)</code></pre>
+<pre><code>## [1] 12</code></pre>
+<pre class="r"><code>mat[c(1,2,11,12)]</code></pre>
+<pre><code>## [1] 3 2 3 1</code></pre>
+<pre class="r"><code>mat[-c(1,2,11,12)]</code></pre>
+<pre><code>## [1] 5 5 4 7 7 9 7 5</code></pre>
+<pre class="r"><code>mat[mat&lt;4]</code></pre>
+<pre><code>## [1] 3 2 3 1</code></pre>
+<pre class="r"><code>mat[!mat&lt;4]</code></pre>
+<pre><code>## [1] 5 5 4 7 7 9 7 5</code></pre>
+<p>To retrieve the element in 2 dimension of the matrix, we specify the row and column indexes inside the <strong>[]</strong> bracket. If want all elements in the row or column, we leave the space blank.</p>
+<pre class="r"><code>dim(mat)</code></pre>
+<pre><code>## [1] 3 4</code></pre>
+<pre class="r"><code>mat[2,3]</code></pre>
+<pre><code>## [1] 9</code></pre>
+<pre class="r"><code>mat[c(2,3),c(3,4)]</code></pre>
+<pre><code>##      [,1] [,2]
+## [1,]    9    3
+## [2,]    7    1</code></pre>
+<pre class="r"><code>mat[2,1]</code></pre>
+<pre><code>## [1] 2</code></pre>
+<pre class="r"><code>mat[2,]</code></pre>
+<pre><code>## [1] 2 4 9 3</code></pre>
+<pre class="r"><code>mat[,c(3,4)]</code></pre>
+<pre><code>##      [,1] [,2]
+## [1,]    7    5
+## [2,]    9    3
+## [3,]    7    1</code></pre>
+<pre class="r"><code>mat[-2,-3]</code></pre>
+<pre><code>##      [,1] [,2] [,3]
+## [1,]    3    5    5
+## [2,]    5    7    1</code></pre>
+<pre class="r"><code>mat[-c(2,3),-c(3,4)]</code></pre>
+<pre><code>## [1] 3 5</code></pre>
+<pre class="r"><code>mat[-2,]</code></pre>
+<pre><code>##      [,1] [,2] [,3] [,4]
+## [1,]    3    5    7    5
+## [2,]    5    7    7    1</code></pre>
+<pre class="r"><code>mat[,-c(3,4)]</code></pre>
+<pre><code>##      [,1] [,2]
+## [1,]    3    5
+## [2,]    2    4
+## [3,]    5    7</code></pre>
+<p>Define the name for matrix elements</p>
+<pre class="r"><code>mat</code></pre>
+<pre><code>##      [,1] [,2] [,3] [,4]
+## [1,]    3    5    7    5
+## [2,]    2    4    9    3
+## [3,]    5    7    7    1</code></pre>
+<pre class="r"><code>attributes(mat)</code></pre>
+<pre><code>## $dim
+## [1] 3 4</code></pre>
+<pre class="r"><code>rownames(mat) &lt;- c(&quot;A&quot;,&quot;B&quot;,&quot;C&quot;)
+colnames(mat) &lt;- c(&quot;a&quot;,&quot;b&quot;,&quot;c&quot;,&quot;d&quot;)
+mat</code></pre>
+<pre><code>##   a b c d
+## A 3 5 7 5
+## B 2 4 9 3
+## C 5 7 7 1</code></pre>
+<p>Retrieve elements by using defined name</p>
+<pre class="r"><code>mat[&quot;A&quot;,]</code></pre>
+<pre><code>## a b c d 
+## 3 5 7 5</code></pre>
+<pre class="r"><code>mat[&quot;A&quot;,c(&quot;c&quot;,&quot;d&quot;)]</code></pre>
+<pre><code>## c d 
+## 7 5</code></pre>
+</div>
+<div id="list" class="section level3">
+<h3>List</h3>
+<ul>
+<li>List can contain element of various nature and structure (including lists)</li>
+<li>Hierarchical structure (whereas atomic vectors have a flat structure).<br />
+Create a list by using function <strong>list()</strong></li>
+</ul>
+<pre class="r"><code>#Create a list
+my_list &lt;- list(mat,vec,int_vec,num_vec,char_vec,log_vec)
+#return the length of my_list
+length(my_list)</code></pre>
+<pre><code>## [1] 6</code></pre>
+<pre class="r"><code>#return the structure of my_list
+str(my_list)</code></pre>
+<pre><code>## List of 6
+##  $ : num [1:3, 1:4] 3 2 5 5 4 7 7 9 7 5 ...
+##   ..- attr(*, &quot;dimnames&quot;)=List of 2
+##   .. ..$ : chr [1:3] &quot;A&quot; &quot;B&quot; &quot;C&quot;
+##   .. ..$ : chr [1:4] &quot;a&quot; &quot;b&quot; &quot;c&quot; &quot;d&quot;
+##  $ : num [1:12] 3 2 5 5 4 7 7 9 7 5 ...
+##  $ : Named num [1:5] 8 10 2 4 6
+##   ..- attr(*, &quot;names&quot;)= chr [1:5] &quot;a&quot; &quot;b&quot; &quot;c&quot; &quot;d&quot; ...
+##   ..- attr(*, &quot;source&quot;)= chr &quot;www.unimas.my&quot;
+##  $ : num [1:3] 3.23 -5.25 1032.33
+##  $ : chr [1:4] &quot;apple&quot; &quot;banana&quot; &quot;durian&quot; &quot;Orange&quot;
+##  $ : logi [1:7] TRUE FALSE FALSE TRUE TRUE TRUE ...</code></pre>
+<p>Check the name of items in the list</p>
+<pre class="r"><code>names(my_list)</code></pre>
+<pre><code>## NULL</code></pre>
+<pre class="r"><code>names(my_list) &lt;- c(&quot;A&quot;,&quot;B&quot;,&quot;C&quot;,&quot;D&quot;,&quot;E&quot;,&quot;F&quot;)
+str(my_list)</code></pre>
+<pre><code>## List of 6
+##  $ A: num [1:3, 1:4] 3 2 5 5 4 7 7 9 7 5 ...
+##   ..- attr(*, &quot;dimnames&quot;)=List of 2
+##   .. ..$ : chr [1:3] &quot;A&quot; &quot;B&quot; &quot;C&quot;
+##   .. ..$ : chr [1:4] &quot;a&quot; &quot;b&quot; &quot;c&quot; &quot;d&quot;
+##  $ B: num [1:12] 3 2 5 5 4 7 7 9 7 5 ...
+##  $ C: Named num [1:5] 8 10 2 4 6
+##   ..- attr(*, &quot;names&quot;)= chr [1:5] &quot;a&quot; &quot;b&quot; &quot;c&quot; &quot;d&quot; ...
+##   ..- attr(*, &quot;source&quot;)= chr &quot;www.unimas.my&quot;
+##  $ D: num [1:3] 3.23 -5.25 1032.33
+##  $ E: chr [1:4] &quot;apple&quot; &quot;banana&quot; &quot;durian&quot; &quot;Orange&quot;
+##  $ F: logi [1:7] TRUE FALSE FALSE TRUE TRUE TRUE ...</code></pre>
+<p>Names can also be defined at creation time</p>
+<pre class="r"><code>my_list2 &lt;- list(the_mat=mat,the_vec=vec)
+my_list2</code></pre>
+<pre><code>## $the_mat
+##   a b c d
+## A 3 5 7 5
+## B 2 4 9 3
+## C 5 7 7 1
+## 
+## $the_vec
+##  [1] 3 2 5 5 4 7 7 9 7 5 3 1</code></pre>
+<p>Elements in the list can be accessed in the same way as for the atomic vectors</p>
+<pre class="r"><code>#by the index
+my_list[2]</code></pre>
+<pre><code>## $B
+##  [1] 3 2 5 5 4 7 7 9 7 5 3 1</code></pre>
+<pre class="r"><code>#by using the names
+my_list[c(&quot;A&quot;,&quot;C&quot;)]</code></pre>
+<pre><code>## $A
+##   a b c d
+## A 3 5 7 5
+## B 2 4 9 3
+## C 5 7 7 1
+## 
+## $C
+##  a  b  c  d  e 
+##  8 10  2  4  6 
+## attr(,&quot;source&quot;)
+## [1] &quot;www.unimas.my&quot;</code></pre>
+<pre class="r"><code>#Remove the elements
+my_list[-c(4,5)]</code></pre>
+<pre><code>## $A
+##   a b c d
+## A 3 5 7 5
+## B 2 4 9 3
+## C 5 7 7 1
+## 
+## $B
+##  [1] 3 2 5 5 4 7 7 9 7 5 3 1
+## 
+## $C
+##  a  b  c  d  e 
+##  8 10  2  4  6 
+## attr(,&quot;source&quot;)
+## [1] &quot;www.unimas.my&quot;
+## 
+## $F
+## [1]  TRUE FALSE FALSE  TRUE  TRUE  TRUE FALSE</code></pre>
+<pre class="r"><code>#by using logical values
+my_list[c(T,T,F,T,F,F)]</code></pre>
+<pre><code>## $A
+##   a b c d
+## A 3 5 7 5
+## B 2 4 9 3
+## C 5 7 7 1
+## 
+## $B
+##  [1] 3 2 5 5 4 7 7 9 7 5 3 1
+## 
+## $D
+## [1]    3.23   -5.25 1032.33</code></pre>
+<p>Using single <strong>[]</strong> matains the list structure</p>
+<pre class="r"><code>my_list[2]</code></pre>
+<pre><code>## $B
+##  [1] 3 2 5 5 4 7 7 9 7 5 3 1</code></pre>
+<p>To remove it, use double <strong>[[]]</strong> or dollar sign (<strong>$</strong>)</p>
+<pre class="r"><code>my_list[[2]]</code></pre>
+<pre><code>##  [1] 3 2 5 5 4 7 7 9 7 5 3 1</code></pre>
+<pre class="r"><code>my_list$B</code></pre>
+<pre><code>##  [1] 3 2 5 5 4 7 7 9 7 5 3 1</code></pre>
+<p>New element can be added to a list this way</p>
+<pre class="r"><code>c(my_list2,c(3,4))</code></pre>
+<pre><code>## $the_mat
+##   a b c d
+## A 3 5 7 5
+## B 2 4 9 3
+## C 5 7 7 1
+## 
+## $the_vec
+##  [1] 3 2 5 5 4 7 7 9 7 5 3 1
+## 
+## [[3]]
+## [1] 3
+## 
+## [[4]]
+## [1] 4</code></pre>
+<p>Convert the list into a vector by remove the list structure</p>
+<pre class="r"><code>unlist(my_list2)</code></pre>
+<pre><code>##  the_mat1  the_mat2  the_mat3  the_mat4  the_mat5  the_mat6  the_mat7  the_mat8 
+##         3         2         5         5         4         7         7         9 
+##  the_mat9 the_mat10 the_mat11 the_mat12  the_vec1  the_vec2  the_vec3  the_vec4 
+##         7         5         3         1         3         2         5         5 
+##  the_vec5  the_vec6  the_vec7  the_vec8  the_vec9 the_vec10 the_vec11 the_vec12 
+##         4         7         7         9         7         5         3         1</code></pre>
+</div>
+<div id="data-frame" class="section level3">
+<h3>Data Frame</h3>
+<ul>
+<li>Data Frames is a list store several atomic vector of the same length but not necessarily of the same nature.<br />
+Define data frame by using function <strong>data.frame()</strong></li>
+</ul>
+<pre class="r"><code>items &lt;- c(&quot;orange&quot;, &quot;apple&quot;, &quot;pineapple&quot;, &quot;mango&quot;, &quot;banana&quot;)
+price &lt;- c(3.45,7.12,12.32,5,7)
+site &lt;- c(&quot;Kuching&quot;, &quot;Kota Samarahan &quot;,&quot;Kota Samarahan&quot;,&quot;Kuching&quot;,&quot;Kuching&quot;)
+market &lt;- c(T,F,T,F,F)
+groceries &lt;- data.frame(items,price,site,market)
+groceries</code></pre>
+<pre><code>##       items price            site market
+## 1    orange  3.45         Kuching   TRUE
+## 2     apple  7.12 Kota Samarahan   FALSE
+## 3 pineapple 12.32  Kota Samarahan   TRUE
+## 4     mango  5.00         Kuching  FALSE
+## 5    banana  7.00         Kuching  FALSE</code></pre>
+<p>Check the data structure</p>
+<pre class="r"><code>str(groceries)</code></pre>
+<pre><code>## &#39;data.frame&#39;:    5 obs. of  4 variables:
+##  $ items : Factor w/ 5 levels &quot;apple&quot;,&quot;banana&quot;,..: 4 1 5 3 2
+##  $ price : num  3.45 7.12 12.32 5 7
+##  $ site  : Factor w/ 3 levels &quot;Kota Samarahan&quot;,..: 3 2 1 3 3
+##  $ market: logi  TRUE FALSE TRUE FALSE FALSE</code></pre>
+<p>Return the summary of each data</p>
+<pre class="r"><code>summary(groceries)</code></pre>
+<pre><code>##        items       price                     site     market       
+##  apple    :1   Min.   : 3.450   Kota Samarahan :1   Mode :logical  
+##  banana   :1   1st Qu.: 5.000   Kota Samarahan :1   FALSE:3        
+##  mango    :1   Median : 7.000   Kuching        :3   TRUE :2        
+##  orange   :1   Mean   : 6.978                                      
+##  pineapple:1   3rd Qu.: 7.120                                      
+##                Max.   :12.320</code></pre>
+<p>The row are observations and the columns are variables.The character variables are by default considered as factors. Since they are lists, their elements can be accessed in the way as for lists.</p>
+<pre class="r"><code>names(groceries)</code></pre>
+<pre><code>## [1] &quot;items&quot;  &quot;price&quot;  &quot;site&quot;   &quot;market&quot;</code></pre>
+<pre class="r"><code>groceries[1]</code></pre>
+<pre><code>##       items
+## 1    orange
+## 2     apple
+## 3 pineapple
+## 4     mango
+## 5    banana</code></pre>
+<pre class="r"><code>groceries[-c(2,4)]</code></pre>
+<pre><code>##       items            site
+## 1    orange         Kuching
+## 2     apple Kota Samarahan 
+## 3 pineapple  Kota Samarahan
+## 4     mango         Kuching
+## 5    banana         Kuching</code></pre>
+<pre class="r"><code>groceries[&quot;market&quot;]</code></pre>
+<pre><code>##   market
+## 1   TRUE
+## 2  FALSE
+## 3   TRUE
+## 4  FALSE
+## 5  FALSE</code></pre>
+<pre class="r"><code>groceries[c(T,F,T,F)]</code></pre>
+<pre><code>##       items            site
+## 1    orange         Kuching
+## 2     apple Kota Samarahan 
+## 3 pineapple  Kota Samarahan
+## 4     mango         Kuching
+## 5    banana         Kuching</code></pre>
+<pre class="r"><code>groceries$items</code></pre>
+<pre><code>## [1] orange    apple     pineapple mango     banana   
+## Levels: apple banana mango orange pineapple</code></pre>
+<p>Data frame is a 2 x 2 structure, therefore can accessed elements the same way for matrices.</p>
+<pre class="r"><code>groceries[1:2,3:4]</code></pre>
+<pre><code>##              site market
+## 1         Kuching   TRUE
+## 2 Kota Samarahan   FALSE</code></pre>
+<pre class="r"><code>groceries[,-2]</code></pre>
+<pre><code>##       items            site market
+## 1    orange         Kuching   TRUE
+## 2     apple Kota Samarahan   FALSE
+## 3 pineapple  Kota Samarahan   TRUE
+## 4     mango         Kuching  FALSE
+## 5    banana         Kuching  FALSE</code></pre>
+<pre class="r"><code>groceries[-1,]</code></pre>
+<pre><code>##       items price            site market
+## 2     apple  7.12 Kota Samarahan   FALSE
+## 3 pineapple 12.32  Kota Samarahan   TRUE
+## 4     mango  5.00         Kuching  FALSE
+## 5    banana  7.00         Kuching  FALSE</code></pre>
+<pre class="r"><code>groceries[c(T,T,F,F,F),c(T,F,T,F)]</code></pre>
+<pre><code>##    items            site
+## 1 orange         Kuching
+## 2  apple Kota Samarahan</code></pre>
+<pre class="r"><code>groceries[,&quot;site&quot;]</code></pre>
+<pre><code>## [1] Kuching         Kota Samarahan  Kota Samarahan  Kuching        
+## [5] Kuching        
+## Levels: Kota Samarahan Kota Samarahan  Kuching</code></pre>
+<p>Managing the data frame</p>
+<pre class="r"><code>#return the item that can find in the market
+groceries[groceries$market,]</code></pre>
+<pre><code>##       items price           site market
+## 1    orange  3.45        Kuching   TRUE
+## 3 pineapple 12.32 Kota Samarahan   TRUE</code></pre>
+<pre class="r"><code>#sorting the data frame according to price
+groceries[order(groceries$price),]</code></pre>
+<pre><code>##       items price            site market
+## 1    orange  3.45         Kuching   TRUE
+## 4     mango  5.00         Kuching  FALSE
+## 5    banana  7.00         Kuching  FALSE
+## 2     apple  7.12 Kota Samarahan   FALSE
+## 3 pineapple 12.32  Kota Samarahan   TRUE</code></pre>
+<p>Retrieving elements from data frame with criteria</p>
+<pre class="r"><code>#return the most expensive item and where is it?
+groceries[groceries$price == max(groceries$price),c(&quot;items&quot;,&quot;site&quot;)]</code></pre>
+<pre><code>##       items           site
+## 3 pineapple Kota Samarahan</code></pre>
+</div>
+</div>
+<div id="basic-data-processing-in-r" class="section level2">
+<h2>Basic Data processing in R</h2>
+<p>Data sets are most of the time in excel spreadsheet of equivalent or in a database system. R can access both database systems and excel files. Basic way to read data from a simple text files by copy and paste the content of excel file sheet to a simple text file.</p>
+<div id="read-data" class="section level3">
+<h3>Read data</h3>
+<p>Data can be load into R by using function <strong>read.table()</strong>,<strong>read.delim()</strong></p>
+<pre class="r"><code>read.table(&quot;gr2.txt&quot;,header=T,sep=&#39;\t&#39;)</code></pre>
+<pre><code>##       items price              site market
+## 1    orange  3.45           Kuching   TRUE
+## 2     apple  7.12 KotaÂ SamarahanÂ   FALSE
+## 3 pineapple 12.32   KotaÂ Samarahan   TRUE
+## 4     mango  5.00           Kuching  FALSE
+## 5    banana  7.00           Kuching  FALSE</code></pre>
+<pre class="r"><code>#read.table(file.choose(),header = T,sep = &#39;\t&#39;)
+read.delim(&quot;gr2.txt&quot;)</code></pre>
+<pre><code>##       items price              site market
+## 1    orange  3.45           Kuching   TRUE
+## 2     apple  7.12 KotaÂ SamarahanÂ   FALSE
+## 3 pineapple 12.32   KotaÂ Samarahan   TRUE
+## 4     mango  5.00           Kuching  FALSE
+## 5    banana  7.00           Kuching  FALSE</code></pre>
+</div>
+<div id="run-statstical-test" class="section level3">
+<h3>Run statstical test</h3>
+<p>Putting data into good format</p>
+<pre class="r"><code>data1 &lt;- read.csv(&#39;datasets/dataset1.csv&#39;,head=TRUE,sep =&#39;,&#39;)
+#data1 &lt;- read.table(file.choose(),header = T,sep = &#39;,&#39;)
+names(data1)</code></pre>
+<pre><code>##  [1] &quot;Grade&quot;             &quot;Year&quot;              &quot;Demographic&quot;      
+##  [4] &quot;Number.Tested&quot;     &quot;Mean.Scale.Score&quot;  &quot;Num.Level.1&quot;      
+##  [7] &quot;Pct.Level.1&quot;       &quot;Num.Level.2&quot;       &quot;Pct.Level.2&quot;      
+## [10] &quot;Num.Level.3&quot;       &quot;Pct.Level.3&quot;       &quot;Num.Level.4&quot;      
+## [13] &quot;Pct.Level.4&quot;       &quot;Num.Level.3.and.4&quot; &quot;Pct.Level.3.and.4&quot;</code></pre>
+<pre class="r"><code>head(data1)</code></pre>
+<pre><code>##   Grade Year Demographic Number.Tested Mean.Scale.Score Num.Level.1 Pct.Level.1
+## 1     3 2006       Asian          7661              684         215         2.8
+## 2     3 2007       Asian          9392              675         463         4.9
+## 3     3 2008       Asian          9600              674         304         3.2
+## 4     3 2009       Asian         10648              680         223         2.1
+## 5     3 2010       Asian         10016              673         832         8.3
+## 6     3 2011       Asian         10630              668         851         8.0
+##   Num.Level.2 Pct.Level.2 Num.Level.3 Pct.Level.3 Num.Level.4 Pct.Level.4
+## 1         980        12.8        5607        73.2         859        11.2
+## 2        1775        18.9        6031        64.2        1123        12.0
+## 3        1953        20.3        6064        63.2        1279        13.3
+## 4        1288        12.1        7505        70.5        1632        15.3
+## 5        2964        29.6        4161        41.5        2059        20.6
+## 6        2665        25.1        6420        60.4         694         6.5
+##   Num.Level.3.and.4 Pct.Level.3.and.4
+## 1              6466              84.4
+## 2              7154              76.2
+## 3              7343              76.5
+## 4              9137              85.8
+## 5              6220              62.1
+## 6              7114              66.9</code></pre>
+<pre class="r"><code>tail(data1)</code></pre>
+<pre><code>##          Grade Year Demographic Number.Tested Mean.Scale.Score Num.Level.1
+## 191 All Grades 2007       White         59725              671        2269
+## 192 All Grades 2008       White         59135              672        1470
+## 193 All Grades 2009       White         59798              676         754
+## 194 All Grades 2010       White         60152              675        3880
+## 195 All Grades 2011       White         61336              671        3468
+## 196 All Grades 2012       White         63359              673        3467
+##     Pct.Level.1 Num.Level.2 Pct.Level.2 Num.Level.3 Pct.Level.3 Num.Level.4
+## 191         3.8       13703        22.9       36818        61.6        6935
+## 192         2.5       11903        20.1       39787        67.3        5975
+## 193         1.3        8336        13.9       42712        71.4        7996
+## 194         6.5       17720        29.5       29303        48.7        9249
+## 195         5.7       17368        28.3       36344        59.3        4156
+## 196         5.5       16102        25.4       38790        61.2        5000
+##     Pct.Level.4 Num.Level.3.and.4 Pct.Level.3.and.4
+## 191        11.6             43753              73.3
+## 192        10.1             45762              77.4
+## 193        13.4             50708              84.8
+## 194        15.4             38552              64.1
+## 195         6.8             40500              66.0
+## 196         7.9             43790              69.1</code></pre>
+<pre class="r"><code>str(data1)</code></pre>
+<pre><code>## &#39;data.frame&#39;:    196 obs. of  15 variables:
+##  $ Grade            : Factor w/ 7 levels &quot;3&quot;,&quot;4&quot;,&quot;5&quot;,&quot;6&quot;,..: 1 1 1 1 1 1 1 2 2 2 ...
+##  $ Year             : int  2006 2007 2008 2009 2010 2011 2012 2006 2007 2008 ...
+##  $ Demographic      : Factor w/ 4 levels &quot;Asian&quot;,&quot;Black&quot;,..: 1 1 1 1 1 1 1 1 1 1 ...
+##  $ Number.Tested    : int  7661 9392 9600 10648 10016 10630 10995 8510 9489 9540 ...
+##  $ Mean.Scale.Score : int  684 675 674 680 673 668 671 678 673 676 ...
+##  $ Num.Level.1      : int  215 463 304 223 832 851 858 278 435 451 ...
+##  $ Pct.Level.1      : num  2.8 4.9 3.2 2.1 8.3 8 7.8 3.3 4.6 4.7 ...
+##  $ Num.Level.2      : int  980 1775 1953 1288 2964 2665 2677 1326 1800 1403 ...
+##  $ Pct.Level.2      : num  12.8 18.9 20.3 12.1 29.6 25.1 24.3 15.6 19 14.7 ...
+##  $ Num.Level.3      : int  5607 6031 6064 7505 4161 6420 6169 5776 6188 6461 ...
+##  $ Pct.Level.3      : num  73.2 64.2 63.2 70.5 41.5 60.4 56.1 67.9 65.2 67.7 ...
+##  $ Num.Level.4      : int  859 1123 1279 1632 2059 694 1291 1130 1066 1225 ...
+##  $ Pct.Level.4      : num  11.2 12 13.3 15.3 20.6 6.5 11.7 13.3 11.2 12.8 ...
+##  $ Num.Level.3.and.4: int  6466 7154 7343 9137 6220 7114 7460 6906 7254 7686 ...
+##  $ Pct.Level.3.and.4: num  84.4 76.2 76.5 85.8 62.1 66.9 67.8 81.2 76.4 80.6 ...</code></pre>
+<p><strong>Introduction of data</strong><br />
+English Language Arts (ELA) Test Results from year 2006 until 2012 in New York City. The data are disaggregated by student ethnicity. With the adoption of the New York Common Core Learning Standards (CCLS) in ELA/ Literacy and Mathematics, students in grades 3 until 8 required to take ELA test each spring. Educators use ELA test result to assign students to appropriate classes and identify areas where the student needs extra help or more challenging material. At the same time, teachers and principals use the results to make decisions about the promotion and summer school. Nevertheless, educators also examine school wide results to identify broad instructional areas that require improvement. Different level will be assigned to student based on their marks (Test Result, 2012). There are Level 1, Level 2, Level 3 and Level 4. Level 1 indicates lowest proficiency level or known as well below proficient while Level 4 shows advanced level.</p>
+<p>Summarize the dataset in efficient way</p>
+<pre class="r"><code>table(data1$Grade,data1$Demographic)</code></pre>
+<pre><code>##             
+##              Asian Black Hispanic White
+##   3              7     7        7     7
+##   4              7     7        7     7
+##   5              7     7        7     7
+##   6              7     7        7     7
+##   7              7     7        7     7
+##   8              7     7        7     7
+##   All Grades     7     7        7     7</code></pre>
+<p><strong>Questions</strong><br />
+1. Is there any relationship between the numbers of student who take ELA and the mean scale score?<br />
+2. Which ethnic perform better in ELA test in mean scale score?<br />
+Basic statistic test</p>
+<pre class="r"><code>summary(data1)</code></pre>
+<pre><code>##         Grade         Year        Demographic Number.Tested    Mean.Scale.Score
+##  3         :28   Min.   :2006   Asian   :49   Min.   :  7661   Min.   :630.0   
+##  4         :28   1st Qu.:2007   Black   :49   1st Qu.:  9971   1st Qu.:654.0   
+##  5         :28   Median :2009   Hispanic:49   Median : 20771   Median :663.0   
+##  6         :28   Mean   :2009   White   :49   Mean   : 29550   Mean   :661.8   
+##  7         :28   3rd Qu.:2011                 3rd Qu.: 27521   3rd Qu.:672.0   
+##  8         :28   Max.   :2012                 Max.   :169531   Max.   :686.0   
+##  All Grades:28                                                                 
+##   Num.Level.1       Pct.Level.1      Num.Level.2     Pct.Level.2   
+##  Min.   :   14.0   Min.   : 0.100   Min.   :  980   Min.   :11.40  
+##  1st Qu.:  479.2   1st Qu.: 3.800   1st Qu.: 2608   1st Qu.:24.30  
+##  Median : 1014.5   Median : 6.900   Median : 8032   Median :32.30  
+##  Mean   : 2962.8   Mean   : 8.411   Mean   :11346   Mean   :33.84  
+##  3rd Qu.: 3633.0   3rd Qu.:12.975   3rd Qu.:12564   3rd Qu.:44.85  
+##  Max.   :31151.0   Max.   :23.000   Max.   :81649   Max.   :60.80  
+##                                                                    
+##   Num.Level.3     Pct.Level.3     Num.Level.4      Pct.Level.4    
+##  Min.   : 4161   Min.   :25.50   Min.   :  68.0   Min.   : 0.300  
+##  1st Qu.: 6169   1st Qu.:38.65   1st Qu.: 463.8   1st Qu.: 2.000  
+##  Median : 7300   Median :53.90   Median : 858.5   Median : 4.600  
+##  Mean   :13823   Mean   :51.11   Mean   :1418.0   Mean   : 6.639  
+##  3rd Qu.:11731   3rd Qu.:61.77   3rd Qu.:1380.2   3rd Qu.:10.400  
+##  Max.   :97303   Max.   :77.10   Max.   :9474.0   Max.   :25.000  
+##                                                                   
+##  Num.Level.3.and.4 Pct.Level.3.and.4
+##  Min.   :  5167    Min.   :25.80    
+##  1st Qu.:  7154    1st Qu.:41.40    
+##  Median :  8372    Median :62.20    
+##  Mean   : 15241    Mean   :57.75    
+##  3rd Qu.: 12188    3rd Qu.:71.22    
+##  Max.   :102358    Max.   :88.10    
+## </code></pre>
+<pre class="r"><code>sd(data1$Mean.Scale.Score)</code></pre>
+<pre><code>## [1] 12.66696</code></pre>
+<pre class="r"><code>quantile(data1$Mean.Scale.Score)</code></pre>
+<pre><code>##   0%  25%  50%  75% 100% 
+##  630  654  663  672  686</code></pre>
+<p>Find the relationship between the number of students and the mean scale score.</p>
+<pre class="r"><code>reg1 &lt;- lm(data1$Mean.Scale.Score ~data1$Number.Tested)
+plot(data1$Number.Tested,
+     data1$Mean.Scale.Score,
+     main=&quot;Number of Students take ELA test with the Mean Scale Score from 2006-2011&quot;,
+     xlab = &quot;Number of Tested&quot;,
+     ylab = &quot;Mean Scale Score&quot;
+     )
+abline(reg1)</code></pre>
+<p><img src="Fundamentals_R_files/figure-html/unnamed-chunk-58-1.png" width="672" /></p>
+<pre class="r"><code>cor(data1$Number.Tested,data1$Mean.Scale.Score)</code></pre>
+<pre><code>## [1] -0.297196</code></pre>
+<p>Which ethnic perform better in ELA test in mean scale score?</p>
+<pre class="r"><code>boxplot(data1$Mean.Scale.Score~data1$Demographic)</code></pre>
+<p><img src="Fundamentals_R_files/figure-html/unnamed-chunk-59-1.png" width="672" /></p>
+<p>Sub-setting the ethnic group and see the summary of each group.</p>
+<pre class="r"><code>black &lt;- subset(data1,Demographic==&quot;Black&quot;)
+summary(black)</code></pre>
+<pre><code>##         Grade        Year        Demographic Number.Tested    Mean.Scale.Score
+##  3         :7   Min.   :2006   Asian   : 0   Min.   : 18862   Min.   :630.0   
+##  4         :7   1st Qu.:2007   Black   :49   1st Qu.: 20595   1st Qu.:648.0   
+##  5         :7   Median :2009   Hispanic: 0   Median : 21783   Median :654.0   
+##  6         :7   Mean   :2009   White   : 0   Mean   : 37103   Mean   :651.8   
+##  7         :7   3rd Qu.:2011                 3rd Qu.: 23460   3rd Qu.:657.0   
+##  8         :7   Max.   :2012                 Max.   :143744   Max.   :664.0   
+##  All Grades:7                                                                 
+##   Num.Level.1     Pct.Level.1     Num.Level.2     Pct.Level.2   
+##  Min.   :   41   Min.   : 0.20   Min.   : 6007   Min.   :29.20  
+##  1st Qu.: 2146   1st Qu.: 7.20   1st Qu.: 8015   1st Qu.:38.30  
+##  Median : 2988   Median :12.70   Median : 9969   Median :45.40  
+##  Mean   : 4315   Mean   :11.75   Mean   :16623   Mean   :44.69  
+##  3rd Qu.: 3924   3rd Qu.:15.70   3rd Qu.:12666   3rd Qu.:50.10  
+##  Max.   :23443   Max.   :23.00   Max.   :65231   Max.   :60.80  
+##                                                                 
+##   Num.Level.3     Pct.Level.3     Num.Level.4      Pct.Level.4   
+##  Min.   : 5473   Min.   :25.70   Min.   :  68.0   Min.   :0.300  
+##  1st Qu.: 6916   1st Qu.:33.70   1st Qu.: 314.0   1st Qu.:1.200  
+##  Median : 8824   Median :38.80   Median : 464.0   Median :2.000  
+##  Mean   :15298   Mean   :41.22   Mean   : 866.9   Mean   :2.347  
+##  3rd Qu.:12315   3rd Qu.:47.80   3rd Qu.: 941.0   3rd Qu.:3.000  
+##  Max.   :77164   Max.   :64.30   Max.   :4773.0   Max.   :8.700  
+##                                                                  
+##  Num.Level.3.and.4 Pct.Level.3.and.4
+##  Min.   : 5721     Min.   :26.90    
+##  1st Qu.: 7284     1st Qu.:35.10    
+##  Median : 9663     Median :41.60    
+##  Mean   :16165     Mean   :43.56    
+##  3rd Qu.:12934     3rd Qu.:50.20    
+##  Max.   :80991     Max.   :69.30    
+## </code></pre>
+<pre class="r"><code>hispanic &lt;- subset(data1,Demographic==&quot;Hispanic&quot;)
+summary(hispanic)</code></pre>
+<pre><code>##         Grade        Year        Demographic Number.Tested    Mean.Scale.Score
+##  3         :7   Min.   :2006   Asian   : 0   Min.   : 20879   Min.   :631.0   
+##  4         :7   1st Qu.:2007   Black   : 0   1st Qu.: 27310   1st Qu.:646.0   
+##  5         :7   Median :2009   Hispanic:49   Median : 27689   Median :654.0   
+##  6         :7   Mean   :2009   White   : 0   Mean   : 47026   Mean   :651.2   
+##  7         :7   3rd Qu.:2011                 3rd Qu.: 28393   3rd Qu.:656.0   
+##  8         :7   Max.   :2012                 Max.   :169531   Max.   :664.0   
+##  All Grades:7                                                                 
+##   Num.Level.1     Pct.Level.1     Num.Level.2     Pct.Level.2   
+##  Min.   :   72   Min.   : 0.30   Min.   : 6288   Min.   :29.30  
+##  1st Qu.: 2907   1st Qu.:10.20   1st Qu.:10540   1st Qu.:37.80  
+##  Median : 3895   Median :13.60   Median :12724   Median :44.70  
+##  Mean   : 5940   Mean   :12.63   Mean   :20836   Mean   :44.19  
+##  3rd Qu.: 5243   3rd Qu.:16.60   3rd Qu.:14996   3rd Qu.:50.20  
+##  Max.   :31151   Max.   :22.00   Max.   :81649   Max.   :60.00  
+##                                                                 
+##   Num.Level.3     Pct.Level.3     Num.Level.4    Pct.Level.4  Num.Level.3.and.4
+##  Min.   : 6962   Min.   :25.50   Min.   :  83   Min.   :0.3   Min.   :  7201   
+##  1st Qu.: 9058   1st Qu.:32.60   1st Qu.: 338   1st Qu.:1.1   1st Qu.:  9812   
+##  Median :11395   Median :38.20   Median : 595   Median :2.0   Median : 11974   
+##  Mean   :19170   Mean   :40.86   Mean   :1080   Mean   :2.3   Mean   : 20250   
+##  3rd Qu.:15719   3rd Qu.:47.10   3rd Qu.:1138   3rd Qu.:3.1   3rd Qu.: 16857   
+##  Max.   :97303   Max.   :63.50   Max.   :6502   Max.   :8.5   Max.   :102358   
+##                                                                                
+##  Pct.Level.3.and.4
+##  Min.   :25.80    
+##  1st Qu.:34.70    
+##  Median :40.80    
+##  Mean   :43.18    
+##  3rd Qu.:49.30    
+##  Max.   :69.30    
+## </code></pre>
+<pre class="r"><code>white &lt;- subset(data1,Demographic==&quot;White&quot;)
+summary(white)</code></pre>
+<pre><code>##         Grade        Year        Demographic Number.Tested   Mean.Scale.Score
+##  3         :7   Min.   :2006   Asian   : 0   Min.   : 9350   Min.   :660.0   
+##  4         :7   1st Qu.:2007   Black   : 0   1st Qu.: 9717   1st Qu.:668.0   
+##  5         :7   Median :2009   Hispanic: 0   Median : 9972   Median :673.0   
+##  6         :7   Mean   :2009   White   :49   Mean   :17268   Mean   :672.6   
+##  7         :7   3rd Qu.:2011                 3rd Qu.:10783   3rd Qu.:677.0   
+##  8         :7   Max.   :2012                 Max.   :63359   Max.   :686.0   
+##  All Grades:7                                                                
+##   Num.Level.1      Pct.Level.1     Num.Level.2     Pct.Level.2   
+##  Min.   :  14.0   Min.   :0.100   Min.   : 1122   Min.   :11.40  
+##  1st Qu.: 337.0   1st Qu.:3.100   1st Qu.: 1853   1st Qu.:17.60  
+##  Median : 506.0   Median :4.700   Median : 2641   Median :24.40  
+##  Mean   : 748.9   Mean   :4.306   Mean   : 4028   Mean   :23.39  
+##  3rd Qu.: 663.0   3rd Qu.:5.600   3rd Qu.: 3203   3rd Qu.:28.30  
+##  Max.   :3880.0   Max.   :8.600   Max.   :17720   Max.   :37.80  
+##                                                                  
+##   Num.Level.3     Pct.Level.3     Num.Level.4    Pct.Level.4   
+##  Min.   : 4188   Min.   :41.00   Min.   : 239   Min.   : 2.50  
+##  1st Qu.: 5656   1st Qu.:57.20   1st Qu.: 757   1st Qu.: 7.80  
+##  Median : 6589   Median :61.20   Median :1192   Median :10.40  
+##  Mean   :10559   Mean   :61.15   Mean   :1933   Mean   :11.16  
+##  3rd Qu.: 7113   3rd Qu.:66.70   3rd Qu.:1801   3rd Qu.:13.50  
+##  Max.   :42712   Max.   :77.10   Max.   :9249   Max.   :25.00  
+##                                                                
+##  Num.Level.3.and.4 Pct.Level.3.and.4
+##  Min.   : 5400     Min.   :57.40    
+##  1st Qu.: 6697     1st Qu.:66.50    
+##  Median : 7752     Median :71.10    
+##  Mean   :12492     Mean   :72.31    
+##  3rd Qu.: 8396     3rd Qu.:78.10    
+##  Max.   :50708     Max.   :88.10    
+## </code></pre>
+<pre class="r"><code>asian &lt;- subset(data1,Demographic==&quot;Asian&quot;)
+summary(asian)</code></pre>
+<pre><code>##         Grade        Year        Demographic Number.Tested   Mean.Scale.Score
+##  3         :7   Min.   :2006   Asian   :49   Min.   : 7661   Min.   :658.0   
+##  4         :7   1st Qu.:2007   Black   : 0   1st Qu.: 9540   1st Qu.:667.0   
+##  5         :7   Median :2009   Hispanic: 0   Median : 9956   Median :672.0   
+##  6         :7   Mean   :2009   White   : 0   Mean   :16802   Mean   :671.7   
+##  7         :7   3rd Qu.:2011                 3rd Qu.:10648   3rd Qu.:676.0   
+##  8         :7   Max.   :2012                 Max.   :63844   Max.   :684.0   
+##  All Grades:7                                                                
+##   Num.Level.1      Pct.Level.1     Num.Level.2     Pct.Level.2   
+##  Min.   :  14.0   Min.   :0.100   Min.   :  980   Min.   :11.90  
+##  1st Qu.: 269.0   1st Qu.:2.900   1st Qu.: 1939   1st Qu.:19.00  
+##  Median : 536.0   Median :4.900   Median : 2540   Median :24.30  
+##  Mean   : 846.7   Mean   :4.953   Mean   : 3897   Mean   :23.08  
+##  3rd Qu.: 851.0   3rd Qu.:7.300   3rd Qu.: 2964   3rd Qu.:27.60  
+##  Max.   :4991.0   Max.   :9.900   Max.   :17319   Max.   :35.40  
+##                                                                  
+##   Num.Level.3     Pct.Level.3     Num.Level.4    Pct.Level.4   
+##  Min.   : 4161   Min.   :41.50   Min.   : 275   Min.   : 2.60  
+##  1st Qu.: 5495   1st Qu.:57.40   1st Qu.: 694   1st Qu.: 7.00  
+##  Median : 6236   Median :60.40   Median :1092   Median :10.40  
+##  Mean   :10265   Mean   :61.21   Mean   :1792   Mean   :10.76  
+##  3rd Qu.: 6937   3rd Qu.:67.70   3rd Qu.:1636   3rd Qu.:13.30  
+##  Max.   :42197   Max.   :74.30   Max.   :9474   Max.   :24.00  
+##                                                                
+##  Num.Level.3.and.4 Pct.Level.3.and.4
+##  Min.   : 5167     Min.   :55.50    
+##  1st Qu.: 6418     1st Qu.:65.00    
+##  Median : 7254     Median :71.60    
+##  Mean   :12057     Mean   :71.97    
+##  3rd Qu.: 8147     3rd Qu.:76.50    
+##  Max.   :50389     Max.   :87.70    
+## </code></pre>
+</div>
+</div>
+
+
+
+
+</div>
+
+<script>
+
+// add bootstrap table styles to pandoc tables
+function bootstrapStylePandocTables() {
+  $('tr.odd').parent('tbody').parent('table').addClass('table table-condensed');
+}
+$(document).ready(function () {
+  bootstrapStylePandocTables();
+});
+
+
+</script>
+
+<!-- tabsets -->
+
+<script>
+$(document).ready(function () {
+  window.buildTabsets("TOC");
+});
+
+$(document).ready(function () {
+  $('.tabset-dropdown > .nav-tabs > li').click(function () {
+    $(this).parent().toggleClass('nav-tabs-open');
+  });
+});
+</script>
+
+<!-- code folding -->
+
+
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+  (function () {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    script.src  = "https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML";
+    document.getElementsByTagName("head")[0].appendChild(script);
+  })();
+</script>
+
+</body>
+</html>

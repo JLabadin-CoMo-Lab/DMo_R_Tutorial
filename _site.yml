@@ -6,12 +6,3 @@ navbar:
       href: index.html
     - text: "Fundamental of R"
       href: Fundamentals_R.html
-  menu:
-    - text: "Home"
-      href: index.html
-    - text: "Fundamental of R"
-      href: Fundamentals_R.html
-  output:
-    html_document:
-      theme: cosmo
-      highlight: textmate

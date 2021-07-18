@@ -1,0 +1,457 @@
+---
+title: "Fundamentals of R"
+output: 
+  html_document:
+    toc: true
+    toc_depth: 3
+    theme: cosmo
+    highlight: textmate
+editor_options: 
+  chunk_output_type: inline
+---
+
+## Installation R CRAN and R Studio
+
+Download and install R from [https://cran.r-project.org/](https://cran.r-project.org/)
+
+Download and install RStudio from[https://www.rstudio.com/](https://www.rstudio.com/products/rstudio/download/#download)
+
+## R Console
+
+### Integrating with R: the command line
+* **>|** indicates R is ready for user to enter an  instruction to execute
+* Press **Enter** to execute the instruction after key in the instruction
+* **+** means previous instruction was  incomplete and R is waiting for user to complete it
+* **#** means comment, R will ignore the following  instruction, it is a notes for other users.
+
+### R as a caculator
+```{r}
+13+5
+```
+```{r}
+10-9
+```
+```{r}
+10*4
+```
+```{r}
+10/2
+```
+```{r}
+2^3
+```
+```{r}
+18%%5
+```
+
+## Variables
+Creating variables:
+Assign value
+```{r}
+a <- 100
+```
+Store results of calculations
+```{r}
+a <- 50*2
+```
+To see the content of the object, type its name at the command line then **Enter**
+```{r}
+a
+```
+Use the variable as a shortcut to its  value for any sort of instruction
+```{r}
+b <- 5
+c <- b+a
+```
+List all variable in the environment
+```{r}
+ls()
+```
+Remove variables
+```{r}
+rm(c) #remove single variable
+ls()
+rm(a,b) #remove multiple variables at once
+ls()
+```
+### Naming Convention
+* cannot start with a numeric value or symbol 
+* do not contains space
+* no special character eg. !, @, $,/, & and etc
+* case sensitive
+
+### Exercise 1
+
+| Aaron wishes to take out a loan, today, of *P*,**RM 1500** at a monthly interest rate *i*, 1*%*. The loan is to be paid back in *n*, **12** monthly installments, *R* amount each month. Calculate *R*, the monthly payment for this particular loan.
+
+| Equating the present value, *P* to the future (discounted) value of the *n* monthly payments *R*, we have:  
+
+$P = R(1+i)^{-1}+R(1+i)^{-2}+R(1+i)^{-3}+\dotsm+R(1+i)^{-n}$  
+or  
+$P = R(\frac{1-(1+i)^{-n}}{i})$  
+Thus,  
+$R = P(\frac{i}{1-(1+i)^{-n}})$
+
+Solution:
+```{r}
+intRate <- 0.01 #i
+n <- 12
+principal <- 1500 #P
+monthly_payment <- principal*intRate/(1-(1+intRate)^(-n)) #R
+monthly_payment
+```
+## Data Types
+1. Vectors
+2. Matrices
+3. Lists
+4. Data Frames
+
+### Vector
+* Vector is a fundamental data object in R.
+* It is a list of elements.
+* Any data object in R can be thought of as a vector.
+* 2 types of vectors: the **atomic vector** and the **lists**.
+* Atomic: contains element of same type nature.
+* List: can contain element of any type nature and structure.  
+
+**Atomic Vectors**  
+- Use concatenate function **c()** to combine the elements into a vector
+- It can concatenate 3 different basic types: numerical, character or logical values.
+```{r}
+##Integer
+int_vec <- c(8,10,2,4,6)
+int_vec
+typeof(int_vec)
+
+##Floating number
+num_vec <- c(3.23,-5.25,1032.33)
+num_vec
+typeof(num_vec)
+```
+```{r}
+##Character
+char_vec <- c("apple","banana","durian","Orange")
+char_vec
+typeof(char_vec)
+```
+```{r}
+##Character
+log_vec <- c(T, F, F, TRUE, T, T, FALSE)
+log_vec
+typeof(log_vec)
+```
+Direct query the nature of the vectors
+```{r}
+is.numeric(int_vec)
+is.character(int_vec)
+is.logical(int_vec)
+```
+Length of the vector
+```{r}
+length(int_vec)
+length(char_vec)
+length(log_vec)
+```
+Convert from type to type
+```{r}
+as.character(int_vec)
+as.logical(int_vec)
+```
+Merge vector of different natures, there will be automatic conversion.
+```{r}
+merged <- c(int_vec,c(num_vec,int_vec))
+merged
+```
+```{r}
+c(int_vec,char_vec)
+```
+**Metadata**  
+Information about the data
+```{r}
+attributes(int_vec)
+names(int_vec)
+names(int_vec) <- c("a","b","c","d","e")
+names(int_vec)
+attributes(int_vec)
+```
+Define the name alternatively
+```{r}
+int_vec2 <- c(A=3,B=5,C=3,G=8)
+int_vec2
+```
+Remove the names
+```{r}
+unname(int_vec2)
+int_vec2
+```
+**Factor**  
+Factor is qualitative value, and for categorical variables
+```{r}
+gender <- c(4,5,4,4,4,5,5,4,5,5)
+gender
+typeof(gender)
+attributes(gender)
+gender <- as.factor(gender)
+gender
+attributes(gender)
+levels(gender)
+levels(gender) <- c("male","female")
+gender
+as.numeric(gender)
+as.character(gender)
+```
+Define more attributes
+```{r}
+attributes(int_vec)
+attr(int_vec,"source") <- "www.unimas.my"
+attributes(int_vec)
+```
+Retrieve any specific attribute with the same function
+```{r}
+attributes(int_vec)
+attr(int_vec,"source")
+```
+```{r}
+names(int_vec)
+attr(int_vec,"name")
+```
+**Retrieving Elements**  
+By specific the index or list of indexes of the elements
+```{r}
+int_vec
+int_vec[2]
+int_vec[c(1,3)]
+```
+By specify the list of the names of the elements(provided that names are defined)
+```{r}
+int_vec[c("a","c")]
+```
+By specify for each element of the object whether want to select it or not with a logical value
+```{r}
+int_vec[c(T,F,T,F,F)]
+```
+Selection Criteria
+```{r}
+int_vec
+sel <- int_vec >5
+sel
+int_vec[sel]
+```
+Or can be done ine single line
+```{r}
+int_vec[int_vec>5]
+```
+
+### Matrices
+Matrix is a vector with dimension attributes by giving number of rows and columns.
+```{r}
+vec <- c(3,2,5,5,4,7,7,9,7,5,3,1)
+vec
+attributes(vec)
+mat <- matrix(vec,ncol = 4)
+mat
+attributes(mat)
+```
+Matrix is internally a vector, can access the matrix like vector.
+```{r}
+typeof(mat)
+length(mat)
+typeof(vec)
+length(vec)
+mat[c(1,2,11,12)]
+mat[-c(1,2,11,12)]
+mat[mat<4]
+mat[!mat<4]
+```
+To retrieve the element in 2 dimension of the matrix, we specify the row and column indexes inside the **[]** bracket. If want all elements in the row or column, we leave the space blank.
+```{r}
+dim(mat)
+mat[2,3]
+mat[c(2,3),c(3,4)]
+mat[2,1]
+mat[2,]
+mat[,c(3,4)]
+mat[-2,-3]
+mat[-c(2,3),-c(3,4)]
+mat[-2,]
+mat[,-c(3,4)]
+```
+Define the name for matrix elements
+```{r}
+mat
+attributes(mat)
+rownames(mat) <- c("A","B","C")
+colnames(mat) <- c("a","b","c","d")
+mat
+```
+Retrieve elements by using defined name
+```{r}
+mat["A",]
+mat["A",c("c","d")]
+```
+### List
+* List can contain element of various nature and structure (including lists)
+* Hierarchical structure (whereas atomic vectors have a flat structure).  
+Create a list by using function **list()**
+```{r}
+#Create a list
+my_list <- list(mat,vec,int_vec,num_vec,char_vec,log_vec)
+#return the length of my_list
+length(my_list)
+#return the structure of my_list
+str(my_list)
+```
+Check the name of items in the list
+```{r}
+names(my_list)
+names(my_list) <- c("A","B","C","D","E","F")
+str(my_list)
+```
+Names can also be defined at creation time
+```{r}
+my_list2 <- list(the_mat=mat,the_vec=vec)
+my_list2
+```
+Elements in the list can be accessed in the same way as for the atomic vectors
+```{r}
+#by the index
+my_list[2]
+#by using the names
+my_list[c("A","C")]
+#Remove the elements
+my_list[-c(4,5)]
+#by using logical values
+my_list[c(T,T,F,T,F,F)]
+```
+Using single **[]** matains the list structure
+```{r}
+my_list[2]
+```
+To remove it, use double **[[]]** or dollar sign (**$**)
+```{r}
+my_list[[2]]
+my_list$B
+```
+New element can be added to a list this way
+```{r}
+c(my_list2,c(3,4))
+```
+Convert the list into a vector by remove the list structure
+```{r}
+unlist(my_list2)
+```
+### Data Frame
+* Data Frames is a list store several atomic vector of the same length but not necessarily of the same nature.  
+Define data frame by using function **data.frame()**
+```{r}
+items <- c("orange", "apple", "pineapple", "mango", "banana")
+price <- c(3.45,7.12,12.32,5,7)
+site <- c("Kuching", "Kota Samarahan ","Kota Samarahan","Kuching","Kuching")
+market <- c(T,F,T,F,F)
+groceries <- data.frame(items,price,site,market)
+groceries
+```
+Check the data structure
+```{r}
+str(groceries)
+```
+Return the summary of each data
+```{r}
+summary(groceries)
+```
+The row are observations and the columns are variables.The character variables are by default considered as factors. Since they are lists, their elements can be accessed in the way as for lists.
+```{r}
+names(groceries)
+groceries[1]
+groceries[-c(2,4)]
+groceries["market"]
+groceries[c(T,F,T,F)]
+groceries$items
+```
+Data frame is a 2 x 2 structure, therefore can accessed elements the same way for matrices.
+```{r}
+groceries[1:2,3:4]
+groceries[,-2]
+groceries[-1,]
+groceries[c(T,T,F,F,F),c(T,F,T,F)]
+groceries[,"site"]
+```
+Managing the data frame
+```{r}
+#return the item that can find in the market
+groceries[groceries$market,]
+#sorting the data frame according to price
+groceries[order(groceries$price),]
+```
+Retrieving elements from data frame with criteria
+```{r}
+#return the most expensive item and where is it?
+groceries[groceries$price == max(groceries$price),c("items","site")]
+```
+## Basic Data processing in R
+Data sets are most of the time in excel spreadsheet of equivalent or in a database system. R can access both database systems and excel files. Basic way to read data from a simple text files by copy and paste the content of excel file sheet to a simple text file.
+
+### Read data
+Data can be load into R by using function **read.table()**,**read.delim()**
+```{r}
+read.table("gr2.txt",header=T,sep='\t')
+#read.table(file.choose(),header = T,sep = '\t')
+read.delim("gr2.txt")
+```
+
+### Run statstical test
+Putting data into good format
+```{r}
+data1 <- read.csv('datasets/dataset1.csv',head=TRUE,sep =',')
+#data1 <- read.table(file.choose(),header = T,sep = ',')
+names(data1)
+head(data1)
+tail(data1)
+str(data1)
+```
+**Introduction of data**  
+  English Language Arts (ELA) Test Results from year 2006 until 2012 in New York City. The data are disaggregated by student ethnicity. With the adoption of the New York Common Core Learning Standards (CCLS) in ELA/ Literacy and Mathematics, students in grades 3 until 8 required to take ELA test each spring. Educators use ELA test result to assign students to appropriate classes and identify areas where the student needs extra help or more challenging material. At the same time, teachers and principals use the results to make decisions about the promotion and summer school. Nevertheless, educators also examine school wide results to identify broad instructional areas that require improvement. Different level will be assigned to student based on their marks (Test Result, 2012). There are Level 1, Level 2, Level 3 and Level 4. Level 1 indicates lowest proficiency level or known as well below proficient while Level 4 shows advanced level.  
+
+Summarize the dataset in efficient way
+```{r}
+table(data1$Grade,data1$Demographic)
+```
+
+**Questions**  
+1. Is there any relationship between the numbers of student who take ELA and the mean scale score?  
+2. Which ethnic perform better in ELA test in mean scale score?  
+Basic statistic test
+```{r}
+summary(data1)
+sd(data1$Mean.Scale.Score)
+quantile(data1$Mean.Scale.Score)
+```
+
+Find the relationship between the number of students and the mean scale score.
+```{r}
+reg1 <- lm(data1$Mean.Scale.Score ~data1$Number.Tested)
+plot(data1$Number.Tested,
+     data1$Mean.Scale.Score,
+     main="Number of Students take ELA test with the Mean Scale Score from 2006-2011",
+     xlab = "Number of Tested",
+     ylab = "Mean Scale Score"
+     )
+abline(reg1)
+cor(data1$Number.Tested,data1$Mean.Scale.Score)
+```
+Which ethnic perform better in ELA test in mean scale score?  
+```{r}
+boxplot(data1$Mean.Scale.Score~data1$Demographic)
+```   
+
+Sub-setting the ethnic group and see the summary of each group.
+```{r}
+black <- subset(data1,Demographic=="Black")
+summary(black)
+hispanic <- subset(data1,Demographic=="Hispanic")
+summary(hispanic)
+white <- subset(data1,Demographic=="White")
+summary(white)
+asian <- subset(data1,Demographic=="Asian")
+summary(asian)
+```
