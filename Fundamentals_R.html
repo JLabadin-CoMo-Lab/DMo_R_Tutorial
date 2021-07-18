@@ -1058,12 +1058,12 @@ plot(data1$Number.Tested,
      ylab = &quot;Mean Scale Score&quot;
      )
 abline(reg1)</code></pre>
-<p><img src="Fundamentals_R_files/figure-html/unnamed-chunk-59-1.png" width="672" /></p>
+<p><img src="Fundamentals_R_files/figure-html/unnamed-chunk-59-1.png" width="672" style="display: block; margin: auto;" /></p>
 <pre class="r"><code>cor(data1$Number.Tested,data1$Mean.Scale.Score)</code></pre>
 <pre><code>## [1] -0.297196</code></pre>
 <p>Which ethnic perform better in ELA test in mean scale score?</p>
 <pre class="r"><code>boxplot(data1$Mean.Scale.Score~data1$Demographic)</code></pre>
-<p><img src="Fundamentals_R_files/figure-html/unnamed-chunk-60-1.png" width="672" /></p>
+<p><img src="Fundamentals_R_files/figure-html/unnamed-chunk-60-1.png" width="672" style="display: block; margin: auto;" /></p>
 <p>Sub-setting the ethnic group and see the summary of each group.</p>
 <pre class="r"><code>black &lt;- subset(data1,Demographic==&quot;Black&quot;)
 summary(black)</code></pre>

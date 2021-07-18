@@ -431,7 +431,7 @@ quantile(data1$Mean.Scale.Score)
 ```
 
 Find the relationship between the number of students and the mean scale score.
-```{r}
+```{r,fig.align = 'center'}
 reg1 <- lm(data1$Mean.Scale.Score ~data1$Number.Tested)
 plot(data1$Number.Tested,
      data1$Mean.Scale.Score,
@@ -443,7 +443,7 @@ abline(reg1)
 cor(data1$Number.Tested,data1$Mean.Scale.Score)
 ```
 Which ethnic perform better in ELA test in mean scale score?  
-```{r}
+```{r,fig.align = 'center'}
 boxplot(data1$Mean.Scale.Score~data1$Demographic)
 ```   
 
