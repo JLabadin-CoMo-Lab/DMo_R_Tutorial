@@ -1,4 +1,5 @@
 name: "DMo Workshop 2021"
+output_dir: "."
 navbar:
   title: "DMo Workshop 2021"
   left:
