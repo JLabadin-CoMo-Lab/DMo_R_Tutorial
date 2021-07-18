@@ -1,0 +1,14 @@
+name: "DMo Workshop 2021"
+navbar:
+  title: "DMo Workshop 2021"
+  left:
+    - text: "Home"
+      href: index.html
+    - text: "Fundamental of R (1)"
+      href: Fundamentals_R.html
+    - text: "Fundamental of R (2)"
+      href: Fundamentals_R_2.html
+  output:
+    html_document:
+    theme: cosmo
+    highlight: textmate 
