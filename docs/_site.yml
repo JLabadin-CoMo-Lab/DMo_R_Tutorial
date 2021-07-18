@@ -8,7 +8,7 @@ navbar:
       href: Fundamentals_R.html
     - text: "Fundamental of R (2)"
       href: Fundamentals_R_2.html
-  output:
-    html_document:
-      theme: cosmo
-      highlight: textmate 
+output:
+  html_document:
+    theme: cosmo
+    highlight: textmate 
