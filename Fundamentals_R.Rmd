@@ -1,5 +1,5 @@
 ---
-title: "Fundamentals of R"
+title: "Fundamentals of R (1)"
 output: 
   html_document:
     toc: true
@@ -416,11 +416,14 @@ Summarize the dataset in efficient way
 ```{r}
 table(data1$Grade,data1$Demographic)
 ```
-
+Basic statistic function
+```{r,fig.align = 'center',echo=FALSE}
+knitr::include_graphics('figures/basic_stats.png')
+```
 **Questions**  
 1. Is there any relationship between the numbers of student who take ELA and the mean scale score?  
 2. Which ethnic perform better in ELA test in mean scale score?  
-Basic statistic test
+
 ```{r}
 summary(data1)
 sd(data1$Mean.Scale.Score)

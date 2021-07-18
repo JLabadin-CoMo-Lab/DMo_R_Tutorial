@@ -11,7 +11,7 @@
 
 
 
-<title>Fundamentals of R</title>
+<title>Fundamentals of R (1)</title>
 
 <script src="site_libs/jquery-1.11.3/jquery.min.js"></script>
 <meta name="viewport" content="width=device-width, initial-scale=1" />
@@ -244,7 +244,10 @@ $(document).ready(function () {
   <a href="index.html">Home</a>
 </li>
 <li>
-  <a href="Fundamentals_R.html">Fundamental of R</a>
+  <a href="Fundamentals_R.html">Fundamental of R (1)</a>
+</li>
+<li>
+  <a href="Fundamentals_R_2.html">Fundamental of R (2)</a>
 </li>
       </ul>
       <ul class="nav navbar-nav navbar-right">
@@ -258,7 +261,7 @@ $(document).ready(function () {
 
 
 
-<h1 class="title toc-ignore">Fundamentals of R</h1>
+<h1 class="title toc-ignore">Fundamentals of R (1)</h1>
 
 </div>
 
@@ -1005,10 +1008,9 @@ English Language Arts (ELA) Test Results from year 2006 until 2012 in New York C
 ##   7              7     7        7     7
 ##   8              7     7        7     7
 ##   All Grades     7     7        7     7</code></pre>
-<p><strong>Questions</strong><br />
+<p>Basic statistic function <img src="figures/basic_stats.png" width="742" style="display: block; margin: auto;" /> <strong>Questions</strong><br />
 1. Is there any relationship between the numbers of student who take ELA and the mean scale score?<br />
-2. Which ethnic perform better in ELA test in mean scale score?<br />
-Basic statistic test</p>
+2. Which ethnic perform better in ELA test in mean scale score?</p>
 <pre class="r"><code>summary(data1)</code></pre>
 <pre><code>##         Grade         Year        Demographic Number.Tested    Mean.Scale.Score
 ##  3         :28   Min.   :2006   Asian   :49   Min.   :  7661   Min.   :630.0   
@@ -1056,12 +1058,12 @@ plot(data1$Number.Tested,
      ylab = &quot;Mean Scale Score&quot;
      )
 abline(reg1)</code></pre>
-<p><img src="Fundamentals_R_files/figure-html/unnamed-chunk-58-1.png" width="672" /></p>
+<p><img src="Fundamentals_R_files/figure-html/unnamed-chunk-59-1.png" width="672" /></p>
 <pre class="r"><code>cor(data1$Number.Tested,data1$Mean.Scale.Score)</code></pre>
 <pre><code>## [1] -0.297196</code></pre>
 <p>Which ethnic perform better in ELA test in mean scale score?</p>
 <pre class="r"><code>boxplot(data1$Mean.Scale.Score~data1$Demographic)</code></pre>
-<p><img src="Fundamentals_R_files/figure-html/unnamed-chunk-59-1.png" width="672" /></p>
+<p><img src="Fundamentals_R_files/figure-html/unnamed-chunk-60-1.png" width="672" /></p>
 <p>Sub-setting the ethnic group and see the summary of each group.</p>
 <pre class="r"><code>black &lt;- subset(data1,Demographic==&quot;Black&quot;)
 summary(black)</code></pre>
