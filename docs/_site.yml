@@ -4,14 +4,7 @@ navbar:
   left:
     - text: "Home"
       href: index.html
-    - text: "Fundamental of R"
+    - text: "Fundamental of R (1)"
       href: Fundamentals_R.html
-  menu:
-    - text: "Home"
-      href: index.html
-    - text: "Fundamental of R"
-      href: Fundamentals_R.html
-  output:
-    html_document:
-      theme: cosmo
-      highlight: textmate
+    - text: "Fundamental of R (2)"
+      href: Fundamentals_R_2.html
