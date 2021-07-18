@@ -6,8 +6,6 @@ output:
 editor_options: 
   chunk_output_type: console
 ---
-## Welcome Message
-
 ```{r,fig.align = 'center',echo=FALSE}
 knitr::include_graphics('figures/dr.jpg')
 ```
