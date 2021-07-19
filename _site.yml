@@ -9,6 +9,8 @@ navbar:
       href: Fundamentals_R.html
     - text: "Fundamental of R (2)"
       href: Fundamentals_R_2.html
+    - text: "SIR models in R"
+      href: SIR.html
     - text: "Materials"
       href: Materials.html
 output:

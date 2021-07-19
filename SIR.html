@@ -1,0 +1,519 @@
+<!DOCTYPE html>
+
+<html>
+
+<head>
+
+<meta charset="utf-8" />
+<meta name="generator" content="pandoc" />
+<meta http-equiv="X-UA-Compatible" content="IE=EDGE" />
+
+
+
+
+<title>Basic Disease Model - SIR</title>
+
+<script src="site_libs/jquery-1.11.3/jquery.min.js"></script>
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<link href="site_libs/bootstrap-3.3.5/css/cosmo.min.css" rel="stylesheet" />
+<script src="site_libs/bootstrap-3.3.5/js/bootstrap.min.js"></script>
+<script src="site_libs/bootstrap-3.3.5/shim/html5shiv.min.js"></script>
+<script src="site_libs/bootstrap-3.3.5/shim/respond.min.js"></script>
+<style>h1 {font-size: 34px;}
+       h1.title {font-size: 38px;}
+       h2 {font-size: 30px;}
+       h3 {font-size: 24px;}
+       h4 {font-size: 18px;}
+       h5 {font-size: 16px;}
+       h6 {font-size: 12px;}
+       code {color: inherit; background-color: rgba(0, 0, 0, 0.04);}
+       pre:not([class]) { background-color: white }</style>
+<script src="site_libs/navigation-1.1/tabsets.js"></script>
+<link href="site_libs/highlightjs-9.12.0/textmate.css" rel="stylesheet" />
+<script src="site_libs/highlightjs-9.12.0/highlight.js"></script>
+<link rel="shortcut icon" href="logo/logo.png" />
+
+<style type="text/css">
+  code{white-space: pre-wrap;}
+  span.smallcaps{font-variant: small-caps;}
+  span.underline{text-decoration: underline;}
+  div.column{display: inline-block; vertical-align: top; width: 50%;}
+  div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+  ul.task-list{list-style: none;}
+    </style>
+
+<style type="text/css">code{white-space: pre;}</style>
+<script type="text/javascript">
+if (window.hljs) {
+  hljs.configure({languages: []});
+  hljs.initHighlightingOnLoad();
+  if (document.readyState && document.readyState === "complete") {
+    window.setTimeout(function() { hljs.initHighlighting(); }, 0);
+  }
+}
+</script>
+
+
+
+
+
+
+
+
+<style type = "text/css">
+.main-container {
+  max-width: 940px;
+  margin-left: auto;
+  margin-right: auto;
+}
+img {
+  max-width:100%;
+}
+.tabbed-pane {
+  padding-top: 12px;
+}
+.html-widget {
+  margin-bottom: 20px;
+}
+button.code-folding-btn:focus {
+  outline: none;
+}
+summary {
+  display: list-item;
+}
+pre code {
+  padding: 0;
+}
+</style>
+
+
+<style type="text/css">
+.dropdown-submenu {
+  position: relative;
+}
+.dropdown-submenu>.dropdown-menu {
+  top: 0;
+  left: 100%;
+  margin-top: -6px;
+  margin-left: -1px;
+  border-radius: 0 6px 6px 6px;
+}
+.dropdown-submenu:hover>.dropdown-menu {
+  display: block;
+}
+.dropdown-submenu>a:after {
+  display: block;
+  content: " ";
+  float: right;
+  width: 0;
+  height: 0;
+  border-color: transparent;
+  border-style: solid;
+  border-width: 5px 0 5px 5px;
+  border-left-color: #cccccc;
+  margin-top: 5px;
+  margin-right: -10px;
+}
+.dropdown-submenu:hover>a:after {
+  border-left-color: #adb5bd;
+}
+.dropdown-submenu.pull-left {
+  float: none;
+}
+.dropdown-submenu.pull-left>.dropdown-menu {
+  left: -100%;
+  margin-left: 10px;
+  border-radius: 6px 0 6px 6px;
+}
+</style>
+
+<script type="text/javascript">
+// manage active state of menu based on current page
+$(document).ready(function () {
+  // active menu anchor
+  href = window.location.pathname
+  href = href.substr(href.lastIndexOf('/') + 1)
+  if (href === "")
+    href = "index.html";
+  var menuAnchor = $('a[href="' + href + '"]');
+
+  // mark it active
+  menuAnchor.tab('show');
+
+  // if it's got a parent navbar menu mark it active as well
+  menuAnchor.closest('li.dropdown').addClass('active');
+
+  // Navbar adjustments
+  var navHeight = $(".navbar").first().height() + 15;
+  var style = document.createElement('style');
+  var pt = "padding-top: " + navHeight + "px; ";
+  var mt = "margin-top: -" + navHeight + "px; ";
+  var css = "";
+  // offset scroll position for anchor links (for fixed navbar)
+  for (var i = 1; i <= 6; i++) {
+    css += ".section h" + i + "{ " + pt + mt + "}\n";
+  }
+  style.innerHTML = "body {" + pt + "padding-bottom: 40px; }\n" + css;
+  document.head.appendChild(style);
+});
+</script>
+
+<!-- tabsets -->
+
+<style type="text/css">
+.tabset-dropdown > .nav-tabs {
+  display: inline-table;
+  max-height: 500px;
+  min-height: 44px;
+  overflow-y: auto;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+}
+
+.tabset-dropdown > .nav-tabs > li.active:before {
+  content: "";
+  font-family: 'Glyphicons Halflings';
+  display: inline-block;
+  padding: 10px;
+  border-right: 1px solid #ddd;
+}
+
+.tabset-dropdown > .nav-tabs.nav-tabs-open > li.active:before {
+  content: "&#xe258;";
+  border: none;
+}
+
+.tabset-dropdown > .nav-tabs.nav-tabs-open:before {
+  content: "";
+  font-family: 'Glyphicons Halflings';
+  display: inline-block;
+  padding: 10px;
+  border-right: 1px solid #ddd;
+}
+
+.tabset-dropdown > .nav-tabs > li.active {
+  display: block;
+}
+
+.tabset-dropdown > .nav-tabs > li > a,
+.tabset-dropdown > .nav-tabs > li > a:focus,
+.tabset-dropdown > .nav-tabs > li > a:hover {
+  border: none;
+  display: inline-block;
+  border-radius: 4px;
+  background-color: transparent;
+}
+
+.tabset-dropdown > .nav-tabs.nav-tabs-open > li {
+  display: block;
+  float: none;
+}
+
+.tabset-dropdown > .nav-tabs > li {
+  display: none;
+}
+</style>
+
+<!-- code folding -->
+
+
+
+
+</head>
+
+<body>
+
+
+<div class="container-fluid main-container">
+
+
+
+
+<div class="navbar navbar-default  navbar-fixed-top" role="navigation">
+  <div class="container">
+    <div class="navbar-header">
+      <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar">
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+      <a class="navbar-brand" href="index.html">DMo Workshop 2021</a>
+    </div>
+    <div id="navbar" class="navbar-collapse collapse">
+      <ul class="nav navbar-nav">
+        <li>
+  <a href="index.html">Home</a>
+</li>
+<li>
+  <a href="Fundamentals_R.html">Fundamental of R (1)</a>
+</li>
+<li>
+  <a href="Fundamentals_R_2.html">Fundamental of R (2)</a>
+</li>
+<li>
+  <a href="Materials.html">Materials</a>
+</li>
+      </ul>
+      <ul class="nav navbar-nav navbar-right">
+        
+      </ul>
+    </div><!--/.nav-collapse -->
+  </div><!--/.container -->
+</div><!--/.navbar -->
+
+<div id="header">
+
+
+
+<h1 class="title toc-ignore">Basic Disease Model - SIR</h1>
+
+</div>
+
+<div id="TOC">
+<ul>
+<li><a href="#sir-model">SIR model</a><ul>
+<li><a href="#compartmental-diagram">Compartmental diagram</a></li>
+<li><a href="#formulation">Formulation</a></li>
+</ul></li>
+<li><a href="#numerical-solution-of-sir-model-in-r">Numerical Solution of SIR model in R</a><ul>
+<li><a href="#step-1-define-sir-model-in-r">Step 1: Define SIR model in R</a></li>
+<li><a href="#step-2-defining-value-for-the-parameters">Step 2: Defining value for the parameters</a></li>
+<li><a href="#step-3-defining-initial-values-for-the-variables">Step 3: Defining initial values for the variables</a></li>
+<li><a href="#step-4-defining-the-time-points-of-simulation">Step 4: Defining the time points of simulation</a></li>
+<li><a href="#step-5-solving-the-sir-model-numerically">Step 5: Solving the SIR model numerically</a></li>
+</ul></li>
+<li><a href="#exercise">Exercise</a><ul>
+<li><a href="#writing-a-sir-model-simulator">Writing a SIR model simulator</a></li>
+</ul></li>
+</ul>
+</div>
+
+<div id="sir-model" class="section level2">
+<h2>SIR model</h2>
+<div id="compartmental-diagram" class="section level3">
+<h3>Compartmental diagram</h3>
+<p>Three variables are defined in our model which are i) <strong><em>S</em></strong> Susceptibles, ii) <strong><em>I</em></strong> Infectious and iii) <strong><em>R</em></strong> Recovered. Susceptibles become infected at a rate equal to the product of an infectious contact rate <span class="math inline">\(\beta\)</span> and the number of infectious <strong><em>I</em></strong>. Infectious people recover at a rate <span class="math inline">\(\gamma\)</span> <img src="figures/sir.png" width="442" style="display: block; margin: auto;" /></p>
+</div>
+<div id="formulation" class="section level3">
+<h3>Formulation</h3>
+<p><span class="math display">\[
+\frac{dS}{dt} = -\beta IS\\
+\frac{dI}{dt} = \beta IS -\gamma I\\
+\frac{dR}{dt} = \gamma I
+\]</span></p>
+</div>
+</div>
+<div id="numerical-solution-of-sir-model-in-r" class="section level2">
+<h2>Numerical Solution of SIR model in R</h2>
+<p>As mentioned before, to obtain numerical solution of differential equation in R, we are required to use the function <code>ode()</code> under <code>deSolve</code> package. To be able to use the deSolve package, you need to load it:</p>
+<pre class="r"><code>library(deSolve)</code></pre>
+<div id="step-1-define-sir-model-in-r" class="section level3">
+<h3>Step 1: Define SIR model in R</h3>
+<p>We need to define the differential equations of SIR model in script. We create a function to define our SIR model:</p>
+<pre class="r"><code>sir_equations &lt;- function(time, variables, parameters) {
+  with(as.list(c(variables, parameters)), {
+    dS &lt;- -beta * I * S
+    dI &lt;-  beta * I * S - gamma * I
+    dR &lt;-  gamma * I
+    return(list(c(dS, dI, dR)))
+  })
+}</code></pre>
+<p>We use the <code>with()</code> function in the function <code>sir_equations()</code>. The <code>with()</code> works on lists only, not on vectors.</p>
+</div>
+<div id="step-2-defining-value-for-the-parameters" class="section level3">
+<h3>Step 2: Defining value for the parameters</h3>
+<p>In the SIR model defined above, 2 parameters are included in the model which are <span class="math inline">\(\beta\)</span> and <span class="math inline">\(\gamma\)</span>. We need to assign value to these two parameters:</p>
+<pre class="r"><code>parameters_values &lt;- c(
+  beta  = 0.004, # infectious contact rate (/person/day)
+  gamma = 0.5    # recovery rate (/day)
+)</code></pre>
+</div>
+<div id="step-3-defining-initial-values-for-the-variables" class="section level3">
+<h3>Step 3: Defining initial values for the variables</h3>
+<p>Since the SIR model is an initial value problem (IVP), we need to assign the initial value to these variables:</p>
+<pre class="r"><code>initial_values &lt;- c(
+  S = 999,  # number of susceptibles at time = 0
+  I =   1,  # number of infectious at time = 0
+  R =   0   # number of recovered (and immune) at time = 0
+)</code></pre>
+</div>
+<div id="step-4-defining-the-time-points-of-simulation" class="section level3">
+<h3>Step 4: Defining the time points of simulation</h3>
+<p>We want to know the values of our SIR model variables at these time points:</p>
+<pre class="r"><code>time_values &lt;- seq(0,10) #days</code></pre>
+</div>
+<div id="step-5-solving-the-sir-model-numerically" class="section level3">
+<h3>Step 5: Solving the SIR model numerically</h3>
+<p>We have defined 4 objects:</p>
+<pre class="r"><code>ls()</code></pre>
+<pre><code>## [1] &quot;initial_values&quot;    &quot;parameters_values&quot; &quot;sir_equations&quot;    
+## [4] &quot;time_values&quot;</code></pre>
+<pre class="r"><code>sir_equations</code></pre>
+<pre><code>## function(time, variables, parameters) {
+##   with(as.list(c(variables, parameters)), {
+##     dS &lt;- -beta * I * S
+##     dI &lt;-  beta * I * S - gamma * I
+##     dR &lt;-  gamma * I
+##     return(list(c(dS, dI, dR)))
+##   })
+## }</code></pre>
+<pre class="r"><code>parameters_values</code></pre>
+<pre><code>##  beta gamma 
+## 0.004 0.500</code></pre>
+<pre class="r"><code>initial_values</code></pre>
+<pre><code>##   S   I   R 
+## 999   1   0</code></pre>
+<pre class="r"><code>time_values</code></pre>
+<pre><code>##  [1]  0  1  2  3  4  5  6  7  8  9 10</code></pre>
+<p>If everything are fine, now we need to use <code>ode()</code> function from <code>delSove()</code> package to solve our model numerically:</p>
+<pre class="r"><code>sir_values_1 &lt;- ode(
+  y = initial_values,
+  times = time_values,
+  func = sir_equations,
+  parms = parameters_values 
+)</code></pre>
+<p>The numerical solution of our SIR model is:</p>
+<pre class="r"><code>sir_values_1</code></pre>
+<pre><code>##    time           S         I          R
+## 1     0 999.0000000   1.00000   0.000000
+## 2     1 963.7055761  31.79830   4.496125
+## 3     2 461.5687749 441.91575  96.515480
+## 4     3  46.1563480 569.50418 384.339476
+## 5     4   7.0358807 373.49831 619.465807
+## 6     5   2.1489407 230.12934 767.721720
+## 7     6   1.0390927 140.41085 858.550058
+## 8     7   0.6674074  85.44479 913.887801
+## 9     8   0.5098627  51.94498 947.545162
+## 10    9   0.4328913  31.56515 968.001960
+## 11   10   0.3919173  19.17668 980.431400</code></pre>
+<p>To use these value for further analytical steps, we can covert <code>sir_values_1</code> into data frame.</p>
+<pre class="r"><code>sir_values_1 &lt;- as.data.frame(sir_values_1)
+sir_values_1</code></pre>
+<pre><code>##    time           S         I          R
+## 1     0 999.0000000   1.00000   0.000000
+## 2     1 963.7055761  31.79830   4.496125
+## 3     2 461.5687749 441.91575  96.515480
+## 4     3  46.1563480 569.50418 384.339476
+## 5     4   7.0358807 373.49831 619.465807
+## 6     5   2.1489407 230.12934 767.721720
+## 7     6   1.0390927 140.41085 858.550058
+## 8     7   0.6674074  85.44479 913.887801
+## 9     8   0.5098627  51.94498 947.545162
+## 10    9   0.4328913  31.56515 968.001960
+## 11   10   0.3919173  19.17668 980.431400</code></pre>
+<p>After we converted <code>sir_values_1</code> into data frame, now we can use <code>with()</code> function to make our life easier:</p>
+<pre class="r"><code>with(sir_values_1, {
+# plotting the time series of susceptibles:
+  plot(time, S, type = &quot;l&quot;, col = &quot;blue&quot;,
+       xlab = &quot;time (days)&quot;, ylab = &quot;number of people&quot;)
+# adding the time series of infectious:
+  lines(time, I, col = &quot;red&quot;)
+# adding the time series of recovered:
+  lines(time, R, col = &quot;green&quot;)
+})
+
+# adding a legend:
+legend(&quot;right&quot;, c(&quot;susceptibles&quot;, &quot;infectious&quot;, &quot;recovered&quot;),
+       col = c(&quot;blue&quot;, &quot;red&quot;, &quot;green&quot;), lty = 1, bty = &quot;n&quot;)</code></pre>
+<p><img src="SIR_files/figure-html/unnamed-chunk-12-1.png" width="672" style="display: block; margin: auto;" /></p>
+</div>
+</div>
+<div id="exercise" class="section level2">
+<h2>Exercise</h2>
+<div id="writing-a-sir-model-simulator" class="section level3">
+<h3>Writing a SIR model simulator</h3>
+<p>Use the code examples above to write a <code>sir_1()</code> function that takes</p>
+<ul>
+<li>parameter values (<span class="math inline">\(\beta\)</span> and <span class="math inline">\(\gamma\)</span>)</li>
+<li>initial values of (<em>S</em>,<em>I</em>,<em>R</em>)</li>
+<li>time points</li>
+</ul>
+<p>as input arguments to run the SIR model and returns a data frame of time series as an output as below:</p>
+<pre class="r"><code>sir_1 &lt;- function(beta, gamma, S0, I0, R0, times) {
+  require(deSolve) # for the &quot;ode&quot; function
+  
+# the differential equations:
+  sir_equations &lt;- function(time, variables, parameters) {
+    with(as.list(c(variables, parameters)), {
+      dS &lt;- -beta * I * S
+      dI &lt;-  beta * I * S - gamma * I
+      dR &lt;-  gamma * I
+      return(list(c(dS, dI, dR)))
+    })
+  }
+  
+# the parameters values:
+  parameters_values &lt;- c(beta  = beta, gamma = gamma)
+
+# the initial values of variables:
+  initial_values &lt;- c(S = S0, I = I0, R = R0)
+  
+# solving
+  out &lt;- ode(initial_values, times, sir_equations, parameters_values)
+
+# returning the output:
+  as.data.frame(out)
+}</code></pre>
+<pre class="r"><code>sir_1(beta = 0.004,gamma = 0.5,S0=999,I0=1,R0=0,times = seq(0,10))</code></pre>
+<pre><code>##    time           S         I          R
+## 1     0 999.0000000   1.00000   0.000000
+## 2     1 963.7055761  31.79830   4.496125
+## 3     2 461.5687749 441.91575  96.515480
+## 4     3  46.1563480 569.50418 384.339476
+## 5     4   7.0358807 373.49831 619.465807
+## 6     5   2.1489407 230.12934 767.721720
+## 7     6   1.0390927 140.41085 858.550058
+## 8     7   0.6674074  85.44479 913.887801
+## 9     8   0.5098627  51.94498 947.545162
+## 10    9   0.4328913  31.56515 968.001960
+## 11   10   0.3919173  19.17668 980.431400</code></pre>
+</div>
+</div>
+
+
+
+
+</div>
+
+<script>
+
+// add bootstrap table styles to pandoc tables
+function bootstrapStylePandocTables() {
+  $('tr.odd').parent('tbody').parent('table').addClass('table table-condensed');
+}
+$(document).ready(function () {
+  bootstrapStylePandocTables();
+});
+
+
+</script>
+
+<!-- tabsets -->
+
+<script>
+$(document).ready(function () {
+  window.buildTabsets("TOC");
+});
+
+$(document).ready(function () {
+  $('.tabset-dropdown > .nav-tabs > li').click(function () {
+    $(this).parent().toggleClass('nav-tabs-open');
+  });
+});
+</script>
+
+<!-- code folding -->
+
+
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+  (function () {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    script.src  = "https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML";
+    document.getElementsByTagName("head")[0].appendChild(script);
+  })();
+</script>
+
+</body>
+</html>
