@@ -23,7 +23,10 @@ $$
 \frac{dI}{dt} = \beta IS -\gamma I\\
 \frac{dR}{dt} = \gamma I
 $$  
-
+Based on the formulation, basic reproduction number, $R_{0}$ is defined as below:
+$$
+R_{0}= \frac{\beta}{\gamma}N
+$$
 ## Numerical Solution of SIR model in R
 As mentioned before, to obtain numerical solution of differential equation in R, we are required to use the function ```ode()``` under ```deSolve``` package. To be able to use the deSolve package, you need to load it:
 ```{r}
@@ -113,7 +116,13 @@ with(sir_values_1, {
 legend("right", c("susceptibles", "infectious", "recovered"),
        col = c("blue", "red", "green"), lty = 1, bty = "n")
 ```
-
+The value of the $R_{0}$ is
+```{r, results=FALSE}
+(999 + 1) * parameters_values["beta"] / parameters_values["gamma"]
+```
+```{r,,echo=FALSE}
+(999 + 1) * 0.004/0.5
+```
 ## Exercise
 ### Writing a SIR model simulator
 Use the code examples above to write a ```sir_1()``` function that takes

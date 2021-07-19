@@ -100,7 +100,7 @@ principal <- 1500 #P
 monthly_payment <- principal*intRate/(1-(1+intRate)^(-n)) #R
 monthly_payment
 ```
-## Data Types
+## Data Objects
 1. Vectors
 2. Matrices
 3. Lists

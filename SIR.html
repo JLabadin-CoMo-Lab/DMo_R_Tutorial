@@ -251,6 +251,9 @@ $(document).ready(function () {
   <a href="Fundamentals_R_2.html">Fundamental of R (2)</a>
 </li>
 <li>
+  <a href="SIR.html">SIR models in R</a>
+</li>
+<li>
   <a href="Materials.html">Materials</a>
 </li>
       </ul>
@@ -274,8 +277,6 @@ $(document).ready(function () {
 <li><a href="#sir-model">SIR model</a><ul>
 <li><a href="#compartmental-diagram">Compartmental diagram</a></li>
 <li><a href="#formulation">Formulation</a></li>
-</ul></li>
-<li><a href="#numerical-solution-of-sir-model-in-r">Numerical Solution of SIR model in R</a><ul>
 <li><a href="#step-1-define-sir-model-in-r">Step 1: Define SIR model in R</a></li>
 <li><a href="#step-2-defining-value-for-the-parameters">Step 2: Defining value for the parameters</a></li>
 <li><a href="#step-3-defining-initial-values-for-the-variables">Step 3: Defining initial values for the variables</a></li>
@@ -300,13 +301,12 @@ $(document).ready(function () {
 \frac{dS}{dt} = -\beta IS\\
 \frac{dI}{dt} = \beta IS -\gamma I\\
 \frac{dR}{dt} = \gamma I
-\]</span></p>
-</div>
-</div>
-<div id="numerical-solution-of-sir-model-in-r" class="section level2">
-<h2>Numerical Solution of SIR model in R</h2>
-<p>As mentioned before, to obtain numerical solution of differential equation in R, we are required to use the function <code>ode()</code> under <code>deSolve</code> package. To be able to use the deSolve package, you need to load it:</p>
+\]</span><br />
+Based on the formulation, basic reproduction number, <span class="math inline">\(R_{0}\)</span> is defined as below: <span class="math display">\[
+R_{0}= \frac{\beta}{\gamma}N
+\]</span> ## Numerical Solution of SIR model in R As mentioned before, to obtain numerical solution of differential equation in R, we are required to use the function <code>ode()</code> under <code>deSolve</code> package. To be able to use the deSolve package, you need to load it:</p>
 <pre class="r"><code>library(deSolve)</code></pre>
+</div>
 <div id="step-1-define-sir-model-in-r" class="section level3">
 <h3>Step 1: Define SIR model in R</h3>
 <p>We need to define the differential equations of SIR model in script. We create a function to define our SIR model:</p>
@@ -415,7 +415,9 @@ sir_values_1</code></pre>
 # adding a legend:
 legend(&quot;right&quot;, c(&quot;susceptibles&quot;, &quot;infectious&quot;, &quot;recovered&quot;),
        col = c(&quot;blue&quot;, &quot;red&quot;, &quot;green&quot;), lty = 1, bty = &quot;n&quot;)</code></pre>
-<p><img src="SIR_files/figure-html/unnamed-chunk-12-1.png" width="672" style="display: block; margin: auto;" /></p>
+<p><img src="SIR_files/figure-html/unnamed-chunk-12-1.png" width="672" style="display: block; margin: auto;" /> The value of the <span class="math inline">\(R_{0}\)</span> is</p>
+<pre class="r"><code>(999 + 1) * parameters_values[&quot;beta&quot;] / parameters_values[&quot;gamma&quot;]</code></pre>
+<pre><code>## [1] 8</code></pre>
 </div>
 </div>
 <div id="exercise" class="section level2">
