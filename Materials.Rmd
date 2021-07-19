@@ -1,0 +1,27 @@
+---
+title: "Materials"
+output:
+  html_document:
+    theme: cosmo
+    toc: yes
+  pdf_document:
+    toc: yes
+editor_options: 
+  chunk_output_type: console
+---
+
+```{r general_options, include = FALSE}
+knitr::knit_hooks$set(margin = function(before, options, envir) {
+  if (before) par(mgp = c(1.5, .5, 0), bty = "n", plt = c(.105, .97, .13, .97))
+  else NULL
+})
+knitr::opts_chunk$set(margin = TRUE, prompt = FALSE, comment = "##",
+                      collapse = FALSE, cache = FALSE, autodep = TRUE,
+                      dev.args = list(pointsize = 11), fig.height = 3.5,
+                      fig.width = 4.24725, fig.retina = 2, fig.align = "center")
+```
+
+|      Title       |  Presenter |
+|:------------------|:------------|
+|[Introduction to Disease Models](Materials/Lect_IntroDM1.pdf)|Jane Labadin|
+|[SIR Models](Materials/Lect_SIR.pdf)|Jane Labadin|
