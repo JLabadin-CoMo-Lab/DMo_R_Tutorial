@@ -321,11 +321,11 @@ $(document).ready(function () {
 </div>
 <div id="compairing-a-models-prediction-with-data" class="section level2">
 <h2>Compairing a model’s prediction with data</h2>
-<p>We will use our model to simulate transmission of influenza A/H1N1. The flu data we use in this tutorial is retrieve from <code>epimdr</code> packages in R.</p>
+<p>We will use our model to simulate transmission of influenza A/H1N1. The flu data we use in this tutorial is retrieve from <code>epimdr</code> packages in R. The data can download from <a href="https://raw.githubusercontent.com/wenhao0117/DMo_2021/main/Materials/flu.txt">https://raw.githubusercontent.com/wenhao0117/DMo_2021/main/Materials/flu.txt</a> or direct read as shown below.</p>
 <p><strong>Introduction of data</strong><br />
 Number of children confined to bed each day during a 1978 outbreak of the reemerging influenza A/H1N1 strain in a boarding school in North England. This subtype of influenza had been absent from human circulation after the A/H2N2 pandemic of 1957 but reemerge (presumably from some laboratory freezer) in 1977. The school had 763 boys of which 512 boys were confined to bed sometime during the outbreak. None of the boys would have had previous exposure to A/H1N1.</p>
 <pre class="r"><code>#install.packages(&quot;epimdr&quot;)
-flu &lt;- read.table(&quot;./Materials/flu.txt&quot;, header = TRUE)</code></pre>
+flu &lt;- read.table(&quot;https://raw.githubusercontent.com/wenhao0117/DMo_2021/main/Materials/flu.txt&quot;, header = TRUE)</code></pre>
 <pre class="r"><code># library(epimdr)
 flu</code></pre>
 <pre><code>##    day cases

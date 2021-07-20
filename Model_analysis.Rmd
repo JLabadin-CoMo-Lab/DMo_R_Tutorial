@@ -42,13 +42,13 @@ sir_1 <- function(beta, gamma, S0, I0, R0, times) {
 ```
 
 ## Compairing a model's prediction with data
-We will use our model to simulate transmission of influenza A/H1N1. The flu data we use in this tutorial is retrieve from ```epimdr``` packages in R.  
+We will use our model to simulate transmission of influenza A/H1N1. The flu data we use in this tutorial is retrieve from ```epimdr``` packages in R. The data can download from [https://raw.githubusercontent.com/wenhao0117/DMo_2021/main/Materials/flu.txt](https://raw.githubusercontent.com/wenhao0117/DMo_2021/main/Materials/flu.txt) or direct read as shown below.
 
 **Introduction of data**  
 Number of children confined to bed each day during a 1978 outbreak of the reemerging influenza A/H1N1 strain in a boarding school in North England. This subtype of influenza had been absent from human circulation after the A/H2N2 pandemic of 1957 but reemerge (presumably from some laboratory freezer) in 1977. The school had 763 boys of which 512 boys were confined to bed sometime during the outbreak. None of the boys would have had previous exposure to A/H1N1.
 ```{r}
 #install.packages("epimdr")
-flu <- read.table("./Materials/flu.txt", header = TRUE)
+flu <- read.table("https://raw.githubusercontent.com/wenhao0117/DMo_2021/main/Materials/flu.txt", header = TRUE)
 
 ```
 ```{r, warning=FALSE,message=FALSE}
