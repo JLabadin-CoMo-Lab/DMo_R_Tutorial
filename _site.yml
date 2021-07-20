@@ -11,6 +11,8 @@ navbar:
       href: Fundamentals_R_2.html
     - text: "SIR models in R"
       href: SIR.html
+    - text: "Model Analysis"
+      href: Model_analysis.html
     - text: "Materials"
       href: Materials.html
 output:

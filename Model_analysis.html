@@ -1,0 +1,745 @@
+<!DOCTYPE html>
+
+<html>
+
+<head>
+
+<meta charset="utf-8" />
+<meta name="generator" content="pandoc" />
+<meta http-equiv="X-UA-Compatible" content="IE=EDGE" />
+
+
+
+
+<title>Model Analysis</title>
+
+<script src="site_libs/jquery-1.11.3/jquery.min.js"></script>
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<link href="site_libs/bootstrap-3.3.5/css/cosmo.min.css" rel="stylesheet" />
+<script src="site_libs/bootstrap-3.3.5/js/bootstrap.min.js"></script>
+<script src="site_libs/bootstrap-3.3.5/shim/html5shiv.min.js"></script>
+<script src="site_libs/bootstrap-3.3.5/shim/respond.min.js"></script>
+<style>h1 {font-size: 34px;}
+       h1.title {font-size: 38px;}
+       h2 {font-size: 30px;}
+       h3 {font-size: 24px;}
+       h4 {font-size: 18px;}
+       h5 {font-size: 16px;}
+       h6 {font-size: 12px;}
+       code {color: inherit; background-color: rgba(0, 0, 0, 0.04);}
+       pre:not([class]) { background-color: white }</style>
+<script src="site_libs/navigation-1.1/tabsets.js"></script>
+<link href="site_libs/highlightjs-9.12.0/textmate.css" rel="stylesheet" />
+<script src="site_libs/highlightjs-9.12.0/highlight.js"></script>
+<link rel="shortcut icon" href="logo/logo.png" />
+
+<style type="text/css">
+  code{white-space: pre-wrap;}
+  span.smallcaps{font-variant: small-caps;}
+  span.underline{text-decoration: underline;}
+  div.column{display: inline-block; vertical-align: top; width: 50%;}
+  div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+  ul.task-list{list-style: none;}
+    </style>
+
+<style type="text/css">code{white-space: pre;}</style>
+<script type="text/javascript">
+if (window.hljs) {
+  hljs.configure({languages: []});
+  hljs.initHighlightingOnLoad();
+  if (document.readyState && document.readyState === "complete") {
+    window.setTimeout(function() { hljs.initHighlighting(); }, 0);
+  }
+}
+</script>
+
+
+
+
+
+
+
+
+<style type = "text/css">
+.main-container {
+  max-width: 940px;
+  margin-left: auto;
+  margin-right: auto;
+}
+img {
+  max-width:100%;
+}
+.tabbed-pane {
+  padding-top: 12px;
+}
+.html-widget {
+  margin-bottom: 20px;
+}
+button.code-folding-btn:focus {
+  outline: none;
+}
+summary {
+  display: list-item;
+}
+pre code {
+  padding: 0;
+}
+</style>
+
+
+<style type="text/css">
+.dropdown-submenu {
+  position: relative;
+}
+.dropdown-submenu>.dropdown-menu {
+  top: 0;
+  left: 100%;
+  margin-top: -6px;
+  margin-left: -1px;
+  border-radius: 0 6px 6px 6px;
+}
+.dropdown-submenu:hover>.dropdown-menu {
+  display: block;
+}
+.dropdown-submenu>a:after {
+  display: block;
+  content: " ";
+  float: right;
+  width: 0;
+  height: 0;
+  border-color: transparent;
+  border-style: solid;
+  border-width: 5px 0 5px 5px;
+  border-left-color: #cccccc;
+  margin-top: 5px;
+  margin-right: -10px;
+}
+.dropdown-submenu:hover>a:after {
+  border-left-color: #adb5bd;
+}
+.dropdown-submenu.pull-left {
+  float: none;
+}
+.dropdown-submenu.pull-left>.dropdown-menu {
+  left: -100%;
+  margin-left: 10px;
+  border-radius: 6px 0 6px 6px;
+}
+</style>
+
+<script type="text/javascript">
+// manage active state of menu based on current page
+$(document).ready(function () {
+  // active menu anchor
+  href = window.location.pathname
+  href = href.substr(href.lastIndexOf('/') + 1)
+  if (href === "")
+    href = "index.html";
+  var menuAnchor = $('a[href="' + href + '"]');
+
+  // mark it active
+  menuAnchor.tab('show');
+
+  // if it's got a parent navbar menu mark it active as well
+  menuAnchor.closest('li.dropdown').addClass('active');
+
+  // Navbar adjustments
+  var navHeight = $(".navbar").first().height() + 15;
+  var style = document.createElement('style');
+  var pt = "padding-top: " + navHeight + "px; ";
+  var mt = "margin-top: -" + navHeight + "px; ";
+  var css = "";
+  // offset scroll position for anchor links (for fixed navbar)
+  for (var i = 1; i <= 6; i++) {
+    css += ".section h" + i + "{ " + pt + mt + "}\n";
+  }
+  style.innerHTML = "body {" + pt + "padding-bottom: 40px; }\n" + css;
+  document.head.appendChild(style);
+});
+</script>
+
+<!-- tabsets -->
+
+<style type="text/css">
+.tabset-dropdown > .nav-tabs {
+  display: inline-table;
+  max-height: 500px;
+  min-height: 44px;
+  overflow-y: auto;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+}
+
+.tabset-dropdown > .nav-tabs > li.active:before {
+  content: "";
+  font-family: 'Glyphicons Halflings';
+  display: inline-block;
+  padding: 10px;
+  border-right: 1px solid #ddd;
+}
+
+.tabset-dropdown > .nav-tabs.nav-tabs-open > li.active:before {
+  content: "&#xe258;";
+  border: none;
+}
+
+.tabset-dropdown > .nav-tabs.nav-tabs-open:before {
+  content: "";
+  font-family: 'Glyphicons Halflings';
+  display: inline-block;
+  padding: 10px;
+  border-right: 1px solid #ddd;
+}
+
+.tabset-dropdown > .nav-tabs > li.active {
+  display: block;
+}
+
+.tabset-dropdown > .nav-tabs > li > a,
+.tabset-dropdown > .nav-tabs > li > a:focus,
+.tabset-dropdown > .nav-tabs > li > a:hover {
+  border: none;
+  display: inline-block;
+  border-radius: 4px;
+  background-color: transparent;
+}
+
+.tabset-dropdown > .nav-tabs.nav-tabs-open > li {
+  display: block;
+  float: none;
+}
+
+.tabset-dropdown > .nav-tabs > li {
+  display: none;
+}
+</style>
+
+<!-- code folding -->
+
+
+
+
+</head>
+
+<body>
+
+
+<div class="container-fluid main-container">
+
+
+
+
+<div class="navbar navbar-default  navbar-fixed-top" role="navigation">
+  <div class="container">
+    <div class="navbar-header">
+      <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar">
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+      <a class="navbar-brand" href="index.html">DMo Workshop 2021</a>
+    </div>
+    <div id="navbar" class="navbar-collapse collapse">
+      <ul class="nav navbar-nav">
+        <li>
+  <a href="index.html">Home</a>
+</li>
+<li>
+  <a href="Fundamentals_R.html">Fundamental of R (1)</a>
+</li>
+<li>
+  <a href="Fundamentals_R_2.html">Fundamental of R (2)</a>
+</li>
+<li>
+  <a href="SIR.html">SIR models in R</a>
+</li>
+<li>
+  <a href="Materials.html">Materials</a>
+</li>
+      </ul>
+      <ul class="nav navbar-nav navbar-right">
+        
+      </ul>
+    </div><!--/.nav-collapse -->
+  </div><!--/.container -->
+</div><!--/.navbar -->
+
+<div id="header">
+
+
+
+<h1 class="title toc-ignore">Model Analysis</h1>
+
+</div>
+
+<div id="TOC">
+<ul>
+<li><a href="#before-start">Before Start</a></li>
+<li><a href="#compairing-a-models-prediction-with-data">Compairing a model’s prediction with data</a></li>
+<li><a href="#estimating-models-parameters">Estimating model’s parameters</a><ul>
+<li><a href="#sum-of-squares">Sum of squares</a></li>
+<li><a href="#sum-of-squares-profile">Sum of squares profile</a></li>
+<li><a href="#optimization">Optimization</a></li>
+</ul></li>
+<li><a href="#maximum-likelihood-estimation-with-the-bbmle-package">Maximum likelihood estimation with the <code>bbmle</code> package</a><ul>
+<li><a href="#poisson-distribution-of-errors">Poisson distribution of errors</a></li>
+</ul></li>
+</ul>
+</div>
+
+<div id="before-start" class="section level2">
+<h2>Before Start</h2>
+<p>We will use the simulator wrote on previous section <a href="SIR.html">SIR models in R</a>:</p>
+<pre class="r"><code>sir_1 &lt;- function(beta, gamma, S0, I0, R0, times) {
+  require(deSolve) # for the &quot;ode&quot; function
+  
+# the differential equations:
+  sir_equations &lt;- function(time, variables, parameters) {
+    with(as.list(c(variables, parameters)), {
+      dS &lt;- -beta * I * S
+      dI &lt;-  beta * I * S - gamma * I
+      dR &lt;-  gamma * I
+      return(list(c(dS, dI, dR)))
+    })
+  }
+  
+# the parameters values:
+  parameters_values &lt;- c(beta  = beta, gamma = gamma)
+
+# the initial values of variables:
+  initial_values &lt;- c(S = S0, I = I0, R = R0)
+  
+# solving
+  out &lt;- ode(initial_values, times, sir_equations, parameters_values)
+
+# returning the output:
+  as.data.frame(out)
+}</code></pre>
+</div>
+<div id="compairing-a-models-prediction-with-data" class="section level2">
+<h2>Compairing a model’s prediction with data</h2>
+<p>We will use our model to simulate transmission of influenza A/H1N1. The flu data we use in this tutorial is retrieve from <code>epimdr</code> packages in R.</p>
+<p><strong>Introduction of data</strong><br />
+Number of children confined to bed each day during a 1978 outbreak of the reemerging influenza A/H1N1 strain in a boarding school in North England. This subtype of influenza had been absent from human circulation after the A/H2N2 pandemic of 1957 but reemerge (presumably from some laboratory freezer) in 1977. The school had 763 boys of which 512 boys were confined to bed sometime during the outbreak. None of the boys would have had previous exposure to A/H1N1.</p>
+<pre class="r"><code>#install.packages(&quot;epimdr&quot;)
+flu &lt;- read.table(&quot;./Materials/flu.txt&quot;, header = TRUE)</code></pre>
+<pre class="r"><code># library(epimdr)
+flu</code></pre>
+<pre><code>##    day cases
+## 1    0     1
+## 2    1     6
+## 3    2    26
+## 4    3    73
+## 5    4   222
+## 6    5   293
+## 7    6   258
+## 8    7   236
+## 9    8   191
+## 10   9   124
+## 11  10    69
+## 12  11    26
+## 13  12    11
+## 14  13     4</code></pre>
+<p>Plot the <code>flu</code> data as point and use the <code>sir_1()</code> function to visually compare the model’s predictions and the data points:</p>
+<pre class="r"><code>with(flu, plot(day, cases, pch = 19, col = &quot;red&quot;, ylim = c(0, 600)))
+predictions &lt;- sir_1(beta = 0.004, gamma = 0.5, S0 = 999, I0 = 1, R0 = 0, times = flu$day)
+with(predictions,lines(time,I,col=&quot;red&quot;))</code></pre>
+<p><img src="Model_analysis_files/figure-html/unnamed-chunk-4-1.png" width="672" style="display: block; margin: auto;" /> Write a function that takes parameters values as inputs and draws the figure as an output. Play with that function to see how changing the values of parameters can bring the model’s predictions closer to the data points.</p>
+<pre class="r"><code>model_fit &lt;- function(beta, gamma, data, N = 763, ...) {
+  I0 &lt;- data$cases[1] # initial number of infected (from data)
+  times &lt;- data$day   # time points (from data)
+# model&#39;s predictions:
+  predictions &lt;- sir_1(beta = beta, gamma = gamma,   # parameters
+                       S0 = N - I0, I0 = I0, R0 = 0, # variables&#39; intial values
+                       times = times)                # time points
+# plotting the observed prevalences:
+  with(data, plot(day, cases, ...))
+# adding the model-predicted prevalence:
+  with(predictions, lines(time, I, col = &quot;red&quot;))
+}</code></pre>
+<p>Let’s try:</p>
+<pre class="r"><code>model_fit(beta = 0.004, gamma = 0.5, flu, pch = 19, col = &quot;red&quot;, ylim = c(0, 600))</code></pre>
+<p><img src="Model_analysis_files/figure-html/unnamed-chunk-6-1.png" width="672" style="display: block; margin: auto;" /> Try to observe the effects of increasing or decreasing the values of the transmission contact rate (<span class="math inline">\(\beta\)</span>) and the recovery rate (<span class="math inline">\(\gamma\)</span>) on the shape of the epidemic curve</p>
+</div>
+<div id="estimating-models-parameters" class="section level2">
+<h2>Estimating model’s parameters</h2>
+<div id="sum-of-squares" class="section level3">
+<h3>Sum of squares</h3>
+<p>We want to compare our model prediction with the real prevalence data. Below is the model prediction</p>
+<pre class="r"><code>predictions &lt;- sir_1(beta = 0.004, gamma = 0.5, S0 = 999, I0 = 1, R0 = 0, times = flu$day)
+predictions</code></pre>
+<pre><code>##    time           S          I          R
+## 1     0 999.0000000   1.000000   0.000000
+## 2     1 963.7055761  31.798299   4.496125
+## 3     2 461.5687749 441.915745  96.515480
+## 4     3  46.1563480 569.504176 384.339476
+## 5     4   7.0358807 373.498313 619.465807
+## 6     5   2.1489407 230.129339 767.721720
+## 7     6   1.0390927 140.410850 858.550058
+## 8     7   0.6674074  85.444792 913.887801
+## 9     8   0.5098627  51.944975 947.545162
+## 10    9   0.4328913  31.565149 968.001960
+## 11   10   0.3919173  19.176683 980.431400
+## 12   11   0.3689440  11.648910 987.982146
+## 13   12   0.3556517   7.075651 992.568698
+## 14   13   0.3478130   4.297635 995.354552</code></pre>
+<p>And the real prevalence data:</p>
+<pre class="r"><code>flu</code></pre>
+<pre><code>##    day cases
+## 1    0     1
+## 2    1     6
+## 3    2    26
+## 4    3    73
+## 5    4   222
+## 6    5   293
+## 7    6   258
+## 8    7   236
+## 9    8   191
+## 10   9   124
+## 11  10    69
+## 12  11    26
+## 13  12    11
+## 14  13     4</code></pre>
+<p>To quantify the comparison between prediction and observation, the simple way to do is compute <strong>“um of squares”</strong>:</p>
+<pre class="r"><code>sum((predictions$I - flu$cases)^2)</code></pre>
+<pre><code>## [1] 514150.7</code></pre>
+<p>Sum of squares is the squared sum of the lengths of vertical black segments of the figure below:</p>
+<pre class="r"><code># the observed prevalence:
+with(flu, plot(day, cases, pch = 19, col = &quot;red&quot;, ylim = c(0, 600)))
+# the model-predicted prevalence:
+with(predictions, lines(time, I, col = &quot;red&quot;, type = &quot;o&quot;))
+# the &quot;errors&quot;:
+segments(flu$day, flu$cases, predictions$time, predictions$I)</code></pre>
+<p><img src="Model_analysis_files/figure-html/unnamed-chunk-10-1.png" width="672" style="display: block; margin: auto;" /></p>
+</div>
+<div id="sum-of-squares-profile" class="section level3">
+<h3>Sum of squares profile</h3>
+<p><strong>Exercises</strong><br />
+Write a function that takes parameters values and a data set as inputs and returns the sum of squares as below:</p>
+<pre class="r"><code>ss &lt;- function(beta, gamma, data = flu, N = 763) {
+  I0 &lt;- data$cases[1]
+  times &lt;- data$day
+  predictions &lt;- sir_1(beta = beta, gamma = gamma,   # parameters
+                       S0 = N - I0, I0 = I0, R0 = 0, # variables&#39; intial values
+                       times = times)                # time points
+  sum((predictions$I[-1] - data$cases[-1])^2)
+}
+ss(beta = 0.004, gamma = 0.5)</code></pre>
+<pre><code>## [1] 194402.6</code></pre>
+<p>Try several possible values of <span class="math inline">\(\beta\)</span>:</p>
+<pre class="r"><code>beta_val &lt;- seq(from = 0.0016, to = 0.004, le = 100)
+ss_val &lt;- sapply(beta_val, ss, gamma = 0.5)</code></pre>
+<p>The minimum value of the sum of squares:</p>
+<pre class="r"><code>min_ss_val &lt;- min(ss_val)
+min_ss_val</code></pre>
+<pre><code>## [1] 5475.694</code></pre>
+<p>The estimate of the infectious contact rate is the value of the <code>beta_val</code> vector that corresponds to the minimum value of the sum of squares:</p>
+<pre class="r"><code>beta_hat &lt;- beta_val[ss_val == min_ss_val]
+beta_hat</code></pre>
+<pre><code>## [1] 0.002593939</code></pre>
+<p>Visualize in graph:</p>
+<pre class="r"><code>plot(beta_val, ss_val, type = &quot;l&quot;, lwd = 2,
+     xlab = expression(paste(&quot;infectious contact rate &quot;, beta)),
+     ylab = &quot;sum of squares&quot;)
+# adding the minimal value of the sum of squares:
+abline(h = min_ss_val, lty = 2, col = &quot;grey&quot;)
+# adding the estimate of beta:
+abline(v = beta_hat, lty = 2, col = &quot;grey&quot;)</code></pre>
+<p><img src="Model_analysis_files/figure-html/unnamed-chunk-15-1.png" width="672" style="display: block; margin: auto;" /> Now, do the same for the recovery rate <span class="math inline">\(\gamma\)</span>:</p>
+<pre class="r"><code>gamma_val &lt;- seq(from = 0.4, to = 0.575, le = 100)
+ss_val &lt;- sapply(gamma_val, function(x) ss(beta_hat, x))
+(min_ss_val &lt;- min(ss_val))</code></pre>
+<pre><code>## [1] 4908.896</code></pre>
+<pre class="r"><code>(gamma_hat &lt;- gamma_val[ss_val == min_ss_val])</code></pre>
+<pre><code>## [1] 0.4777778</code></pre>
+<pre class="r"><code>plot(gamma_val, ss_val, type = &quot;l&quot;, lwd = 2,
+     xlab = expression(paste(&quot;recovery rate &quot;, gamma)),
+     ylab = &quot;sum of squares&quot;)
+abline(h = min_ss_val, lty = 2, col = &quot;grey&quot;)
+abline(v = gamma_hat, lty = 2, col = &quot;grey&quot;)</code></pre>
+<p><img src="Model_analysis_files/figure-html/unnamed-chunk-18-1.png" width="672" style="display: block; margin: auto;" /> Do it now for the two parameters at the same time, using the functions <code>expand.grid()</code> and <code>persp()</code>:</p>
+<pre class="r"><code>n &lt;- 10 # number of parameter values to try
+beta_val &lt;- seq(from = 0.002, to = 0.0035, le = n)
+gamma_val &lt;- seq(from = 0.3, to = 0.65, le = n)
+param_val &lt;- expand.grid(beta_val, gamma_val)
+ss_val &lt;- with(param_val, Map(ss, Var1, Var2))
+ss_val &lt;- matrix(unlist(ss_val), n)
+persp(beta_val, gamma_val, -ss_val, theta = 40, phi = 30,
+      xlab = &quot;beta&quot;, ylab = &quot;gamma&quot;, zlab = &quot;-sum of squares&quot;)</code></pre>
+<p><img src="Model_analysis_files/figure-html/unnamed-chunk-19-1.png" width="672" style="display: block; margin: auto;" /> And a 2-dimension version using the <code>image()</code> and <code>contour()</code> functions:</p>
+<pre class="r"><code>n &lt;- 30 # number of parameters values
+beta_val &lt;- seq(from = 0.002, to = 0.0035, le = n)
+gamma_val &lt;- seq(from = 0.3, to = 0.65, le = n)
+# calculating the sum of squares:
+param_val &lt;- expand.grid(beta_val, gamma_val)
+ss_val &lt;- with(param_val, Map(ss, Var1, Var2))
+ss_val &lt;- unlist(ss_val)
+
+# minimum sum of squares and parameters values:
+(ss_min &lt;- min(ss_val))</code></pre>
+<pre><code>## [1] 4843.681</code></pre>
+<pre class="r"><code>ind &lt;- ss_val == ss_min
+(beta_hat &lt;- param_val$Var1[ind])</code></pre>
+<pre><code>## [1] 0.002568966</code></pre>
+<pre class="r"><code>(gamma_hat &lt;- param_val$Var2[ind])</code></pre>
+<pre><code>## [1] 0.4810345</code></pre>
+<pre class="r"><code># visualizing the sum of squares profile:
+ss_val &lt;- matrix(ss_val, n)
+image(beta_val, gamma_val, ss_val,
+      xlab = expression(paste(&quot;infectious contact rate &quot;, beta, &quot; (/person/day)&quot;)),
+      ylab = expression(paste(&quot;recovery rate &quot;, gamma, &quot; (/day)&quot;)))
+contour(beta_val, gamma_val,ss_val, add = TRUE)
+points(beta_hat, gamma_hat, pch = 3)
+box(bty = &quot;o&quot;)</code></pre>
+<p><img src="Model_analysis_files/figure-html/unnamed-chunk-20-1.png" width="672" style="display: block; margin: auto;" /></p>
+</div>
+<div id="optimization" class="section level3">
+<h3>Optimization</h3>
+<p>The aim here is to estimate the parameters values more efficiently, with an “intelligent” algorithm instead of exploring many possible values (at random or “exhaustively”). This can be done with the function <code>optim()</code>. Looking at the help of this function, you can see that you need * a vector of initial values for the parameters to be optimized over and * a function to be minimized. This function should take as its first argument a vector of parameters over which minimization is to take place and return one single number (the value of the function, here the sum of squares).</p>
+<p>Let’s do this. First thing we need is a function that takes parameters values as an input and return the sum of squares as an output. We already have the <code>ss()</code> function that almost does the job:</p>
+<pre class="r"><code>ss(beta = 0.004, gamma = 0.5)</code></pre>
+<pre><code>## [1] 194402.6</code></pre>
+<p>We just need to write another function around this <code>ss()</code> that will have an input interface that fits the requirement of the <code>optim()</code> function (i.e. having the parameters in one vector argument instead of two separate arguments:</p>
+<pre class="r"><code>ss2 &lt;- function(x) {
+  ss(beta = x[1], gamma = x[2])
+}
+ss2(c(0.004, 0.5))</code></pre>
+<pre><code>## [1] 194402.6</code></pre>
+<p>Now we can feed it to the optim() function, together with some starting values of the parameters to initiate the optimization algorithm:</p>
+<pre class="r"><code>starting_param_val &lt;- c(0.004, 0.5)
+ss_optim &lt;- optim(starting_param_val, ss2)</code></pre>
+<p>It returns this object, which is a simple list of 5 slots:</p>
+<pre class="r"><code>ss_optim</code></pre>
+<pre><code>## $par
+## [1] 0.002569418 0.475099614
+## 
+## $value
+## [1] 4799.546
+## 
+## $counts
+## function gradient 
+##       75       NA 
+## 
+## $convergence
+## [1] 0
+## 
+## $message
+## NULL</code></pre>
+<p>and from which you can extract the information you are interested in: the minimum value of the sum of squares and the parameters estimates:</p>
+<pre class="r"><code>ss_optim$value</code></pre>
+<pre><code>## [1] 4799.546</code></pre>
+<pre class="r"><code>ss_optim$par</code></pre>
+<pre><code>## [1] 0.002569418 0.475099614</code></pre>
+</div>
+</div>
+<div id="maximum-likelihood-estimation-with-the-bbmle-package" class="section level2">
+<h2>Maximum likelihood estimation with the <code>bbmle</code> package</h2>
+<p>A generalisation of the sum of squares idea is the likelihood. You can achieve the same results as above by defining a likelihood function instead of a sum of squares function and maximizing it (instead of minimizing) in order to estimate the parmaters values. You can also use the <code>optim()</code> function for that, as we did on the sum of squares. The <code>bbmle</code> package is built upon this <code>optim()</code> function and offers many more possibilities in terms of maximum likelihood estimation (confidence intervals, likelihood profiles, models comparisons, etc…). Have a look at this package and its tutorials to see how it works.</p>
+<p>First we need to define a likelihood function:</p>
+<pre class="r"><code>mLL &lt;- function(beta, gamma, sigma, day, cases, N = 763) {
+  beta &lt;- exp(beta) # to make sure that the parameters are positive
+  gamma &lt;- exp(gamma)
+  sigma &lt;- exp(sigma)
+  I0 &lt;- cases[1] # initial number of infectious
+  observations &lt;- cases[-1] # the fit is done on the other data points
+  predictions &lt;- sir_1(beta = beta, gamma = gamma,
+                       S0 = N - I0, I0 = I0, R0 = 0, times = day)
+  predictions &lt;- predictions$I[-1] # removing the first point too
+# returning minus log-likelihood:
+  -sum(dnorm(x = observations, mean = predictions, sd = sigma, log = TRUE))
+}</code></pre>
+<p>Performing the maximum likelihood with the <code>mle2()</code> function of the <code>bbmle</code> package:</p>
+<pre class="r"><code>library(bbmle) # for &quot;mle2&quot;, &quot;coef&quot;, &quot;confint&quot;, &quot;vcov&quot;, &quot;logLik&quot;, &quot;profile&quot;, &quot;summary&quot;, &quot;plot.profile.mle2&quot;</code></pre>
+<pre><code>## Loading required package: stats4</code></pre>
+<pre class="r"><code>starting_param_val &lt;- list(beta = 0.004, gamma = 0.5, sigma = 1)
+estimates &lt;- mle2(minuslogl = mLL, start = lapply(starting_param_val, log),
+                  method = &quot;Nelder-Mead&quot;, data = c(flu, N = 763))</code></pre>
+<p>A summary of the estimates:</p>
+<pre class="r"><code>summary(estimates)</code></pre>
+<pre><code>## Maximum likelihood estimation
+## 
+## Call:
+## mle2(minuslogl = mLL, start = lapply(starting_param_val, log), 
+##     method = &quot;Nelder-Mead&quot;, data = c(flu, N = 763))
+## 
+## Coefficients:
+##        Estimate Std. Error  z value     Pr(z)    
+## beta  -5.964048   0.017412 -342.517 &lt; 2.2e-16 ***
+## gamma -0.745078   0.037571  -19.831 &lt; 2.2e-16 ***
+## sigma  2.955300   0.196050   15.074 &lt; 2.2e-16 ***
+## ---
+## Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1
+## 
+## -2 log L: 113.7402</code></pre>
+<p>The point estimates (we need to back transform):</p>
+<pre class="r"><code>exp(coef(estimates))</code></pre>
+<pre><code>##         beta        gamma        sigma 
+##  0.002569489  0.474697037 19.207487576</code></pre>
+<p>The confidence interval (back transformation too):</p>
+<pre class="r"><code>exp(confint(estimates))</code></pre>
+<pre><code>##              2.5 %       97.5 %
+## beta   0.002476587  0.002666221
+## gamma  0.439434199  0.515227420
+## sigma 13.665889066 29.856687129</code></pre>
+<p>The variance-covariance matrix of the parameters:</p>
+<pre class="r"><code>vcov(estimates)</code></pre>
+<pre><code>##               beta         gamma         sigma
+## beta  0.0003031921  1.736696e-04  1.019810e-05
+## gamma 0.0001736696  1.411559e-03 -5.817817e-05
+## sigma 0.0000101981 -5.817817e-05  3.843550e-02</code></pre>
+<p>The value of the minus log-likelihood:</p>
+<pre class="r"><code>-logLik(estimates)</code></pre>
+<pre><code>## &#39;log Lik.&#39; 56.87009 (df=3)</code></pre>
+<p>The likelihood profiles:</p>
+<pre class="r"><code>prof &lt;- profile(estimates)
+plot(prof, main = NA)</code></pre>
+<p><img src="Model_analysis_files/figure-html/unnamed-chunk-33-1.png" width="672" style="display: block; margin: auto;" /></p>
+<p>A figure comparing the data with the fitted model:</p>
+<pre class="r"><code>N &lt;- 763 # total population size
+time_points &lt;- seq(min(flu$day), max(flu$day), le = 100) # vector of time points
+I0 &lt;- flu$cases[1] # initial number of infected
+param_hat &lt;- exp(coef(estimates)) # parameters estimates
+# model&#39;s best predictions:
+best_predictions &lt;- sir_1(beta = param_hat[&quot;beta&quot;], gamma = param_hat[&quot;gamma&quot;],
+                          S0 = N - I0, I0 = I0, R0 = 0, time_points)$I
+# confidence interval of the best predictions:
+cl &lt;- 0.95 # confidence level
+cl &lt;- (1 - cl) / 2
+lwr &lt;- qnorm(p = cl, mean = best_predictions, sd = param_hat[&quot;sigma&quot;])
+upr &lt;- qnorm(p = 1 - cl, mean = best_predictions, sd = param_hat[&quot;sigma&quot;])
+# layout of the plot:
+plot(time_points, time_points, ylim = c(0, max(upr)), type = &quot;n&quot;,
+     xlab = &quot;time (days)&quot;, ylab = &quot;prevalence&quot;)
+# adding the predictions&#39; confidence interval:
+sel &lt;- time_points &gt;= 1 # predictions start from the second data point
+polygon(c(time_points[sel], rev(time_points[sel])), c(upr[sel], rev(lwr[sel])),
+        border = NA, col = adjustcolor(&quot;red&quot;, alpha.f = 0.1))
+# adding the model&#39;s best predictions:
+lines(time_points, best_predictions, col = &quot;red&quot;)
+# adding the observed data:
+with(flu, points(day, cases, pch = 19, col = &quot;red&quot;))</code></pre>
+<p><img src="Model_analysis_files/figure-html/unnamed-chunk-34-1.png" width="672" style="display: block; margin: auto;" /></p>
+<div id="poisson-distribution-of-errors" class="section level3">
+<h3>Poisson distribution of errors</h3>
+<p>Let’s now try another version of the model where we assume that the prevelences are Poisson distributed instead of normally distributed.</p>
+<p>Modifying the likelihood function:</p>
+<pre class="r"><code>#mLL &lt;- function(beta, gamma, sigma, day, cases, N = 763) {
+mLL_pois &lt;- function(beta, gamma, day, cases, N = 763) {
+  beta &lt;- exp(beta) # to make sure that the parameters are positive
+  gamma &lt;- exp(gamma)
+#  sigma &lt;- exp(sigma)
+  I0 &lt;- cases[1] # initial number of infectious
+  observations &lt;- cases[-1] # the fit is done on the other data points
+  predictions &lt;- sir_1(beta = beta, gamma = gamma,
+                       S0 = N - I0, I0 = I0, R0 = 0, times = day)
+  predictions &lt;- predictions$I[-1] # removing the first point too
+  if (any(predictions &lt; 0)) return(NA) # safety
+# returning minus log-likelihood:
+#  -sum(dnorm(x = observations, mean = predictions, sd = sigma, log = TRUE))
+  -sum(dpois(x = observations, lambda = predictions, log = TRUE))
+}</code></pre>
+<p>Estimating the parameters (2 here instead of 3):</p>
+<pre class="r"><code>starting_param_val &lt;- list(beta = 0.004, gamma = 0.5)
+estimates_pois &lt;- mle2(minuslogl = mLL_pois,
+                       start = lapply(starting_param_val, log),
+                       data = c(flu, N = 763))</code></pre>
+<p>Point estimates, to compare with the estimates from the previous model:</p>
+<pre class="r"><code>exp(coef(estimates))</code></pre>
+<pre><code>##         beta        gamma        sigma 
+##  0.002569489  0.474697037 19.207487576</code></pre>
+<pre class="r"><code>exp(coef(estimates_pois))</code></pre>
+<pre><code>##        beta       gamma 
+## 0.002606615 0.488037031</code></pre>
+<p>Confidence intervals, also to compare with the estimates from the previous model:</p>
+<pre class="r"><code>exp(confint(estimates))</code></pre>
+<pre><code>##              2.5 %       97.5 %
+## beta   0.002476587  0.002666221
+## gamma  0.439434199  0.515227420
+## sigma 13.665889066 29.856687129</code></pre>
+<pre class="r"><code>exp(confint(estimates_pois))</code></pre>
+<pre><code>##             2.5 %      97.5 %
+## beta  0.002555869 0.002659051
+## gamma 0.465921534 0.511233983</code></pre>
+<p>Variance-covariance:</p>
+<pre class="r"><code>vcov(estimates_pois)</code></pre>
+<pre><code>##               beta        gamma
+## beta  1.018070e-04 1.441282e-05
+## gamma 1.441282e-05 5.605317e-04</code></pre>
+<p>A figure:</p>
+<pre class="r"><code># points estimates:
+param_hat &lt;- exp(coef(estimates_pois))
+# model&#39;s best predictions:
+best_predictions &lt;- sir_1(beta = param_hat[&quot;beta&quot;], gamma = param_hat[&quot;gamma&quot;],
+                          S0 = N - I0, I0 = I0, R0 = 0, time_points)$I
+# confidence interval of the best predictions:
+cl &lt;- 0.95 # confidence level
+cl &lt;- (1 - cl) / 2
+lwr &lt;- qpois(p = cl, lambda = best_predictions)
+upr &lt;- qpois(p = 1 - cl, lambda = best_predictions)
+# layout of the plot:
+plot(time_points, time_points, ylim = c(0, max(upr)), type = &quot;n&quot;,
+     xlab = &quot;time (days)&quot;, ylab = &quot;prevalence&quot;)
+# adding the predictions&#39; confidence interval:
+sel &lt;- time_points &gt;= 1 # predictions start from the second data point
+polygon(c(time_points[sel], rev(time_points[sel])), c(upr[sel], rev(lwr[sel])),
+        border = NA, col = adjustcolor(&quot;red&quot;, alpha.f = 0.1))
+# adding the model&#39;s best predictions:
+lines(time_points, best_predictions, col = &quot;red&quot;)
+# adding the observed data:
+with(flu, points(day, cases, pch = 19, col = &quot;red&quot;))</code></pre>
+<p><img src="Model_analysis_files/figure-html/unnamed-chunk-39-1.png" width="672" style="display: block; margin: auto;" /></p>
+<p>Comparing the minus log-likelihoods:</p>
+<pre class="r"><code>-logLik(estimates)</code></pre>
+<pre><code>## &#39;log Lik.&#39; 56.87009 (df=3)</code></pre>
+<pre class="r"><code>-logLik(estimates_pois)</code></pre>
+<pre><code>## &#39;log Lik.&#39; 68.6638 (df=2)</code></pre>
+</div>
+</div>
+
+
+
+
+</div>
+
+<script>
+
+// add bootstrap table styles to pandoc tables
+function bootstrapStylePandocTables() {
+  $('tr.odd').parent('tbody').parent('table').addClass('table table-condensed');
+}
+$(document).ready(function () {
+  bootstrapStylePandocTables();
+});
+
+
+</script>
+
+<!-- tabsets -->
+
+<script>
+$(document).ready(function () {
+  window.buildTabsets("TOC");
+});
+
+$(document).ready(function () {
+  $('.tabset-dropdown > .nav-tabs > li').click(function () {
+    $(this).parent().toggleClass('nav-tabs-open');
+  });
+});
+</script>
+
+<!-- code folding -->
+
+
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+  (function () {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    script.src  = "https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML";
+    document.getElementsByTagName("head")[0].appendChild(script);
+  })();
+</script>
+
+</body>
+</html>

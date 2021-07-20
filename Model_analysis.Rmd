@@ -1,0 +1,421 @@
+---
+title: "Model Analysis"
+output: 
+  html_document:
+    toc: true
+    toc_depth: 3
+    theme: cosmo
+    highlight: textmate
+editor_options: 
+  chunk_output_type: inline
+---
+
+
+## Before Start
+We will use the simulator wrote on previous section [SIR models in R](SIR.html):
+```{r}
+sir_1 <- function(beta, gamma, S0, I0, R0, times) {
+  require(deSolve) # for the "ode" function
+  
+# the differential equations:
+  sir_equations <- function(time, variables, parameters) {
+    with(as.list(c(variables, parameters)), {
+      dS <- -beta * I * S
+      dI <-  beta * I * S - gamma * I
+      dR <-  gamma * I
+      return(list(c(dS, dI, dR)))
+    })
+  }
+  
+# the parameters values:
+  parameters_values <- c(beta  = beta, gamma = gamma)
+
+# the initial values of variables:
+  initial_values <- c(S = S0, I = I0, R = R0)
+  
+# solving
+  out <- ode(initial_values, times, sir_equations, parameters_values)
+
+# returning the output:
+  as.data.frame(out)
+}
+```
+
+## Compairing a model's prediction with data
+We will use our model to simulate transmission of influenza A/H1N1. The flu data we use in this tutorial is retrieve from ```epimdr``` packages in R.  
+
+**Introduction of data**  
+Number of children confined to bed each day during a 1978 outbreak of the reemerging influenza A/H1N1 strain in a boarding school in North England. This subtype of influenza had been absent from human circulation after the A/H2N2 pandemic of 1957 but reemerge (presumably from some laboratory freezer) in 1977. The school had 763 boys of which 512 boys were confined to bed sometime during the outbreak. None of the boys would have had previous exposure to A/H1N1.
+```{r}
+#install.packages("epimdr")
+flu <- read.table("./Materials/flu.txt", header = TRUE)
+
+```
+```{r, warning=FALSE,message=FALSE}
+# library(epimdr)
+flu
+```
+Plot the ```flu``` data as point and use the ```sir_1()``` function to visually compare the model's predictions and the data points:
+```{r,message=FALSE,fig.align='center'}
+with(flu, plot(day, cases, pch = 19, col = "red", ylim = c(0, 600)))
+predictions <- sir_1(beta = 0.004, gamma = 0.5, S0 = 999, I0 = 1, R0 = 0, times = flu$day)
+with(predictions,lines(time,I,col="red"))
+```
+Write a function that takes parameters values as inputs and draws the figure as an output. Play with that function to see how changing the values of parameters can bring the model's predictions closer to the data points.
+```{r}
+model_fit <- function(beta, gamma, data, N = 763, ...) {
+  I0 <- data$cases[1] # initial number of infected (from data)
+  times <- data$day   # time points (from data)
+# model's predictions:
+  predictions <- sir_1(beta = beta, gamma = gamma,   # parameters
+                       S0 = N - I0, I0 = I0, R0 = 0, # variables' intial values
+                       times = times)                # time points
+# plotting the observed prevalences:
+  with(data, plot(day, cases, ...))
+# adding the model-predicted prevalence:
+  with(predictions, lines(time, I, col = "red"))
+}
+```
+Let's try:
+```{r, fig.align='center'}
+model_fit(beta = 0.004, gamma = 0.5, flu, pch = 19, col = "red", ylim = c(0, 600))
+```
+Try to observe the effects of increasing or decreasing the values of the transmission contact rate ($\beta$) and the recovery rate ($\gamma$) on the shape of the epidemic curve
+
+## Estimating model's parameters
+### Sum of squares
+We want to compare our model prediction with the real prevalence data. Below is the model prediction
+```{r}
+predictions <- sir_1(beta = 0.004, gamma = 0.5, S0 = 999, I0 = 1, R0 = 0, times = flu$day)
+predictions
+```
+And the real prevalence data:
+```{r}
+flu
+```
+To quantify the comparison between prediction and observation, the simple way to do is compute **"um of squares"**:
+```{r}
+sum((predictions$I - flu$cases)^2)
+```
+Sum of squares is the squared sum of the lengths of vertical black segments of the figure below:
+```{r,fig.align='center'}
+# the observed prevalence:
+with(flu, plot(day, cases, pch = 19, col = "red", ylim = c(0, 600)))
+# the model-predicted prevalence:
+with(predictions, lines(time, I, col = "red", type = "o"))
+# the "errors":
+segments(flu$day, flu$cases, predictions$time, predictions$I)
+```
+
+### Sum of squares profile
+**Exercises**  
+Write a function that takes parameters values and a data set as inputs and returns the sum of squares as below:
+```{r}
+ss <- function(beta, gamma, data = flu, N = 763) {
+  I0 <- data$cases[1]
+  times <- data$day
+  predictions <- sir_1(beta = beta, gamma = gamma,   # parameters
+                       S0 = N - I0, I0 = I0, R0 = 0, # variables' intial values
+                       times = times)                # time points
+  sum((predictions$I[-1] - data$cases[-1])^2)
+}
+ss(beta = 0.004, gamma = 0.5)
+```
+Try several possible values of $\beta$:
+```{r}
+beta_val <- seq(from = 0.0016, to = 0.004, le = 100)
+ss_val <- sapply(beta_val, ss, gamma = 0.5)
+```
+The minimum value of the sum of squares:
+```{r}
+min_ss_val <- min(ss_val)
+min_ss_val
+```
+The estimate of the infectious contact rate is the value of the ```beta_val``` vector that corresponds to the minimum value of the sum of squares:
+```{r}
+beta_hat <- beta_val[ss_val == min_ss_val]
+beta_hat
+```
+Visualize in graph:
+```{r,fig.align='center'}
+plot(beta_val, ss_val, type = "l", lwd = 2,
+     xlab = expression(paste("infectious contact rate ", beta)),
+     ylab = "sum of squares")
+# adding the minimal value of the sum of squares:
+abline(h = min_ss_val, lty = 2, col = "grey")
+# adding the estimate of beta:
+abline(v = beta_hat, lty = 2, col = "grey")
+```
+Now, do the same for the recovery rate $\gamma$:
+```{r}
+gamma_val <- seq(from = 0.4, to = 0.575, le = 100)
+ss_val <- sapply(gamma_val, function(x) ss(beta_hat, x))
+(min_ss_val <- min(ss_val))
+```
+```{r}
+(gamma_hat <- gamma_val[ss_val == min_ss_val])
+```
+```{r,fig.align='center'}
+plot(gamma_val, ss_val, type = "l", lwd = 2,
+     xlab = expression(paste("recovery rate ", gamma)),
+     ylab = "sum of squares")
+abline(h = min_ss_val, lty = 2, col = "grey")
+abline(v = gamma_hat, lty = 2, col = "grey")
+```
+Do it now for the two parameters at the same time, using the functions ```expand.grid()``` and ```persp()```:
+```{r,fig.align='center'}
+n <- 10 # number of parameter values to try
+beta_val <- seq(from = 0.002, to = 0.0035, le = n)
+gamma_val <- seq(from = 0.3, to = 0.65, le = n)
+param_val <- expand.grid(beta_val, gamma_val)
+ss_val <- with(param_val, Map(ss, Var1, Var2))
+ss_val <- matrix(unlist(ss_val), n)
+persp(beta_val, gamma_val, -ss_val, theta = 40, phi = 30,
+      xlab = "beta", ylab = "gamma", zlab = "-sum of squares")
+```
+And a 2-dimension version using the ```image()``` and ```contour()``` functions:
+```{r,fig.align='center'}
+n <- 30 # number of parameters values
+beta_val <- seq(from = 0.002, to = 0.0035, le = n)
+gamma_val <- seq(from = 0.3, to = 0.65, le = n)
+# calculating the sum of squares:
+param_val <- expand.grid(beta_val, gamma_val)
+ss_val <- with(param_val, Map(ss, Var1, Var2))
+ss_val <- unlist(ss_val)
+
+# minimum sum of squares and parameters values:
+(ss_min <- min(ss_val))
+ind <- ss_val == ss_min
+(beta_hat <- param_val$Var1[ind])
+(gamma_hat <- param_val$Var2[ind])
+# visualizing the sum of squares profile:
+ss_val <- matrix(ss_val, n)
+image(beta_val, gamma_val, ss_val,
+      xlab = expression(paste("infectious contact rate ", beta, " (/person/day)")),
+      ylab = expression(paste("recovery rate ", gamma, " (/day)")))
+contour(beta_val, gamma_val,ss_val, add = TRUE)
+points(beta_hat, gamma_hat, pch = 3)
+box(bty = "o")
+```
+
+### Optimization
+The aim here is to estimate the parameters values more efficiently, with an "intelligent" algorithm instead of exploring many possible values (at random or "exhaustively"). This can be done with the function ```optim()```. Looking at the help of this function, you can see that you need
+* a vector of initial values for the parameters to be optimized over and
+* a function to be minimized. This function should take as its first argument a vector of parameters over which minimization is to take place and return one single number (the value of the function, here the sum of squares).
+
+Let's do this. First thing we need is a function that takes parameters values as an input and return the sum of squares as an output. We already have the ```ss()``` function that almost does the job:
+```{r}
+ss(beta = 0.004, gamma = 0.5)
+```
+We just need to write another function around this ```ss()``` that will have an input interface that fits the requirement of the ```optim()``` function (i.e.  having the parameters in one vector argument instead of two separate arguments:
+```{r}
+ss2 <- function(x) {
+  ss(beta = x[1], gamma = x[2])
+}
+ss2(c(0.004, 0.5))
+```
+Now we can feed it to the optim() function, together with some starting values of the parameters to initiate the optimization algorithm:
+```{r}
+starting_param_val <- c(0.004, 0.5)
+ss_optim <- optim(starting_param_val, ss2)
+```
+It returns this object, which is a simple list of 5 slots:
+```{r}
+ss_optim
+```
+and from which you can extract the information you are interested in: the minimum value of the sum of squares and the parameters estimates:
+```{r}
+ss_optim$value
+ss_optim$par
+```
+
+## Maximum likelihood estimation with the `bbmle` package
+
+A generalisation of the sum of squares idea is the likelihood. You can 
+achieve the same results as above by defining a likelihood function instead of a
+sum of squares function and maximizing it (instead of minimizing) in order to
+estimate the parmaters values. You can also use the `optim()` function for that,
+as we did on the sum of squares. The `bbmle` package is built upon this
+`optim()` function and offers many more possibilities in terms of maximum
+likelihood estimation (confidence intervals, likelihood profiles, models
+comparisons, etc...). Have a look at this package and its tutorials to see how
+it works.
+
+First we need to define a likelihood function:
+
+```{r}
+mLL <- function(beta, gamma, sigma, day, cases, N = 763) {
+  beta <- exp(beta) # to make sure that the parameters are positive
+  gamma <- exp(gamma)
+  sigma <- exp(sigma)
+  I0 <- cases[1] # initial number of infectious
+  observations <- cases[-1] # the fit is done on the other data points
+  predictions <- sir_1(beta = beta, gamma = gamma,
+                       S0 = N - I0, I0 = I0, R0 = 0, times = day)
+  predictions <- predictions$I[-1] # removing the first point too
+# returning minus log-likelihood:
+  -sum(dnorm(x = observations, mean = predictions, sd = sigma, log = TRUE))
+}
+```
+
+Performing the maximum likelihood with the `mle2()` function of the `bbmle`
+package:
+
+```{r}
+library(bbmle) # for "mle2", "coef", "confint", "vcov", "logLik", "profile", "summary", "plot.profile.mle2"
+starting_param_val <- list(beta = 0.004, gamma = 0.5, sigma = 1)
+estimates <- mle2(minuslogl = mLL, start = lapply(starting_param_val, log),
+                  method = "Nelder-Mead", data = c(flu, N = 763))
+```
+
+A summary of the estimates:
+
+```{r}
+summary(estimates)
+```
+
+The point estimates (we need to back transform):
+
+```{r}
+exp(coef(estimates))
+```
+
+The confidence interval (back transformation too):
+
+```{r}
+exp(confint(estimates))
+```
+
+The variance-covariance matrix of the parameters:
+
+```{r}
+vcov(estimates)
+```
+
+The value of the minus log-likelihood:
+
+```{r}
+-logLik(estimates)
+```
+
+The likelihood profiles:
+
+```{r,fig.align='center'}
+prof <- profile(estimates)
+plot(prof, main = NA)
+```
+
+A figure comparing the data with the fitted model:
+
+```{r,fig.align='center'}
+N <- 763 # total population size
+time_points <- seq(min(flu$day), max(flu$day), le = 100) # vector of time points
+I0 <- flu$cases[1] # initial number of infected
+param_hat <- exp(coef(estimates)) # parameters estimates
+# model's best predictions:
+best_predictions <- sir_1(beta = param_hat["beta"], gamma = param_hat["gamma"],
+                          S0 = N - I0, I0 = I0, R0 = 0, time_points)$I
+# confidence interval of the best predictions:
+cl <- 0.95 # confidence level
+cl <- (1 - cl) / 2
+lwr <- qnorm(p = cl, mean = best_predictions, sd = param_hat["sigma"])
+upr <- qnorm(p = 1 - cl, mean = best_predictions, sd = param_hat["sigma"])
+# layout of the plot:
+plot(time_points, time_points, ylim = c(0, max(upr)), type = "n",
+     xlab = "time (days)", ylab = "prevalence")
+# adding the predictions' confidence interval:
+sel <- time_points >= 1 # predictions start from the second data point
+polygon(c(time_points[sel], rev(time_points[sel])), c(upr[sel], rev(lwr[sel])),
+        border = NA, col = adjustcolor("red", alpha.f = 0.1))
+# adding the model's best predictions:
+lines(time_points, best_predictions, col = "red")
+# adding the observed data:
+with(flu, points(day, cases, pch = 19, col = "red"))
+```
+
+### Poisson distribution of errors
+
+Let's now try another version of the model where we assume that the prevelences
+are Poisson distributed instead of normally distributed.
+
+Modifying the likelihood function:
+
+```{r}
+#mLL <- function(beta, gamma, sigma, day, cases, N = 763) {
+mLL_pois <- function(beta, gamma, day, cases, N = 763) {
+  beta <- exp(beta) # to make sure that the parameters are positive
+  gamma <- exp(gamma)
+#  sigma <- exp(sigma)
+  I0 <- cases[1] # initial number of infectious
+  observations <- cases[-1] # the fit is done on the other data points
+  predictions <- sir_1(beta = beta, gamma = gamma,
+                       S0 = N - I0, I0 = I0, R0 = 0, times = day)
+  predictions <- predictions$I[-1] # removing the first point too
+  if (any(predictions < 0)) return(NA) # safety
+# returning minus log-likelihood:
+#  -sum(dnorm(x = observations, mean = predictions, sd = sigma, log = TRUE))
+  -sum(dpois(x = observations, lambda = predictions, log = TRUE))
+}
+```
+
+Estimating the parameters (2 here instead of 3):
+
+```{r,results==FALSE}
+starting_param_val <- list(beta = 0.004, gamma = 0.5)
+estimates_pois <- mle2(minuslogl = mLL_pois,
+                       start = lapply(starting_param_val, log),
+                       data = c(flu, N = 763))
+```
+
+Point estimates, to compare with the estimates from the previous model:
+
+```{r}
+exp(coef(estimates))
+exp(coef(estimates_pois))
+```
+
+Confidence intervals, also to compare with the estimates from the previous model:
+
+```{r,warning=FALSE,message=FALSE}
+exp(confint(estimates))
+exp(confint(estimates_pois))
+```
+
+Variance-covariance:
+
+```{r}
+vcov(estimates_pois)
+```
+
+A figure:
+
+```{r,fig.align='center'}
+# points estimates:
+param_hat <- exp(coef(estimates_pois))
+# model's best predictions:
+best_predictions <- sir_1(beta = param_hat["beta"], gamma = param_hat["gamma"],
+                          S0 = N - I0, I0 = I0, R0 = 0, time_points)$I
+# confidence interval of the best predictions:
+cl <- 0.95 # confidence level
+cl <- (1 - cl) / 2
+lwr <- qpois(p = cl, lambda = best_predictions)
+upr <- qpois(p = 1 - cl, lambda = best_predictions)
+# layout of the plot:
+plot(time_points, time_points, ylim = c(0, max(upr)), type = "n",
+     xlab = "time (days)", ylab = "prevalence")
+# adding the predictions' confidence interval:
+sel <- time_points >= 1 # predictions start from the second data point
+polygon(c(time_points[sel], rev(time_points[sel])), c(upr[sel], rev(lwr[sel])),
+        border = NA, col = adjustcolor("red", alpha.f = 0.1))
+# adding the model's best predictions:
+lines(time_points, best_predictions, col = "red")
+# adding the observed data:
+with(flu, points(day, cases, pch = 19, col = "red"))
+```
+
+Comparing the minus log-likelihoods:
+
+```{r}
+-logLik(estimates)
+-logLik(estimates_pois)
+```
