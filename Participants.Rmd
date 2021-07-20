@@ -1,0 +1,32 @@
+---
+title: "Particpants"
+output: 
+  html_document:
+    toc: true
+    toc_depth: 3
+    theme: cosmo
+    highlight: textmate
+editor_options: 
+  chunk_output_type: inline
+---
+
+```{r general_options, include = FALSE}
+knitr::knit_hooks$set(margin = function(before, options, envir) {
+  if (before) par(mgp = c(1.5, .5, 0), bty = "n", plt = c(.105, .97, .13, .97))
+  else NULL
+})
+knitr::opts_chunk$set(margin = TRUE, prompt = FALSE, comment = "##",
+                      collapse = FALSE, cache = FALSE, autodep = TRUE,
+                      dev.args = list(pointsize = 11), fig.height = 3.5,
+                      fig.width = 4.24725, fig.retina = 2, fig.align = "center")
+
+```
+
+## Instructors
+
+
+Name | Role |Email | Affiliation
+:--- | :---- |:---- | :----------
+[Assoc Prof Dr Jane Labadin](https://expert.unimas.my/profile/374) |Main instructor| ljane@unimas.my | [FCSIT](http://www.fcsit.unimas.my), [UNIMAS](http://www.unimas.my)
+[Hong Boon Hao](https://www.linkedin.com/in/hong-boon-hao-6202a7186/) |Assistant instructor  | wenhao0117@hotmail.com | [FCSIT](http://www.fcsit.unimas.my), [UNIMAS](http://www.unimas.my)
+

@@ -5,6 +5,8 @@ navbar:
   left:
     - text: "Home"
       href: index.html
+    - text: "Participants"
+      href: Participants.html
     - text: "Fundamental of R (1)"
       href: Fundamentals_R.html
     - text: "Fundamental of R (2)"
