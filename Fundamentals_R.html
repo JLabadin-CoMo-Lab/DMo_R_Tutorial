@@ -917,7 +917,7 @@ groceries[groceries$price == max(groceries$price),c(&quot;items&quot;,&quot;site
 <div id="read-data" class="section level3">
 <h3>Read data</h3>
 <p>Data can be load into R by using function <strong>read.table()</strong>,<strong>read.delim()</strong></p>
-<pre class="r"><code>read.table(&quot;gr2.txt&quot;,header=T,sep=&#39;\t&#39;)</code></pre>
+<pre class="r"><code>read.table(&quot;https://raw.githubusercontent.com/wenhao0117/DMo_2021/main/Materials/gr2.txt&quot;,header=T,sep=&#39;\t&#39;)</code></pre>
 <pre><code>##       items price              site market
 ## 1    orange  3.45           Kuching   TRUE
 ## 2     apple  7.12 KotaÂ SamarahanÂ   FALSE
@@ -925,7 +925,7 @@ groceries[groceries$price == max(groceries$price),c(&quot;items&quot;,&quot;site
 ## 4     mango  5.00           Kuching  FALSE
 ## 5    banana  7.00           Kuching  FALSE</code></pre>
 <pre class="r"><code>#read.table(file.choose(),header = T,sep = &#39;\t&#39;)
-read.delim(&quot;gr2.txt&quot;)</code></pre>
+read.delim(&quot;https://raw.githubusercontent.com/wenhao0117/DMo_2021/main/Materials/gr2.txt&quot;)</code></pre>
 <pre><code>##       items price              site market
 ## 1    orange  3.45           Kuching   TRUE
 ## 2     apple  7.12 KotaÂ SamarahanÂ   FALSE

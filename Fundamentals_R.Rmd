@@ -394,9 +394,9 @@ Data sets are most of the time in excel spreadsheet of equivalent or in a databa
 ### Read data
 Data can be load into R by using function **read.table()**,**read.delim()**
 ```{r}
-read.table("gr2.txt",header=T,sep='\t')
+read.table("https://raw.githubusercontent.com/wenhao0117/DMo_2021/main/Materials/gr2.txt",header=T,sep='\t')
 #read.table(file.choose(),header = T,sep = '\t')
-read.delim("gr2.txt")
+read.delim("https://raw.githubusercontent.com/wenhao0117/DMo_2021/main/Materials/gr2.txt")
 ```
 
 ### Run statstical test
