@@ -402,8 +402,7 @@ read.delim("gr2.txt")
 ### Run statstical test
 Putting data into good format
 ```{r}
-data1 <- read.csv('datasets/dataset1.csv',head=TRUE,sep =',')
-#data1 <- read.table(file.choose(),header = T,sep = ',')
+data1 <- read.csv('https://raw.githubusercontent.com/wenhao0117/DMo_2021/main/datasets/dataset1.csv',head=TRUE,sep=',')
 names(data1)
 head(data1)
 tail(data1)
@@ -416,10 +415,7 @@ Summarize the dataset in efficient way
 ```{r}
 table(data1$Grade,data1$Demographic)
 ```
-Basic statistic function
-```{r,fig.align = 'center',echo=FALSE}
-knitr::include_graphics('figures/basic_stats.png')
-```
+
 **Questions**  
 1. Is there any relationship between the numbers of student who take ELA and the mean scale score?  
 2. Which ethnic perform better in ELA test in mean scale score?  

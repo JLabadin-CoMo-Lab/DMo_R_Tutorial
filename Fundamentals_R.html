@@ -936,8 +936,7 @@ read.delim(&quot;gr2.txt&quot;)</code></pre>
 <div id="run-statstical-test" class="section level3">
 <h3>Run statstical test</h3>
 <p>Putting data into good format</p>
-<pre class="r"><code>data1 &lt;- read.csv(&#39;datasets/dataset1.csv&#39;,head=TRUE,sep =&#39;,&#39;)
-#data1 &lt;- read.table(file.choose(),header = T,sep = &#39;,&#39;)
+<pre class="r"><code>data1 &lt;- read.csv(&#39;https://raw.githubusercontent.com/wenhao0117/DMo_2021/main/datasets/dataset1.csv&#39;,head=TRUE,sep=&#39;,&#39;)
 names(data1)</code></pre>
 <pre><code>##  [1] &quot;Grade&quot;             &quot;Year&quot;              &quot;Demographic&quot;      
 ##  [4] &quot;Number.Tested&quot;     &quot;Mean.Scale.Score&quot;  &quot;Num.Level.1&quot;      
@@ -1018,7 +1017,7 @@ English Language Arts (ELA) Test Results from year 2006 until 2012 in New York C
 ##   7              7     7        7     7
 ##   8              7     7        7     7
 ##   All Grades     7     7        7     7</code></pre>
-<p>Basic statistic function <img src="figures/basic_stats.png" width="742" style="display: block; margin: auto;" /> <strong>Questions</strong><br />
+<p><strong>Questions</strong><br />
 1. Is there any relationship between the numbers of student who take ELA and the mean scale score?<br />
 2. Which ethnic perform better in ELA test in mean scale score?</p>
 <pre class="r"><code>summary(data1)</code></pre>
@@ -1068,12 +1067,12 @@ plot(data1$Number.Tested,
      ylab = &quot;Mean Scale Score&quot;
      )
 abline(reg1)</code></pre>
-<p><img src="Fundamentals_R_files/figure-html/unnamed-chunk-59-1.png" width="672" style="display: block; margin: auto;" /></p>
+<p><img src="Fundamentals_R_files/figure-html/unnamed-chunk-58-1.png" width="672" style="display: block; margin: auto;" /></p>
 <pre class="r"><code>cor(data1$Number.Tested,data1$Mean.Scale.Score)</code></pre>
 <pre><code>## [1] -0.297196</code></pre>
 <p>Which ethnic perform better in ELA test in mean scale score?</p>
 <pre class="r"><code>boxplot(data1$Mean.Scale.Score~data1$Demographic)</code></pre>
-<p><img src="Fundamentals_R_files/figure-html/unnamed-chunk-60-1.png" width="672" style="display: block; margin: auto;" /></p>
+<p><img src="Fundamentals_R_files/figure-html/unnamed-chunk-59-1.png" width="672" style="display: block; margin: auto;" /></p>
 <p>Sub-setting the ethnic group and see the summary of each group.</p>
 <pre class="r"><code>black &lt;- subset(data1,Demographic==&quot;Black&quot;)
 summary(black)</code></pre>
