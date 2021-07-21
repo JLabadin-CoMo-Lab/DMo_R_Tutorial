@@ -1,0 +1,136 @@
+---
+title: "Data Processing and Exploration"
+output: 
+  html_document:
+    toc: true
+    toc_depth: 3
+    theme: cosmo
+    highlight: textmate
+editor_options: 
+  chunk_output_type: inline
+---
+
+```{r general_options, include = FALSE}
+knitr::knit_hooks$set(margin = function(before, options, envir) {
+  if (before) par(mgp = c(1.5, .5, 0), bty = "n", plt = c(.105, .97, .13, .97))
+  else NULL
+})
+knitr::opts_chunk$set(margin = TRUE, prompt = FALSE, comment = "##",
+                      collapse = FALSE, cache = FALSE, autodep = TRUE,
+                      dev.args = list(pointsize = 11), fig.height = 3.5,
+                      fig.width = 4.24725, fig.retina = 2, fig.align = "center")
+
+```
+
+## Data processing
+
+Here we show how to manipulate and visualize the data we can retrieved from ```COVID19``` package which is created by [COVID-19 Data Hub](https://covid19datahub.io/index.html). First, we need to install the package ```COVID19```:
+```
+install.packages("COVID19")
+```
+In this packages, it consisted 190 countries data included Malaysia
+```{r,warning=FALSE}
+library(COVID19)
+```
+In this session, we only cover Malaysia dataset. To retrieve the dataset of Malaysia, we need to use the ```covid19()``` function:
+```{r}
+x <- covid19("MYS")#MYS = Malaysia
+```
+[COVID-19 Data Hub](https://covid19datahub.io/index.html) provided many variable in the datasets, we can check it:
+```{r}
+names(x)
+```
+The details for each variable can review at [here](https://covid19datahub.io/articles/doc/data.html). Since the dataset did not provide number of incidence per day, now we need to compute the daily incidence based on the data. As we know the daily number of new cases is total number confirmed cases of today minus total number confirmed cases of yesterday. There are some of missing value on first few data of attribute confirmed, we can assume them as 0 in this scenario:
+```{r}
+x$confirmed[is.na(x$confirmed)] <- 0
+
+```
+Hence we can compute using the code below:
+```{r}
+#Method 1
+incidence <- c() #create an empty vector to hold all the incidence  
+for(i in 1:length(x$confirmed)){
+  temp <- x$confirmed[i+1]-x$confirmed[i] 
+  incidence <- append(incidence,temp)
+}
+length(incidence)
+length(incidence)==length(x$confirmed)
+```
+Or we can use the properties of data frame:
+```{r}
+#Method 2
+incidence <-tail(x$confirmed,-1) - head(x$confirmed,-1)
+length(incidence)
+length(incidence)==length(x$confirmed)
+```
+The only difference between this two method is the length of output. We can leave the output like this or we can insert into the dataframe. Note that the length of every attributes in the data frame must be same. If using method 2, we need to insert NA last of ```incidence``` vector:
+```{r}
+incidence[length(incidence)+1] <- NA
+length(incidence)==length(x$confirmed)
+x$incidence <- incidence
+```
+Now we have new attributes in our dataset:
+```{r}
+names(x)
+```
+
+### Excersice
+Since the dataset only provide total number of confirmed cases, recovered cases and deaths. Now let's try to calculate the number of active cases using formula below and insert into dataframe ```x```:
+$$
+ac(t) = cc(t) - rc(t) - dc(t)
+$$
+$$
+\\where:  
+\\ac(t) = number\;of\;active\;cases\;at\;time\;t,
+\\cc(t) = total\;number\;of\;confirmed\;cases\;at\;time\;t,
+\\rc(t) = total\;number\;of\;recovered\;cases\;at\;time\;t,
+\\dc(t) = total\;number\;of\;deaths\;at\;time\;t,
+\\t =1,2,3,...,T
+$$
+
+Some values are missing in the attributes of recovered and deaths, we can assume those missing data as 0 in this scenario:
+```{r}
+x$recovered[is.na(x$recovered)] <- 0
+x$deaths[is.na(x$deaths)] <- 0
+```
+
+Solution:
+```{r}
+x$active <- x$confirmed - x$recovered - x$deaths
+names(x)
+head(x$active)
+tail(x$active)
+```
+
+## Data Exploration
+The dataset consists the data from year 2020 to 2021 July, let's try to seperate the data with year:
+```{r}
+x2020 <- x[x$date <= '2020-12-31',]
+head(x2020)
+tail(x2020)
+x2021 <- x[x$date > '2020-12-31',]
+head(x2021)
+tail(x2021)
+```
+Now we focus on year 2020, let's us visualize some of the attributes:
+```{r,fig.align = "center"}
+attr_list <- c(5,6,7,37,38)#index of attribute
+par(mfrow = c(5,1))
+for(attrX in attr_list){
+  barplot(x2020[[attrX]],space=0,xlab = NA,ylab = 'Total')
+  mtext(names(x2020[attrX]),line=-1)
+}
+```
+
+### Exersice
+Now let's try with same attributes for year 2021  
+
+Solution:
+```{r,fig.align = "center"}
+attr_list <- c(5,6,7,37,38)#index of attribute
+par(mfrow = c(5,1))
+for(attrX in attr_list){
+  barplot(x2021[[attrX]],space=0,xlab = NA,ylab = 'Total')
+  mtext(names(x2021[attrX]),line=-1)
+}
+```

@@ -1,0 +1,592 @@
+<!DOCTYPE html>
+
+<html>
+
+<head>
+
+<meta charset="utf-8" />
+<meta name="generator" content="pandoc" />
+<meta http-equiv="X-UA-Compatible" content="IE=EDGE" />
+
+
+
+
+<title>Data Processing and Exploration</title>
+
+<script src="site_libs/jquery-1.11.3/jquery.min.js"></script>
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<link href="site_libs/bootstrap-3.3.5/css/cosmo.min.css" rel="stylesheet" />
+<script src="site_libs/bootstrap-3.3.5/js/bootstrap.min.js"></script>
+<script src="site_libs/bootstrap-3.3.5/shim/html5shiv.min.js"></script>
+<script src="site_libs/bootstrap-3.3.5/shim/respond.min.js"></script>
+<style>h1 {font-size: 34px;}
+       h1.title {font-size: 38px;}
+       h2 {font-size: 30px;}
+       h3 {font-size: 24px;}
+       h4 {font-size: 18px;}
+       h5 {font-size: 16px;}
+       h6 {font-size: 12px;}
+       code {color: inherit; background-color: rgba(0, 0, 0, 0.04);}
+       pre:not([class]) { background-color: white }</style>
+<script src="site_libs/navigation-1.1/tabsets.js"></script>
+<link href="site_libs/highlightjs-9.12.0/textmate.css" rel="stylesheet" />
+<script src="site_libs/highlightjs-9.12.0/highlight.js"></script>
+<link rel="shortcut icon" href="logo/logo.png" />
+
+<style type="text/css">
+  code{white-space: pre-wrap;}
+  span.smallcaps{font-variant: small-caps;}
+  span.underline{text-decoration: underline;}
+  div.column{display: inline-block; vertical-align: top; width: 50%;}
+  div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+  ul.task-list{list-style: none;}
+    </style>
+
+<style type="text/css">code{white-space: pre;}</style>
+<script type="text/javascript">
+if (window.hljs) {
+  hljs.configure({languages: []});
+  hljs.initHighlightingOnLoad();
+  if (document.readyState && document.readyState === "complete") {
+    window.setTimeout(function() { hljs.initHighlighting(); }, 0);
+  }
+}
+</script>
+
+
+
+
+
+
+
+
+<style type = "text/css">
+.main-container {
+  max-width: 940px;
+  margin-left: auto;
+  margin-right: auto;
+}
+img {
+  max-width:100%;
+}
+.tabbed-pane {
+  padding-top: 12px;
+}
+.html-widget {
+  margin-bottom: 20px;
+}
+button.code-folding-btn:focus {
+  outline: none;
+}
+summary {
+  display: list-item;
+}
+pre code {
+  padding: 0;
+}
+</style>
+
+
+<style type="text/css">
+.dropdown-submenu {
+  position: relative;
+}
+.dropdown-submenu>.dropdown-menu {
+  top: 0;
+  left: 100%;
+  margin-top: -6px;
+  margin-left: -1px;
+  border-radius: 0 6px 6px 6px;
+}
+.dropdown-submenu:hover>.dropdown-menu {
+  display: block;
+}
+.dropdown-submenu>a:after {
+  display: block;
+  content: " ";
+  float: right;
+  width: 0;
+  height: 0;
+  border-color: transparent;
+  border-style: solid;
+  border-width: 5px 0 5px 5px;
+  border-left-color: #cccccc;
+  margin-top: 5px;
+  margin-right: -10px;
+}
+.dropdown-submenu:hover>a:after {
+  border-left-color: #adb5bd;
+}
+.dropdown-submenu.pull-left {
+  float: none;
+}
+.dropdown-submenu.pull-left>.dropdown-menu {
+  left: -100%;
+  margin-left: 10px;
+  border-radius: 6px 0 6px 6px;
+}
+</style>
+
+<script type="text/javascript">
+// manage active state of menu based on current page
+$(document).ready(function () {
+  // active menu anchor
+  href = window.location.pathname
+  href = href.substr(href.lastIndexOf('/') + 1)
+  if (href === "")
+    href = "index.html";
+  var menuAnchor = $('a[href="' + href + '"]');
+
+  // mark it active
+  menuAnchor.tab('show');
+
+  // if it's got a parent navbar menu mark it active as well
+  menuAnchor.closest('li.dropdown').addClass('active');
+
+  // Navbar adjustments
+  var navHeight = $(".navbar").first().height() + 15;
+  var style = document.createElement('style');
+  var pt = "padding-top: " + navHeight + "px; ";
+  var mt = "margin-top: -" + navHeight + "px; ";
+  var css = "";
+  // offset scroll position for anchor links (for fixed navbar)
+  for (var i = 1; i <= 6; i++) {
+    css += ".section h" + i + "{ " + pt + mt + "}\n";
+  }
+  style.innerHTML = "body {" + pt + "padding-bottom: 40px; }\n" + css;
+  document.head.appendChild(style);
+});
+</script>
+
+<!-- tabsets -->
+
+<style type="text/css">
+.tabset-dropdown > .nav-tabs {
+  display: inline-table;
+  max-height: 500px;
+  min-height: 44px;
+  overflow-y: auto;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+}
+
+.tabset-dropdown > .nav-tabs > li.active:before {
+  content: "";
+  font-family: 'Glyphicons Halflings';
+  display: inline-block;
+  padding: 10px;
+  border-right: 1px solid #ddd;
+}
+
+.tabset-dropdown > .nav-tabs.nav-tabs-open > li.active:before {
+  content: "&#xe258;";
+  border: none;
+}
+
+.tabset-dropdown > .nav-tabs.nav-tabs-open:before {
+  content: "";
+  font-family: 'Glyphicons Halflings';
+  display: inline-block;
+  padding: 10px;
+  border-right: 1px solid #ddd;
+}
+
+.tabset-dropdown > .nav-tabs > li.active {
+  display: block;
+}
+
+.tabset-dropdown > .nav-tabs > li > a,
+.tabset-dropdown > .nav-tabs > li > a:focus,
+.tabset-dropdown > .nav-tabs > li > a:hover {
+  border: none;
+  display: inline-block;
+  border-radius: 4px;
+  background-color: transparent;
+}
+
+.tabset-dropdown > .nav-tabs.nav-tabs-open > li {
+  display: block;
+  float: none;
+}
+
+.tabset-dropdown > .nav-tabs > li {
+  display: none;
+}
+</style>
+
+<!-- code folding -->
+
+
+
+
+</head>
+
+<body>
+
+
+<div class="container-fluid main-container">
+
+
+
+
+<div class="navbar navbar-default  navbar-fixed-top" role="navigation">
+  <div class="container">
+    <div class="navbar-header">
+      <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar">
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+      <a class="navbar-brand" href="index.html">DMo Workshop 2021</a>
+    </div>
+    <div id="navbar" class="navbar-collapse collapse">
+      <ul class="nav navbar-nav">
+        <li>
+  <a href="index.html">Home</a>
+</li>
+<li>
+  <a href="Participants.html">Participants</a>
+</li>
+<li>
+  <a href="Fundamentals_R.html">Fundamental of R (1)</a>
+</li>
+<li>
+  <a href="Fundamentals_R_2.html">Fundamental of R (2)</a>
+</li>
+<li>
+  <a href="SIR.html">SIR models in R</a>
+</li>
+<li>
+  <a href="Model_analysis.html">Model Analysis</a>
+</li>
+<li>
+  <a href="Data_processing_exporation.html">Data processing and exploration</a>
+</li>
+<li>
+  <a href="Materials.html">Materials</a>
+</li>
+      </ul>
+      <ul class="nav navbar-nav navbar-right">
+        
+      </ul>
+    </div><!--/.nav-collapse -->
+  </div><!--/.container -->
+</div><!--/.navbar -->
+
+<div id="header">
+
+
+
+<h1 class="title toc-ignore">Data Processing and Exploration</h1>
+
+</div>
+
+<div id="TOC">
+<ul>
+<li><a href="#data-processing">Data processing</a><ul>
+<li><a href="#excersice">Excersice</a></li>
+</ul></li>
+<li><a href="#data-exploration">Data Exploration</a><ul>
+<li><a href="#exersice">Exersice</a></li>
+</ul></li>
+</ul>
+</div>
+
+<div id="data-processing" class="section level2">
+<h2>Data processing</h2>
+<p>Here we show how to manipulate and visualize the data we can retrieved from <code>COVID19</code> package which is created by <a href="https://covid19datahub.io/index.html">COVID-19 Data Hub</a>. First, we need to install the package <code>COVID19</code>:</p>
+<pre><code>install.packages(&quot;COVID19&quot;)</code></pre>
+<p>In this packages, it consisted 190 countries data included Malaysia</p>
+<pre class="r"><code>library(COVID19)</code></pre>
+<p>In this session, we only cover Malaysia dataset. To retrieve the dataset of Malaysia, we need to use the <code>covid19()</code> function:</p>
+<pre class="r"><code>x &lt;- covid19(&quot;MYS&quot;)#MYS = Malaysia</code></pre>
+<pre><code>## We have invested a lot of time and effort in creating COVID-19 Data Hub, please cite the following when using it:
+## 
+##   Guidotti, E., Ardia, D., (2020), &quot;COVID-19 Data Hub&quot;, Journal of Open
+##   Source Software 5(51):2376, doi: 10.21105/joss.02376.
+## 
+## A BibTeX entry for LaTeX users is
+## 
+##   @Article{,
+##     title = {COVID-19 Data Hub},
+##     year = {2020},
+##     doi = {10.21105/joss.02376},
+##     author = {Emanuele Guidotti and David Ardia},
+##     journal = {Journal of Open Source Software},
+##     volume = {5},
+##     number = {51},
+##     pages = {2376},
+##   }
+## 
+## To retrieve citation and metadata of the data sources see ?covid19cite. To hide this message use &#39;verbose = FALSE&#39;.</code></pre>
+<p><a href="https://covid19datahub.io/index.html">COVID-19 Data Hub</a> provided many variable in the datasets, we can check it:</p>
+<pre class="r"><code>names(x)</code></pre>
+<pre><code>##  [1] &quot;id&quot;                                  &quot;date&quot;                               
+##  [3] &quot;vaccines&quot;                            &quot;tests&quot;                              
+##  [5] &quot;confirmed&quot;                           &quot;recovered&quot;                          
+##  [7] &quot;deaths&quot;                              &quot;hosp&quot;                               
+##  [9] &quot;vent&quot;                                &quot;icu&quot;                                
+## [11] &quot;population&quot;                          &quot;school_closing&quot;                     
+## [13] &quot;workplace_closing&quot;                   &quot;cancel_events&quot;                      
+## [15] &quot;gatherings_restrictions&quot;             &quot;transport_closing&quot;                  
+## [17] &quot;stay_home_restrictions&quot;              &quot;internal_movement_restrictions&quot;     
+## [19] &quot;international_movement_restrictions&quot; &quot;information_campaigns&quot;              
+## [21] &quot;testing_policy&quot;                      &quot;contact_tracing&quot;                    
+## [23] &quot;stringency_index&quot;                    &quot;iso_alpha_3&quot;                        
+## [25] &quot;iso_alpha_2&quot;                         &quot;iso_numeric&quot;                        
+## [27] &quot;currency&quot;                            &quot;administrative_area_level&quot;          
+## [29] &quot;administrative_area_level_1&quot;         &quot;administrative_area_level_2&quot;        
+## [31] &quot;administrative_area_level_3&quot;         &quot;latitude&quot;                           
+## [33] &quot;longitude&quot;                           &quot;key&quot;                                
+## [35] &quot;key_apple_mobility&quot;                  &quot;key_google_mobility&quot;</code></pre>
+<p>The details for each variable can review at <a href="https://covid19datahub.io/articles/doc/data.html">here</a>. Since the dataset did not provide number of incidence per day, now we need to compute the daily incidence based on the data. As we know the daily number of new cases is total number confirmed cases of today minus total number confirmed cases of yesterday. There are some of missing value on first few data of attribute confirmed, we can assume them as 0 in this scenario:</p>
+<pre class="r"><code>x$confirmed[is.na(x$confirmed)] &lt;- 0</code></pre>
+<p>Hence we can compute using the code below:</p>
+<pre class="r"><code>#Method 1
+incidence &lt;- c() #create an empty vector to hold all the incidence  
+for(i in 1:length(x$confirmed)){
+  temp &lt;- x$confirmed[i+1]-x$confirmed[i] 
+  incidence &lt;- append(incidence,temp)
+}
+length(incidence)</code></pre>
+<pre><code>## [1] 546</code></pre>
+<pre class="r"><code>length(incidence)==length(x$confirmed)</code></pre>
+<pre><code>## [1] TRUE</code></pre>
+<p>Or we can use the properties of data frame:</p>
+<pre class="r"><code>#Method 2
+incidence &lt;-tail(x$confirmed,-1) - head(x$confirmed,-1)
+length(incidence)</code></pre>
+<pre><code>## [1] 545</code></pre>
+<pre class="r"><code>length(incidence)==length(x$confirmed)</code></pre>
+<pre><code>## [1] FALSE</code></pre>
+<p>The only difference between this two method is the length of output. We can leave the output like this or we can insert into the dataframe. Note that the length of every attributes in the data frame must be same. If using method 2, we need to insert NA last of <code>incidence</code> vector:</p>
+<pre class="r"><code>incidence[length(incidence)+1] &lt;- NA
+length(incidence)==length(x$confirmed)</code></pre>
+<pre><code>## [1] TRUE</code></pre>
+<pre class="r"><code>x$incidence &lt;- incidence</code></pre>
+<p>Now we have new attributes in our dataset:</p>
+<pre class="r"><code>names(x)</code></pre>
+<pre><code>##  [1] &quot;id&quot;                                  &quot;date&quot;                               
+##  [3] &quot;vaccines&quot;                            &quot;tests&quot;                              
+##  [5] &quot;confirmed&quot;                           &quot;recovered&quot;                          
+##  [7] &quot;deaths&quot;                              &quot;hosp&quot;                               
+##  [9] &quot;vent&quot;                                &quot;icu&quot;                                
+## [11] &quot;population&quot;                          &quot;school_closing&quot;                     
+## [13] &quot;workplace_closing&quot;                   &quot;cancel_events&quot;                      
+## [15] &quot;gatherings_restrictions&quot;             &quot;transport_closing&quot;                  
+## [17] &quot;stay_home_restrictions&quot;              &quot;internal_movement_restrictions&quot;     
+## [19] &quot;international_movement_restrictions&quot; &quot;information_campaigns&quot;              
+## [21] &quot;testing_policy&quot;                      &quot;contact_tracing&quot;                    
+## [23] &quot;stringency_index&quot;                    &quot;iso_alpha_3&quot;                        
+## [25] &quot;iso_alpha_2&quot;                         &quot;iso_numeric&quot;                        
+## [27] &quot;currency&quot;                            &quot;administrative_area_level&quot;          
+## [29] &quot;administrative_area_level_1&quot;         &quot;administrative_area_level_2&quot;        
+## [31] &quot;administrative_area_level_3&quot;         &quot;latitude&quot;                           
+## [33] &quot;longitude&quot;                           &quot;key&quot;                                
+## [35] &quot;key_apple_mobility&quot;                  &quot;key_google_mobility&quot;                
+## [37] &quot;incidence&quot;</code></pre>
+<div id="excersice" class="section level3">
+<h3>Excersice</h3>
+<p>Since the dataset only provide total number of confirmed cases, recovered cases and deaths. Now let’s try to calculate the number of active cases using formula below and insert into dataframe <code>x</code>: <span class="math display">\[
+ac(t) = cc(t) - rc(t) - dc(t)
+\]</span> <span class="math display">\[
+\\where:  
+\\ac(t) = number\;of\;active\;cases\;at\;time\;t,
+\\cc(t) = total\;number\;of\;confirmed\;cases\;at\;time\;t,
+\\rc(t) = total\;number\;of\;recovered\;cases\;at\;time\;t,
+\\dc(t) = total\;number\;of\;deaths\;at\;time\;t,
+\\t =1,2,3,...,T
+\]</span></p>
+<p>Some values are missing in the attributes of recovered and deaths, we can assume those missing data as 0 in this scenario:</p>
+<pre class="r"><code>x$recovered[is.na(x$recovered)] &lt;- 0
+x$deaths[is.na(x$deaths)] &lt;- 0</code></pre>
+<p>Solution:</p>
+<pre class="r"><code>x$active &lt;- x$confirmed - x$recovered - x$deaths
+names(x)</code></pre>
+<pre><code>##  [1] &quot;id&quot;                                  &quot;date&quot;                               
+##  [3] &quot;vaccines&quot;                            &quot;tests&quot;                              
+##  [5] &quot;confirmed&quot;                           &quot;recovered&quot;                          
+##  [7] &quot;deaths&quot;                              &quot;hosp&quot;                               
+##  [9] &quot;vent&quot;                                &quot;icu&quot;                                
+## [11] &quot;population&quot;                          &quot;school_closing&quot;                     
+## [13] &quot;workplace_closing&quot;                   &quot;cancel_events&quot;                      
+## [15] &quot;gatherings_restrictions&quot;             &quot;transport_closing&quot;                  
+## [17] &quot;stay_home_restrictions&quot;              &quot;internal_movement_restrictions&quot;     
+## [19] &quot;international_movement_restrictions&quot; &quot;information_campaigns&quot;              
+## [21] &quot;testing_policy&quot;                      &quot;contact_tracing&quot;                    
+## [23] &quot;stringency_index&quot;                    &quot;iso_alpha_3&quot;                        
+## [25] &quot;iso_alpha_2&quot;                         &quot;iso_numeric&quot;                        
+## [27] &quot;currency&quot;                            &quot;administrative_area_level&quot;          
+## [29] &quot;administrative_area_level_1&quot;         &quot;administrative_area_level_2&quot;        
+## [31] &quot;administrative_area_level_3&quot;         &quot;latitude&quot;                           
+## [33] &quot;longitude&quot;                           &quot;key&quot;                                
+## [35] &quot;key_apple_mobility&quot;                  &quot;key_google_mobility&quot;                
+## [37] &quot;incidence&quot;                           &quot;active&quot;</code></pre>
+<pre class="r"><code>head(x$active)</code></pre>
+<pre><code>## [1] 0 0 0 3 4 4</code></pre>
+<pre class="r"><code>tail(x$active)</code></pre>
+<pre><code>## [1] 108369 114053 119814 124593 128997 133703</code></pre>
+</div>
+</div>
+<div id="data-exploration" class="section level2">
+<h2>Data Exploration</h2>
+<p>The dataset consists the data from year 2020 to 2021 July, let’s try to seperate the data with year:</p>
+<pre class="r"><code>x2020 &lt;- x[x$date &lt;= &#39;2020-12-31&#39;,]
+head(x2020)</code></pre>
+<pre><code>## # A tibble: 6 x 38
+## # Groups:   id [1]
+##   id    date       vaccines tests confirmed recovered deaths  hosp  vent   icu
+##   &lt;chr&gt; &lt;date&gt;        &lt;dbl&gt; &lt;int&gt;     &lt;dbl&gt;     &lt;dbl&gt;  &lt;dbl&gt; &lt;dbl&gt; &lt;int&gt; &lt;int&gt;
+## 1 MYS   2020-01-22       NA    NA         0         0      0    NA    NA    NA
+## 2 MYS   2020-01-23       NA    NA         0         0      0    NA    NA    NA
+## 3 MYS   2020-01-24       NA    NA         0         0      0    NA    NA    NA
+## 4 MYS   2020-01-25       NA    NA         3         0      0    NA    NA    NA
+## 5 MYS   2020-01-26       NA    NA         4         0      0    NA    NA    NA
+## 6 MYS   2020-01-27       NA    NA         4         0      0    NA    NA    NA
+## # ... with 28 more variables: population &lt;int&gt;, school_closing &lt;int&gt;,
+## #   workplace_closing &lt;int&gt;, cancel_events &lt;int&gt;,
+## #   gatherings_restrictions &lt;int&gt;, transport_closing &lt;int&gt;,
+## #   stay_home_restrictions &lt;int&gt;, internal_movement_restrictions &lt;int&gt;,
+## #   international_movement_restrictions &lt;int&gt;, information_campaigns &lt;int&gt;,
+## #   testing_policy &lt;int&gt;, contact_tracing &lt;int&gt;, stringency_index &lt;dbl&gt;,
+## #   iso_alpha_3 &lt;chr&gt;, iso_alpha_2 &lt;chr&gt;, iso_numeric &lt;int&gt;, currency &lt;chr&gt;,
+## #   administrative_area_level &lt;int&gt;, administrative_area_level_1 &lt;chr&gt;,
+## #   administrative_area_level_2 &lt;lgl&gt;, administrative_area_level_3 &lt;lgl&gt;,
+## #   latitude &lt;dbl&gt;, longitude &lt;dbl&gt;, key &lt;lgl&gt;, key_apple_mobility &lt;chr&gt;,
+## #   key_google_mobility &lt;chr&gt;, incidence &lt;dbl&gt;, active &lt;dbl&gt;</code></pre>
+<pre class="r"><code>tail(x2020)</code></pre>
+<pre><code>## # A tibble: 6 x 38
+## # Groups:   id [1]
+##   id    date       vaccines   tests confirmed recovered deaths  hosp  vent   icu
+##   &lt;chr&gt; &lt;date&gt;        &lt;dbl&gt;   &lt;int&gt;     &lt;dbl&gt;     &lt;dbl&gt;  &lt;dbl&gt; &lt;dbl&gt; &lt;int&gt; &lt;int&gt;
+## 1 MYS   2020-12-26       NA 3239706    103900     83414    451    NA    NA    NA
+## 2 MYS   2020-12-27       NA 3257503    105096     84411    452    NA    NA    NA
+## 3 MYS   2020-12-28       NA 3271880    106690     85592    455    NA    NA    NA
+## 4 MYS   2020-12-29       NA 3291834    108615     86715    457    NA    NA    NA
+## 5 MYS   2020-12-30       NA 3317646    110485     87460    463    NA    NA    NA
+## 6 MYS   2020-12-31       NA 3344327    113010     88941    471    NA    NA    NA
+## # ... with 28 more variables: population &lt;int&gt;, school_closing &lt;int&gt;,
+## #   workplace_closing &lt;int&gt;, cancel_events &lt;int&gt;,
+## #   gatherings_restrictions &lt;int&gt;, transport_closing &lt;int&gt;,
+## #   stay_home_restrictions &lt;int&gt;, internal_movement_restrictions &lt;int&gt;,
+## #   international_movement_restrictions &lt;int&gt;, information_campaigns &lt;int&gt;,
+## #   testing_policy &lt;int&gt;, contact_tracing &lt;int&gt;, stringency_index &lt;dbl&gt;,
+## #   iso_alpha_3 &lt;chr&gt;, iso_alpha_2 &lt;chr&gt;, iso_numeric &lt;int&gt;, currency &lt;chr&gt;,
+## #   administrative_area_level &lt;int&gt;, administrative_area_level_1 &lt;chr&gt;,
+## #   administrative_area_level_2 &lt;lgl&gt;, administrative_area_level_3 &lt;lgl&gt;,
+## #   latitude &lt;dbl&gt;, longitude &lt;dbl&gt;, key &lt;lgl&gt;, key_apple_mobility &lt;chr&gt;,
+## #   key_google_mobility &lt;chr&gt;, incidence &lt;dbl&gt;, active &lt;dbl&gt;</code></pre>
+<pre class="r"><code>x2021 &lt;- x[x$date &gt; &#39;2020-12-31&#39;,]
+head(x2021)</code></pre>
+<pre><code>## # A tibble: 6 x 38
+## # Groups:   id [1]
+##   id    date       vaccines   tests confirmed recovered deaths  hosp  vent   icu
+##   &lt;chr&gt; &lt;date&gt;        &lt;dbl&gt;   &lt;int&gt;     &lt;dbl&gt;     &lt;dbl&gt;  &lt;dbl&gt; &lt;dbl&gt; &lt;int&gt; &lt;int&gt;
+## 1 MYS   2021-01-01       NA 3371509    115078     91171    474    NA    NA    NA
+## 2 MYS   2021-01-02       NA 3390804    117373     94492    483    NA    NA    NA
+## 3 MYS   2021-01-03       NA 3414380    119077     97218    494    NA    NA    NA
+## 4 MYS   2021-01-04       NA 3435694    120818     98228    501    NA    NA    NA
+## 5 MYS   2021-01-05       NA 3462628    122845     99449    509    NA    NA    NA
+## 6 MYS   2021-01-06       NA 3492902    125438    100578    513    NA    NA    NA
+## # ... with 28 more variables: population &lt;int&gt;, school_closing &lt;int&gt;,
+## #   workplace_closing &lt;int&gt;, cancel_events &lt;int&gt;,
+## #   gatherings_restrictions &lt;int&gt;, transport_closing &lt;int&gt;,
+## #   stay_home_restrictions &lt;int&gt;, internal_movement_restrictions &lt;int&gt;,
+## #   international_movement_restrictions &lt;int&gt;, information_campaigns &lt;int&gt;,
+## #   testing_policy &lt;int&gt;, contact_tracing &lt;int&gt;, stringency_index &lt;dbl&gt;,
+## #   iso_alpha_3 &lt;chr&gt;, iso_alpha_2 &lt;chr&gt;, iso_numeric &lt;int&gt;, currency &lt;chr&gt;,
+## #   administrative_area_level &lt;int&gt;, administrative_area_level_1 &lt;chr&gt;,
+## #   administrative_area_level_2 &lt;lgl&gt;, administrative_area_level_3 &lt;lgl&gt;,
+## #   latitude &lt;dbl&gt;, longitude &lt;dbl&gt;, key &lt;lgl&gt;, key_apple_mobility &lt;chr&gt;,
+## #   key_google_mobility &lt;chr&gt;, incidence &lt;dbl&gt;, active &lt;dbl&gt;</code></pre>
+<pre class="r"><code>tail(x2021)</code></pre>
+<pre><code>## # A tibble: 6 x 38
+## # Groups:   id [1]
+##   id    date       vaccines   tests confirmed recovered deaths  hosp  vent   icu
+##   &lt;chr&gt; &lt;date&gt;        &lt;dbl&gt;   &lt;int&gt;     &lt;dbl&gt;     &lt;dbl&gt;  &lt;dbl&gt; &lt;dbl&gt; &lt;int&gt; &lt;int&gt;
+## 1 MYS   2021-07-15 13215121  1.60e7    880782    765800   6613    NA    NA    NA
+## 2 MYS   2021-07-16 13621884 NA         893323    772542   6728    NA    NA    NA
+## 3 MYS   2021-07-17 14002324 NA         905851    779171   6866    NA    NA    NA
+## 4 MYS   2021-07-18 14347285 NA         916561    784949   7019    NA    NA    NA
+## 5 MYS   2021-07-19 14772221 NA         927533    791388   7148    NA    NA    NA
+## 6 MYS   2021-07-20 15071814 NA         939899    798955   7241    NA    NA    NA
+## # ... with 28 more variables: population &lt;int&gt;, school_closing &lt;int&gt;,
+## #   workplace_closing &lt;int&gt;, cancel_events &lt;int&gt;,
+## #   gatherings_restrictions &lt;int&gt;, transport_closing &lt;int&gt;,
+## #   stay_home_restrictions &lt;int&gt;, internal_movement_restrictions &lt;int&gt;,
+## #   international_movement_restrictions &lt;int&gt;, information_campaigns &lt;int&gt;,
+## #   testing_policy &lt;int&gt;, contact_tracing &lt;int&gt;, stringency_index &lt;dbl&gt;,
+## #   iso_alpha_3 &lt;chr&gt;, iso_alpha_2 &lt;chr&gt;, iso_numeric &lt;int&gt;, currency &lt;chr&gt;,
+## #   administrative_area_level &lt;int&gt;, administrative_area_level_1 &lt;chr&gt;,
+## #   administrative_area_level_2 &lt;lgl&gt;, administrative_area_level_3 &lt;lgl&gt;,
+## #   latitude &lt;dbl&gt;, longitude &lt;dbl&gt;, key &lt;lgl&gt;, key_apple_mobility &lt;chr&gt;,
+## #   key_google_mobility &lt;chr&gt;, incidence &lt;dbl&gt;, active &lt;dbl&gt;</code></pre>
+<p>Now we focus on year 2020, let’s us visualize some of the attributes:</p>
+<pre class="r"><code>attr_list &lt;- c(5,6,7,37,38)#index of attribute
+par(mfrow = c(5,1))
+for(attrX in attr_list){
+  barplot(x2020[[attrX]],space=0,xlab = NA,ylab = &#39;Total&#39;)
+  mtext(names(x2020[attrX]),line=-1)
+}</code></pre>
+<p><img src="Data_processing_exporation_files/figure-html/unnamed-chunk-12-1.png" width="407.736" style="display: block; margin: auto;" /></p>
+<div id="exersice" class="section level3">
+<h3>Exersice</h3>
+<p>Now let’s try with same attributes for year 2021</p>
+<p>Solution:</p>
+<pre class="r"><code>attr_list &lt;- c(5,6,7,37,38)#index of attribute
+par(mfrow = c(5,1))
+for(attrX in attr_list){
+  barplot(x2021[[attrX]],space=0,xlab = NA,ylab = &#39;Total&#39;)
+  mtext(names(x2021[attrX]),line=-1)
+}</code></pre>
+<p><img src="Data_processing_exporation_files/figure-html/unnamed-chunk-13-1.png" width="407.736" style="display: block; margin: auto;" /></p>
+</div>
+</div>
+
+
+
+
+</div>
+
+<script>
+
+// add bootstrap table styles to pandoc tables
+function bootstrapStylePandocTables() {
+  $('tr.odd').parent('tbody').parent('table').addClass('table table-condensed');
+}
+$(document).ready(function () {
+  bootstrapStylePandocTables();
+});
+
+
+</script>
+
+<!-- tabsets -->
+
+<script>
+$(document).ready(function () {
+  window.buildTabsets("TOC");
+});
+
+$(document).ready(function () {
+  $('.tabset-dropdown > .nav-tabs > li').click(function () {
+    $(this).parent().toggleClass('nav-tabs-open');
+  });
+});
+</script>
+
+<!-- code folding -->
+
+
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+  (function () {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    script.src  = "https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML";
+    document.getElementsByTagName("head")[0].appendChild(script);
+  })();
+</script>
+
+</body>
+</html>

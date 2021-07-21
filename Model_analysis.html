@@ -260,6 +260,9 @@ $(document).ready(function () {
   <a href="Model_analysis.html">Model Analysis</a>
 </li>
 <li>
+  <a href="Data_processing_exporation.html">Data processing and exploration</a>
+</li>
+<li>
   <a href="Materials.html">Materials</a>
 </li>
       </ul>
@@ -350,7 +353,7 @@ flu</code></pre>
 <pre class="r"><code>with(flu, plot(day, cases, pch = 19, col = &quot;red&quot;, ylim = c(0, 600)))
 predictions &lt;- sir_1(beta = 0.004, gamma = 0.5, S0 = 999, I0 = 1, R0 = 0, times = flu$day)
 with(predictions,lines(time,I,col=&quot;red&quot;))</code></pre>
-<p><img src="Model_analysis_files/figure-html/unnamed-chunk-4-1.png" width="672" style="display: block; margin: auto;" /> Write a function that takes parameters values as inputs and draws the figure as an output. Play with that function to see how changing the values of parameters can bring the model’s predictions closer to the data points.</p>
+<p><img src="Model_analysis_files/figure-html/unnamed-chunk-4-1.png" width="407.736" style="display: block; margin: auto;" /> Write a function that takes parameters values as inputs and draws the figure as an output. Play with that function to see how changing the values of parameters can bring the model’s predictions closer to the data points.</p>
 <pre class="r"><code>model_fit &lt;- function(beta, gamma, data, N = 763, ...) {
   I0 &lt;- data$cases[1] # initial number of infected (from data)
   times &lt;- data$day   # time points (from data)
@@ -365,7 +368,7 @@ with(predictions,lines(time,I,col=&quot;red&quot;))</code></pre>
 }</code></pre>
 <p>Let’s try:</p>
 <pre class="r"><code>model_fit(beta = 0.004, gamma = 0.5, flu, pch = 19, col = &quot;red&quot;, ylim = c(0, 600))</code></pre>
-<p><img src="Model_analysis_files/figure-html/unnamed-chunk-6-1.png" width="672" style="display: block; margin: auto;" /> Try to observe the effects of increasing or decreasing the values of the transmission contact rate (<span class="math inline">\(\beta\)</span>) and the recovery rate (<span class="math inline">\(\gamma\)</span>) on the shape of the epidemic curve</p>
+<p><img src="Model_analysis_files/figure-html/unnamed-chunk-6-1.png" width="407.736" style="display: block; margin: auto;" /> Try to observe the effects of increasing or decreasing the values of the transmission contact rate (<span class="math inline">\(\beta\)</span>) and the recovery rate (<span class="math inline">\(\gamma\)</span>) on the shape of the epidemic curve</p>
 </div>
 <div id="estimating-models-parameters" class="section level2">
 <h2>Estimating model’s parameters</h2>
@@ -416,7 +419,7 @@ with(flu, plot(day, cases, pch = 19, col = &quot;red&quot;, ylim = c(0, 600)))
 with(predictions, lines(time, I, col = &quot;red&quot;, type = &quot;o&quot;))
 # the &quot;errors&quot;:
 segments(flu$day, flu$cases, predictions$time, predictions$I)</code></pre>
-<p><img src="Model_analysis_files/figure-html/unnamed-chunk-10-1.png" width="672" style="display: block; margin: auto;" /></p>
+<p><img src="Model_analysis_files/figure-html/unnamed-chunk-10-1.png" width="407.736" style="display: block; margin: auto;" /></p>
 </div>
 <div id="sum-of-squares-profile" class="section level3">
 <h3>Sum of squares profile</h3>
@@ -451,7 +454,7 @@ beta_hat</code></pre>
 abline(h = min_ss_val, lty = 2, col = &quot;grey&quot;)
 # adding the estimate of beta:
 abline(v = beta_hat, lty = 2, col = &quot;grey&quot;)</code></pre>
-<p><img src="Model_analysis_files/figure-html/unnamed-chunk-15-1.png" width="672" style="display: block; margin: auto;" /> Now, do the same for the recovery rate <span class="math inline">\(\gamma\)</span>:</p>
+<p><img src="Model_analysis_files/figure-html/unnamed-chunk-15-1.png" width="407.736" style="display: block; margin: auto;" /> Now, do the same for the recovery rate <span class="math inline">\(\gamma\)</span>:</p>
 <pre class="r"><code>gamma_val &lt;- seq(from = 0.4, to = 0.575, le = 100)
 ss_val &lt;- sapply(gamma_val, function(x) ss(beta_hat, x))
 (min_ss_val &lt;- min(ss_val))</code></pre>
@@ -463,7 +466,7 @@ ss_val &lt;- sapply(gamma_val, function(x) ss(beta_hat, x))
      ylab = &quot;sum of squares&quot;)
 abline(h = min_ss_val, lty = 2, col = &quot;grey&quot;)
 abline(v = gamma_hat, lty = 2, col = &quot;grey&quot;)</code></pre>
-<p><img src="Model_analysis_files/figure-html/unnamed-chunk-18-1.png" width="672" style="display: block; margin: auto;" /> Do it now for the two parameters at the same time, using the functions <code>expand.grid()</code> and <code>persp()</code>:</p>
+<p><img src="Model_analysis_files/figure-html/unnamed-chunk-18-1.png" width="407.736" style="display: block; margin: auto;" /> Do it now for the two parameters at the same time, using the functions <code>expand.grid()</code> and <code>persp()</code>:</p>
 <pre class="r"><code>n &lt;- 10 # number of parameter values to try
 beta_val &lt;- seq(from = 0.002, to = 0.0035, le = n)
 gamma_val &lt;- seq(from = 0.3, to = 0.65, le = n)
@@ -472,7 +475,7 @@ ss_val &lt;- with(param_val, Map(ss, Var1, Var2))
 ss_val &lt;- matrix(unlist(ss_val), n)
 persp(beta_val, gamma_val, -ss_val, theta = 40, phi = 30,
       xlab = &quot;beta&quot;, ylab = &quot;gamma&quot;, zlab = &quot;-sum of squares&quot;)</code></pre>
-<p><img src="Model_analysis_files/figure-html/unnamed-chunk-19-1.png" width="672" style="display: block; margin: auto;" /> And a 2-dimension version using the <code>image()</code> and <code>contour()</code> functions:</p>
+<p><img src="Model_analysis_files/figure-html/unnamed-chunk-19-1.png" width="407.736" style="display: block; margin: auto;" /> And a 2-dimension version using the <code>image()</code> and <code>contour()</code> functions:</p>
 <pre class="r"><code>n &lt;- 30 # number of parameters values
 beta_val &lt;- seq(from = 0.002, to = 0.0035, le = n)
 gamma_val &lt;- seq(from = 0.3, to = 0.65, le = n)
@@ -497,7 +500,7 @@ image(beta_val, gamma_val, ss_val,
 contour(beta_val, gamma_val,ss_val, add = TRUE)
 points(beta_hat, gamma_hat, pch = 3)
 box(bty = &quot;o&quot;)</code></pre>
-<p><img src="Model_analysis_files/figure-html/unnamed-chunk-20-1.png" width="672" style="display: block; margin: auto;" /></p>
+<p><img src="Model_analysis_files/figure-html/unnamed-chunk-20-1.png" width="407.736" style="display: block; margin: auto;" /></p>
 </div>
 <div id="optimization" class="section level3">
 <h3>Optimization</h3>
@@ -599,7 +602,7 @@ estimates &lt;- mle2(minuslogl = mLL, start = lapply(starting_param_val, log),
 <p>The likelihood profiles:</p>
 <pre class="r"><code>prof &lt;- profile(estimates)
 plot(prof, main = NA)</code></pre>
-<p><img src="Model_analysis_files/figure-html/unnamed-chunk-33-1.png" width="672" style="display: block; margin: auto;" /></p>
+<p><img src="Model_analysis_files/figure-html/unnamed-chunk-33-1.png" width="407.736" style="display: block; margin: auto;" /></p>
 <p>A figure comparing the data with the fitted model:</p>
 <pre class="r"><code>N &lt;- 763 # total population size
 time_points &lt;- seq(min(flu$day), max(flu$day), le = 100) # vector of time points
@@ -624,7 +627,7 @@ polygon(c(time_points[sel], rev(time_points[sel])), c(upr[sel], rev(lwr[sel])),
 lines(time_points, best_predictions, col = &quot;red&quot;)
 # adding the observed data:
 with(flu, points(day, cases, pch = 19, col = &quot;red&quot;))</code></pre>
-<p><img src="Model_analysis_files/figure-html/unnamed-chunk-34-1.png" width="672" style="display: block; margin: auto;" /></p>
+<p><img src="Model_analysis_files/figure-html/unnamed-chunk-34-1.png" width="407.736" style="display: block; margin: auto;" /></p>
 <div id="poisson-distribution-of-errors" class="section level3">
 <h3>Poisson distribution of errors</h3>
 <p>Let’s now try another version of the model where we assume that the prevelences are Poisson distributed instead of normally distributed.</p>
@@ -693,7 +696,7 @@ polygon(c(time_points[sel], rev(time_points[sel])), c(upr[sel], rev(lwr[sel])),
 lines(time_points, best_predictions, col = &quot;red&quot;)
 # adding the observed data:
 with(flu, points(day, cases, pch = 19, col = &quot;red&quot;))</code></pre>
-<p><img src="Model_analysis_files/figure-html/unnamed-chunk-39-1.png" width="672" style="display: block; margin: auto;" /></p>
+<p><img src="Model_analysis_files/figure-html/unnamed-chunk-39-1.png" width="407.736" style="display: block; margin: auto;" /></p>
 <p>Comparing the minus log-likelihoods:</p>
 <pre class="r"><code>-logLik(estimates)</code></pre>
 <pre><code>## &#39;log Lik.&#39; 56.87009 (df=3)</code></pre>

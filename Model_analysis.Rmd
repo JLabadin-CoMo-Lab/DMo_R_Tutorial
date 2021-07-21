@@ -9,7 +9,33 @@ output:
 editor_options: 
   chunk_output_type: inline
 ---
-
+```{r general_options, include = FALSE}
+knitr::knit_hooks$set(
+  margin1 = function(before, options, envir) {
+    if (before) par(mgp = c(1.5, .5, 0), bty = "n", plt = c(.105, .97, .13, .97))
+    else NULL
+  },
+  margin2 = function(before, options, envir) {
+    if (before) par(mgp = c(1.5, .5, 0), bty = "n", plt = c(.105, .9, .13, .97))
+    else NULL
+  }
+)
+knitr::opts_chunk$set(margin1 = TRUE, margin2 = FALSE, prompt = FALSE, comment = "##",
+                      collapse = FALSE, cache = FALSE, autodep = TRUE,
+                      dev.args = list(pointsize = 11), fig.height = 3.5,
+                      fig.width = 4.24725, fig.retina = 2, fig.align = "center")
+l <- "en_US.UTF-8"
+Sys.setenv(LANGAGE = l)
+Sys.setlocale(locale = l)
+Sys.setlocale("LC_MESSAGES", l)
+# cleaning the packages space:
+search_path <- search()
+pkgs <- c("stats", "graphics", "grDevices", "utils", "datasets", "methods", "base")
+tdet <- grep("package", search_path[!(search_path %in% paste0("package:", pkgs))],
+             value = TRUE)
+for(i in tdet) detach(i, unload = TRUE, character.only = TRUE)
+rm(list = ls())
+```
 
 ## Before Start
 We will use the simulator wrote on previous section [SIR models in R](SIR.html):
