@@ -6,7 +6,7 @@ output:
 editor_options: 
   chunk_output_type: console
 ---
-```{r,fig.align = 'center',echo=FALSE}
+```{r,fig.align = 'left',echo=FALSE}
 knitr::include_graphics('figures/dr.jpg')
 ```
 

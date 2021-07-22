@@ -24,11 +24,11 @@ knitr::opts_chunk$set(margin = TRUE, prompt = FALSE, comment = "##",
 
 ## Data processing
 
-Here we show how to manipulate and visualize the data we can retrieved from ```COVID19``` package which is created by [COVID-19 Data Hub](https://covid19datahub.io/index.html). First, we need to install the package ```COVID19```:
+Here we show how to manipulate and visualize the data we retrieved from ```COVID19``` package which is created by [COVID-19 Data Hub](https://covid19datahub.io/index.html). First, we need to install the package ```COVID19```:
 ```
 install.packages("COVID19")
 ```
-In this packages, it consisted 190 countries data included Malaysia
+In this package, it consisted 190 countries data included Malaysia
 ```{r,warning=FALSE}
 library(COVID19)
 ```
@@ -36,11 +36,11 @@ In this session, we only cover Malaysia dataset. To retrieve the dataset of Mala
 ```{r}
 x <- covid19("MYS")#MYS = Malaysia
 ```
-[COVID-19 Data Hub](https://covid19datahub.io/index.html) provided many variable in the datasets, we can check it:
+[COVID-19 Data Hub](https://covid19datahub.io/index.html) provided many variables in the dataset, we can check it:
 ```{r}
 names(x)
 ```
-The details for each variable can review at [here](https://covid19datahub.io/articles/doc/data.html). Since the dataset did not provide number of incidence per day, now we need to compute the daily incidence based on the data. As we know the daily number of new cases is total number confirmed cases of today minus total number confirmed cases of yesterday. There are some of missing value on first few data of attribute confirmed, we can assume them as 0 in this scenario:
+The details for each variable can reviewed at [here](https://covid19datahub.io/articles/doc/data.html). Since the dataset did not provide the number of incidence per day, then we need to compute the daily incidence based on the data. As we know the daily number of new cases is defined as the total number of confirmed cases of today minus the total number of confirmed cases of yesterday. Notice that there are some missing values on the first few data of the attribute confirmed, thus, we can assume them as 0 in this scenario:
 ```{r}
 x$confirmed[is.na(x$confirmed)] <- 0
 
