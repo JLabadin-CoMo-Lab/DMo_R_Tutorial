@@ -16,6 +16,8 @@ Download and install R from [https://cran.r-project.org/](https://cran.r-project
 
 Download and install RStudio from[https://www.rstudio.com/](https://www.rstudio.com/products/rstudio/download/#download)
 
+Install R and RStudio - A Step-by-Step Guide for Beginners [https://techvidvan.com/tutorials/install-r](https://techvidvan.com/tutorials/install-r)
+
 ## R Console
 
 ### Integrating with R: the command line
