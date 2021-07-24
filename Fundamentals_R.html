@@ -290,7 +290,7 @@ $(document).ready(function () {
 </ul></li>
 <li><a href="#variables">Variables</a><ul>
 <li><a href="#naming-convention">Naming Convention</a></li>
-<li><a href="#exercise-1">Exercise 1</a></li>
+<li><a href="#exercise-1-calculating-bmi">Exercise 1 Calculating BMI</a></li>
 </ul></li>
 <li><a href="#data-objects">Data Objects</a><ul>
 <li><a href="#vector">Vector</a></li>
@@ -369,22 +369,17 @@ ls()</code></pre>
 <li>case sensitive</li>
 </ul>
 </div>
-<div id="exercise-1" class="section level3">
-<h3>Exercise 1</h3>
-<div class="line-block">Aaron wishes to take out a loan, today, of <em>P</em>,<strong>RM 1500</strong> at a monthly interest rate <em>i</em>, 1<em>%</em>. The loan is to be paid back in <em>n</em>, <strong>12</strong> monthly installments, <em>R</em> amount each month. Calculate <em>R</em>, the monthly payment for this particular loan.</div>
-<div class="line-block">Equating the present value, <em>P</em> to the future (discounted) value of the <em>n</em> monthly payments <em>R</em>, we have:</div>
-<p><span class="math inline">\(P = R(1+i)^{-1}+R(1+i)^{-2}+R(1+i)^{-3}+\dotsm+R(1+i)^{-n}\)</span><br />
-or<br />
-<span class="math inline">\(P = R(\frac{1-(1+i)^{-n}}{i})\)</span><br />
-Thus,<br />
-<span class="math inline">\(R = P(\frac{i}{1-(1+i)^{-n}})\)</span></p>
+<div id="exercise-1-calculating-bmi" class="section level3">
+<h3>Exercise 1 Calculating BMI</h3>
+<p>Rose is 163cm tall and weighs 54.5kg, calculate BMI of Rose using formula below: <span class="math display">\[
+BMI = \frac{weight(kg)}{height(m)^2}
+\]</span></p>
 <p>Solution:</p>
-<pre class="r"><code>intRate &lt;- 0.01 #i
-n &lt;- 12
-principal &lt;- 1500 #P
-monthly_payment &lt;- principal*intRate/(1-(1+intRate)^(-n)) #R
-monthly_payment</code></pre>
-<pre><code>## [1] 133.2732</code></pre>
+<pre class="r"><code>weight &lt;- 54.5#kg
+height &lt;- 163/100#covert cm to m
+BMI &lt;- weight/(height)^2
+BMI</code></pre>
+<pre><code>## [1] 20.51263</code></pre>
 </div>
 </div>
 <div id="data-objects" class="section level2">
