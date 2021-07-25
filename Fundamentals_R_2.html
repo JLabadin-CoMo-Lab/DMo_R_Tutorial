@@ -297,7 +297,7 @@ $(document).ready(function () {
   result &lt;- x^y
   print(paste(x,&quot;raised to the power&quot;,y,&quot;is&quot;,result))
 }</code></pre>
-<p>We have created a function called pow(). It takes two arguments, finds the first argument raised to the power of second argument and prints the result in a sentence. Two <code>build-in function</code> are used which are <code>print()</code> and <code>paste()</code>. The function <code>print()</code> is display the output on the console while the <code>paste()</code> is concatenate strings.<br />
+<p>We have created a function called pow(). It takes two arguments, finds the first argument raised to the power of second argument and prints the result in a sentence. Two <code>build-in functions</code> are used which are <code>print()</code> and <code>paste()</code>. The function <code>print()</code> is display the output on the console while the <code>paste()</code> is concatenate strings.<br />
 Function call</p>
 <pre class="r"><code>pow(8,2)</code></pre>
 <pre><code>## [1] &quot;8 raised to the power 2 is 64&quot;</code></pre>
@@ -408,7 +408,7 @@ abline(0, 1, col = &quot;blue&quot;, lwd = 2, lty = 2)</code></pre>
 </div>
 <div id="packages" class="section level2">
 <h2>Packages</h2>
-<p>R packages are a collection of R functions, complied code and sample data. They are stored under a directory called <code>library()</code> in the R environment. By default, R installs a set of packages during installation. More packages are added later, when they are needed for some specific purpose. When we start the R console, only the default packages are available by default. Other packages which are already installed have to be loaded explicitly to be used by the R program that is going to use them. We have seen some of the functions is under <strong>base</strong> package which are <code>ls()</code>,<code>rm()</code>,<code>list()</code>,<code>data.frame()</code>. The graph function used on previous section <code>plot()</code>,<code>hist()</code>,<code>points()</code>,<code>abline()</code>,<code>legend()</code> are under under <strong>graphics</strong> packages. Since R is open source, user can develop other packages for others to use.<br />
+<p>R packages are a collection of R functions, code and sample data. They are stored under a directory called <code>library</code> in the R environment. By default, R installs a set of packages during installation. More packages are added later, when they are needed for some specific purpose. When we start the R console, only the default packages are available by default. Other packages which are already installed have to be loaded explicitly to be used by the R program that is going to use them. We have seen some of the functions is under <strong>base</strong> package which are <code>ls()</code>,<code>rm()</code>,<code>list()</code>,<code>data.frame()</code>. The graph function used on previous section <code>plot()</code>,<code>hist()</code>,<code>points()</code>,<code>abline()</code>,<code>legend()</code> are under under <strong>graphics</strong> packages. Since R is open source, user can develop other packages for others to use.<br />
 To install package, <code>install.packages()</code> is called by passing package name as argument:</p>
 <pre><code>install.packages(&quot;Package Name&quot;)</code></pre>
 <p>We will use the package <strong>deSolve</strong> for SIR modeling and <strong>bbmle</strong> for model calibration.</p>

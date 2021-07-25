@@ -95,7 +95,7 @@ The numerical solution of our SIR model is:
 ```{r}
 sir_values_1
 ```
-To use these value for further analytical steps, we can covert ```sir_values_1``` into data frame.
+To use these value for further analytical steps, we can convert ```sir_values_1``` into data frame.
 ```{r}
 sir_values_1 <- as.data.frame(sir_values_1)
 sir_values_1
