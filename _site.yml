@@ -15,7 +15,7 @@ navbar:
       href: SIR.html
     - text: "Model Analysis"
       href: Model_analysis.html
-    - text: "Data processing and exploration"
+    - text: "Data in R"
       href: Data_processing_exporation.html
     - text: "Materials"
       href: Materials.html
