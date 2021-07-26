@@ -1,12 +1,15 @@
 ---
 title: "Fundamentals of R (1)"
-output: 
+output:
+  pdf_document:
+    toc: yes
+    toc_depth: '3'
   html_document:
-    toc: true
+    toc: yes
     toc_depth: 3
     theme: cosmo
     highlight: textmate
-editor_options: 
+editor_options:
   chunk_output_type: inline
 ---
 
@@ -21,7 +24,7 @@ Install R and RStudio - A Step-by-Step Guide for Beginners [https://techvidvan.c
 ## R Console
 
 ### Integrating with R: the command line
-* **>|** indicates R is ready for user to enter an  instruction to execute
+* **>** indicates R is ready for user to enter an  instruction to execute
 * Press **Enter** to execute the instruction after key in the instruction
 * **+** means previous instruction was  incomplete and R is waiting for user to complete it
 * **#** means comment, R will ignore the following  instruction, it is a notes for other users.
@@ -284,6 +287,22 @@ Retrieve elements by using defined name
 ```{r}
 mat["A",]
 mat["A",c("c","d")]
+```
+We can form a matrix by combining multiple vectors with using function ```cbind``` or ```rbind()```:
+```{r}
+name <- c("Kelvin","Sam","Vivian")
+age <- c(25,31,17)
+gender <- c("Male","Male","Female")
+```
+```rbind()``` function stands for row-bind, the vectors are combined by rows:
+```{r}
+patient_info <- rbind(name,age,gender)
+patient_info
+```
+```cbind()``` function stands for column-bind, the vectors are combined by columns:
+```{r}
+patient_info <- cbind(name,age,gender)
+patient_info
 ```
 ### List
 * List can contain element of various nature and structure (including lists)

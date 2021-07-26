@@ -260,7 +260,7 @@ $(document).ready(function () {
   <a href="Model_analysis.html">Model Analysis</a>
 </li>
 <li>
-  <a href="Data_processing_exporation.html">Data processing and exploration</a>
+  <a href="Data_processing_exporation.html">Data in R</a>
 </li>
 <li>
   <a href="Materials.html">Materials</a>
@@ -316,7 +316,7 @@ $(document).ready(function () {
 <div id="integrating-with-r-the-command-line" class="section level3">
 <h3>Integrating with R: the command line</h3>
 <ul>
-<li><strong>&gt;|</strong> indicates R is ready for user to enter an instruction to execute</li>
+<li><strong>&gt;</strong> indicates R is ready for user to enter an instruction to execute</li>
 <li>Press <strong>Enter</strong> to execute the instruction after key in the instruction</li>
 <li><strong>+</strong> means previous instruction was incomplete and R is waiting for user to complete it</li>
 <li><strong>#</strong> means comment, R will ignore the following instruction, it is a notes for other users.</li>
@@ -659,6 +659,24 @@ mat</code></pre>
 <pre class="r"><code>mat[&quot;A&quot;,c(&quot;c&quot;,&quot;d&quot;)]</code></pre>
 <pre><code>## c d 
 ## 7 5</code></pre>
+<p>We can form a matrix by combining multiple vectors with using function <code>cbind</code> or <code>rbind()</code>:</p>
+<pre class="r"><code>name &lt;- c(&quot;Kelvin&quot;,&quot;Sam&quot;,&quot;Vivian&quot;)
+age &lt;- c(25,31,17)
+gender &lt;- c(&quot;Male&quot;,&quot;Male&quot;,&quot;Female&quot;)</code></pre>
+<p><code>rbind()</code> function stands for row-bind, the vectors are combined by rows:</p>
+<pre class="r"><code>patient_info &lt;- rbind(name,age,gender)
+patient_info</code></pre>
+<pre><code>##        [,1]     [,2]   [,3]    
+## name   &quot;Kelvin&quot; &quot;Sam&quot;  &quot;Vivian&quot;
+## age    &quot;25&quot;     &quot;31&quot;   &quot;17&quot;    
+## gender &quot;Male&quot;   &quot;Male&quot; &quot;Female&quot;</code></pre>
+<p><code>cbind()</code> function stands for column-bind, the vectors are combined by columns:</p>
+<pre class="r"><code>patient_info &lt;- cbind(name,age,gender)
+patient_info</code></pre>
+<pre><code>##      name     age  gender  
+## [1,] &quot;Kelvin&quot; &quot;25&quot; &quot;Male&quot;  
+## [2,] &quot;Sam&quot;    &quot;31&quot; &quot;Male&quot;  
+## [3,] &quot;Vivian&quot; &quot;17&quot; &quot;Female&quot;</code></pre>
 </div>
 <div id="list" class="section level3">
 <h3>List</h3>
@@ -1069,12 +1087,12 @@ plot(data1$Number.Tested,
      ylab = &quot;Mean Scale Score&quot;
      )
 abline(reg1)</code></pre>
-<p><img src="Fundamentals_R_files/figure-html/unnamed-chunk-58-1.png" width="672" style="display: block; margin: auto;" /></p>
+<p><img src="Fundamentals_R_files/figure-html/unnamed-chunk-61-1.png" width="672" style="display: block; margin: auto;" /></p>
 <pre class="r"><code>cor(data1$Number.Tested,data1$Mean.Scale.Score)</code></pre>
 <pre><code>## [1] -0.297196</code></pre>
 <p>Which ethnic perform better in ELA test in mean scale score?</p>
 <pre class="r"><code>boxplot(data1$Mean.Scale.Score~data1$Demographic)</code></pre>
-<p><img src="Fundamentals_R_files/figure-html/unnamed-chunk-59-1.png" width="672" style="display: block; margin: auto;" /></p>
+<p><img src="Fundamentals_R_files/figure-html/unnamed-chunk-62-1.png" width="672" style="display: block; margin: auto;" /></p>
 <p>Sub-setting the ethnic group and see the summary of each group.</p>
 <pre class="r"><code>black &lt;- subset(data1,Demographic==&quot;Black&quot;)
 summary(black)</code></pre>
