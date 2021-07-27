@@ -260,7 +260,7 @@ $(document).ready(function () {
   <a href="Model_analysis.html">Model Analysis</a>
 </li>
 <li>
-  <a href="Data_processing_exporation.html">Data processing and exploration</a>
+  <a href="Data_processing_exporation.html">Data in R</a>
 </li>
 <li>
   <a href="Materials.html">Materials</a>
@@ -288,6 +288,9 @@ $(document).ready(function () {
 </ul></li>
 <li><a href="#data-exploration">Data Exploration</a><ul>
 <li><a href="#exersice">Exersice</a></li>
+</ul></li>
+<li><a href="#data-analysis">Data Analysis</a><ul>
+<li><a href="#multivariate-data">Multivariate Data</a></li>
 </ul></li>
 </ul>
 </div>
@@ -349,14 +352,14 @@ for(i in 1:length(x$confirmed)){
   incidence &lt;- append(incidence,temp)
 }
 length(incidence)</code></pre>
-<pre><code>## [1] 547</code></pre>
+<pre><code>## [1] 552</code></pre>
 <pre class="r"><code>length(incidence)==length(x$confirmed)</code></pre>
 <pre><code>## [1] TRUE</code></pre>
 <p>Or we can use the properties of data frame:</p>
 <pre class="r"><code>#Method 2
 incidence &lt;-tail(x$confirmed,-1) - head(x$confirmed,-1)
 length(incidence)</code></pre>
-<pre><code>## [1] 546</code></pre>
+<pre><code>## [1] 551</code></pre>
 <pre class="r"><code>length(incidence)==length(x$confirmed)</code></pre>
 <pre><code>## [1] FALSE</code></pre>
 <p>The only difference between this two method is the length of output. We can leave the output like this or we can insert into the dataframe. Note that the length of every attributes in the data frame must be same. If using method 2, we need to insert NA last of <code>incidence</code> vector:</p>
@@ -425,7 +428,7 @@ names(x)</code></pre>
 <pre class="r"><code>head(x$active)</code></pre>
 <pre><code>## [1] 0 0 0 3 4 4</code></pre>
 <pre class="r"><code>tail(x$active)</code></pre>
-<pre><code>## [1] 114053 119814 124593 128997 133703 137587</code></pre>
+<pre><code>## [1] 137587 142051 147386 153633 160903 165840</code></pre>
 </div>
 </div>
 <div id="data-exploration" class="section level2">
@@ -502,14 +505,14 @@ head(x2021)</code></pre>
 <pre class="r"><code>tail(x2021)</code></pre>
 <pre><code>## # A tibble: 6 x 38
 ## # Groups:   id [1]
-##   id    date       vaccines tests confirmed recovered deaths  hosp  vent   icu
-##   &lt;chr&gt; &lt;date&gt;        &lt;dbl&gt; &lt;int&gt;     &lt;dbl&gt;     &lt;dbl&gt;  &lt;dbl&gt; &lt;dbl&gt; &lt;int&gt; &lt;int&gt;
-## 1 MYS   2021-07-16 13621884    NA    893323    772542   6728    NA    NA    NA
-## 2 MYS   2021-07-17 14002324    NA    905851    779171   6866    NA    NA    NA
-## 3 MYS   2021-07-18 14347285    NA    916561    784949   7019    NA    NA    NA
-## 4 MYS   2021-07-19 14772221    NA    927533    791388   7148    NA    NA    NA
-## 5 MYS   2021-07-20 15071814    NA    939899    798955   7241    NA    NA    NA
-## 6 MYS   2021-07-21       NA    NA    951884    806857   7440    NA    NA    NA
+##   id    date       vaccines   tests confirmed recovered deaths  hosp  vent   icu
+##   &lt;chr&gt; &lt;date&gt;        &lt;dbl&gt;   &lt;int&gt;     &lt;dbl&gt;     &lt;dbl&gt;  &lt;dbl&gt; &lt;dbl&gt; &lt;int&gt; &lt;int&gt;
+## 1 MYS   2021-07-21 15529433 NA         951884    806857   7440    NA    NA    NA
+## 2 MYS   2021-07-22 16037614  1.68e7    964918    815293   7574    NA    NA    NA
+## 3 MYS   2021-07-23 16500564 NA         980491    825387   7718    NA    NA    NA
+## 4 MYS   2021-07-24 16918418 NA         996393    834858   7902    NA    NA    NA
+## 5 MYS   2021-07-25 17317553 NA        1013438    844541   7994    NA    NA    NA
+## 6 MYS   2021-07-26 17839476 NA        1027954    853913   8201    NA    NA    NA
 ## # ... with 28 more variables: population &lt;int&gt;, school_closing &lt;int&gt;,
 ## #   workplace_closing &lt;int&gt;, cancel_events &lt;int&gt;,
 ## #   gatherings_restrictions &lt;int&gt;, transport_closing &lt;int&gt;,
@@ -540,6 +543,91 @@ for(attrX in attr_list){
   mtext(names(x2021[attrX]),line=-1)
 }</code></pre>
 <p><img src="Data_processing_exporation_files/figure-html/unnamed-chunk-13-1.png" width="407.736" style="display: block; margin: auto;" /></p>
+</div>
+</div>
+<div id="data-analysis" class="section level2">
+<h2>Data Analysis</h2>
+<div id="multivariate-data" class="section level3">
+<h3>Multivariate Data</h3>
+<p>We will using data in <code>ISwR</code> package. First, let’s install <code>ISwR</code>:</p>
+<pre><code>install.packages(&quot;ISwR&quot;)</code></pre>
+<p>The data we will using is <code>cystfibr</code>:</p>
+<pre class="r"><code>library(ISwR)</code></pre>
+<pre><code>## Warning: package &#39;ISwR&#39; was built under R version 3.6.3</code></pre>
+<pre class="r"><code>data(&quot;cystfibr&quot;)
+cystfibr</code></pre>
+<pre><code>##    age sex height weight bmp fev1  rv frc tlc pemax
+## 1    7   0    109   13.1  68   32 258 183 137    95
+## 2    7   1    112   12.9  65   19 449 245 134    85
+## 3    8   0    124   14.1  64   22 441 268 147   100
+## 4    8   1    125   16.2  67   41 234 146 124    85
+## 5    8   0    127   21.5  93   52 202 131 104    95
+## 6    9   0    130   17.5  68   44 308 155 118    80
+## 7   11   1    139   30.7  89   28 305 179 119    65
+## 8   12   1    150   28.4  69   18 369 198 103   110
+## 9   12   0    146   25.1  67   24 312 194 128    70
+## 10  13   1    155   31.5  68   23 413 225 136    95
+## 11  13   0    156   39.9  89   39 206 142  95   110
+## 12  14   1    153   42.1  90   26 253 191 121    90
+## 13  14   0    160   45.6  93   45 174 139 108   100
+## 14  15   1    158   51.2  93   45 158 124  90    80
+## 15  16   1    160   35.9  66   31 302 133 101   134
+## 16  17   1    153   34.8  70   29 204 118 120   134
+## 17  17   0    174   44.7  70   49 187 104 103   165
+## 18  17   1    176   60.1  92   29 188 129 130   120
+## 19  17   0    171   42.6  69   38 172 130 103   130
+## 20  19   1    156   37.2  72   21 216 119  81    85
+## 21  19   0    174   54.6  86   37 184 118 101    85
+## 22  20   0    178   64.0  86   34 225 148 135   160
+## 23  23   0    180   73.8  97   57 171 108  98   165
+## 24  23   0    175   51.1  71   33 224 131 113    95
+## 25  23   0    179   71.5  95   52 225 127 101   195</code></pre>
+<pre class="r"><code>str(cystfibr)</code></pre>
+<pre><code>## &#39;data.frame&#39;:    25 obs. of  10 variables:
+##  $ age   : int  7 7 8 8 8 9 11 12 12 13 ...
+##  $ sex   : int  0 1 0 1 0 0 1 1 0 1 ...
+##  $ height: int  109 112 124 125 127 130 139 150 146 155 ...
+##  $ weight: num  13.1 12.9 14.1 16.2 21.5 17.5 30.7 28.4 25.1 31.5 ...
+##  $ bmp   : int  68 65 64 67 93 68 89 69 67 68 ...
+##  $ fev1  : int  32 19 22 41 52 44 28 18 24 23 ...
+##  $ rv    : int  258 449 441 234 202 308 305 369 312 413 ...
+##  $ frc   : int  183 245 268 146 131 155 179 198 194 225 ...
+##  $ tlc   : int  137 134 147 124 104 118 119 103 128 136 ...
+##  $ pemax : int  95 85 100 85 95 80 65 110 70 95 ...</code></pre>
+<p>Let’s see what is the output when plotting:</p>
+<pre class="r"><code>plot(cystfibr)</code></pre>
+<p><img src="figures/plot_output.png" width="100%" style="display: block; margin: auto;" /> We can plot the multivariate data in this way:</p>
+<pre class="r"><code># mex is parameter reduces the interline distance in the margin
+#gap=0 is remove the space between subplot; cex.labels is adjust the font size
+
+par(mex=0.5) 
+pairs(cystfibr,gap = 0,cex.labels = 0.9) </code></pre>
+<p><img src="figures/pair_output.png" width="100%" style="display: block; margin: auto;" /> Using <code>lm()</code> to run a regression analysis:</p>
+<pre><code>## 
+## Call:
+## lm(formula = pemax ~ age + sex + height + weight + bmp + fev1 + 
+##     rv + frc + tlc, data = cystfibr)
+## 
+## Residuals:
+##     Min      1Q  Median      3Q     Max 
+## -37.338 -11.532   1.081  13.386  33.405 
+## 
+## Coefficients:
+##             Estimate Std. Error t value Pr(&gt;|t|)
+## (Intercept) 176.0582   225.8912   0.779    0.448
+## age          -2.5420     4.8017  -0.529    0.604
+## sex          -3.7368    15.4598  -0.242    0.812
+## height       -0.4463     0.9034  -0.494    0.628
+## weight        2.9928     2.0080   1.490    0.157
+## bmp          -1.7449     1.1552  -1.510    0.152
+## fev1          1.0807     1.0809   1.000    0.333
+## rv            0.1970     0.1962   1.004    0.331
+## frc          -0.3084     0.4924  -0.626    0.540
+## tlc           0.1886     0.4997   0.377    0.711
+## 
+## Residual standard error: 25.47 on 15 degrees of freedom
+## Multiple R-squared:  0.6373, Adjusted R-squared:  0.4197 
+## F-statistic: 2.929 on 9 and 15 DF,  p-value: 0.03195</code></pre>
 </div>
 </div>
 

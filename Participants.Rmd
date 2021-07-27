@@ -40,3 +40,4 @@ Name | Role |Email | Affiliation
 |WONG LIANG TUNG|20040007@siswa.unimas.my|UNIMAS
 |YASOKTARAN A/L ANANTHAN|yaso920130@gmail.com|DEPARTMENT OF PUBLIC HEALTH MEDICINE
 |YASSIMEAR ANAK UGAK|yassugak@gmail.com|UNIMAS
+|DR HARISHAH TALIB|harishahbttalib@gmail.com|

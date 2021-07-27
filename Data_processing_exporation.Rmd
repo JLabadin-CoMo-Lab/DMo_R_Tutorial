@@ -134,3 +134,40 @@ for(attrX in attr_list){
   mtext(names(x2021[attrX]),line=-1)
 }
 ```
+
+## Data Analysis
+### Multivariate Data
+We will using data in ```ISwR``` package. First, let's install ```ISwR```:
+```
+install.packages("ISwR")
+```
+The data we will using is ```cystfibr```:
+```{r}
+library(ISwR)
+data("cystfibr")
+cystfibr
+str(cystfibr)
+```
+Let's see what is the output when plotting:
+```{r, fig.show='hide'}
+plot(cystfibr)
+```
+```{r,echo=FALSE,out.width='100%'}
+knitr::include_graphics("figures/plot_output.png")
+```
+We can plot the multivariate data in this way:
+```{r, fig.show='hide'}
+# mex is parameter reduces the interline distance in the margin
+#gap=0 is remove the space between subplot; cex.labels is adjust the font size
+
+par(mex=0.5) 
+pairs(cystfibr,gap = 0,cex.labels = 0.9) 
+```
+```{r,echo=FALSE,out.width='100%'}
+knitr::include_graphics("figures/pair_output.png")
+```
+Using ```lm()``` to run a regression analysis:
+```{r,echo=FALSE}
+pemaxReg<-lm(pemax~age+sex+height+weight+bmp+fev1+rv+frc+tlc,data = cystfibr)
+summary(pemaxReg)
+```

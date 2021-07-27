@@ -444,6 +444,14 @@ quantile(data1$Mean.Scale.Score)
 Find the relationship between the number of students and the mean scale score.
 ```{r,fig.align = 'center'}
 reg1 <- lm(data1$Mean.Scale.Score ~data1$Number.Tested)
+summary(reg1)
+```
+Information provided by ```lm()```:
+```{r}
+names(reg1)
+```
+
+```{r}
 plot(data1$Number.Tested,
      data1$Mean.Scale.Score,
      main="Number of Students take ELA test with the Mean Scale Score from 2006-2011",
