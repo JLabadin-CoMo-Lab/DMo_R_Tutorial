@@ -84,7 +84,7 @@ d11 <- exp_vector[12]-exp_vector[11]
 ```
 Let we using method 2 above to compute the difference between each element in ```exp_vector```:
 ```
-tail(val,-1) - head(val,-1)
+tail(exp_vector,-1) - head(exp_vector,-1)
 ```
 We try to devide the code and see it one by one:
 ```{r}
@@ -94,7 +94,7 @@ tail(exp_vector,-1)
 ```
 ```{r}
 #What will show in head(exp_vector,-1)
-tail(exp_vector,-1)
+head(exp_vector,-1)
 ```
 Now, let's us combine both and see the output:
 ```{r}

@@ -379,7 +379,7 @@ d3 &lt;- exp_vector[4]-exp_vector[3]
 
 d11 &lt;- exp_vector[12]-exp_vector[11]</code></pre>
 <p>Let we using method 2 above to compute the difference between each element in <code>exp_vector</code>:</p>
-<pre><code>tail(val,-1) - head(val,-1)</code></pre>
+<pre><code>tail(exp_vector,-1) - head(exp_vector,-1)</code></pre>
 <p>We try to devide the code and see it one by one:</p>
 <pre class="r"><code>exp_vector</code></pre>
 <pre><code>##  1  2  3  4  5  6  7  8  9 10 11 12 
@@ -389,9 +389,9 @@ tail(exp_vector,-1)</code></pre>
 <pre><code>##  2  3  4  5  6  7  8  9 10 11 12 
 ##  0  0  3  4  4  4  7  8  8  8  8</code></pre>
 <pre class="r"><code>#What will show in head(exp_vector,-1)
-tail(exp_vector,-1)</code></pre>
-<pre><code>##  2  3  4  5  6  7  8  9 10 11 12 
-##  0  0  3  4  4  4  7  8  8  8  8</code></pre>
+head(exp_vector,-1)</code></pre>
+<pre><code>##  1  2  3  4  5  6  7  8  9 10 11 
+##  0  0  0  3  4  4  4  7  8  8  8</code></pre>
 <p>Now, let’s us combine both and see the output:</p>
 <pre class="r"><code>diff &lt;- tail(exp_vector,-1)-head(exp_vector,-1)
 names(diff)&lt;-c(1:length(diff))
