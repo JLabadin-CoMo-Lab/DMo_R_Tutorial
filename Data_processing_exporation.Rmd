@@ -63,7 +63,48 @@ incidence <-tail(x$confirmed,-1) - head(x$confirmed,-1)
 length(incidence)
 length(incidence)==length(x$confirmed)
 ```
-The only difference between this two method is the length of output. We can leave the output like this or we can insert into the dataframe. Note that the length of every attributes in the data frame must be same. If using method 2, we need to insert NA last of ```incidence``` vector:
+In **method 2**, the ```tail(x$confirmed,-1)``` is removed the first row/element of ```x$confirmed``` while ```head(x$confirmed,-1)``` is removed the last row/element of ```x$confirmed```. To calculate the difference between the row/element, we will using **next** value minus **previous** value. Let's say now we have 12 elements in a vector named ```exp_vector```:
+```{r}
+exp_vector <- c(0,0,0,3,4,4,4,7,8,8,8,8)
+exp_vector
+```
+We try to assign the index as the name for each element in ```exp_vector```:
+```{r}
+names(exp_vector)<-c(1:12)
+exp_vector
+```
+We want to compute the different between each element in ```exp_vector```, the pseudocode is look like below:
+```
+d1 <- exp_vector[2]-exp_vector[1]
+d2 <- exp_vector[3]-exp_vector[2]
+d3 <- exp_vector[4]-exp_vector[3]
+...
+
+d11 <- exp_vector[12]-exp_vector[11]
+```
+Let we using method 2 above to compute the difference between each element in ```exp_vector```:
+```
+tail(val,-1) - head(val,-1)
+```
+We try to devide the code and see it one by one:
+```{r}
+exp_vector
+#What will show in tail(exp_vector,-1)
+tail(exp_vector,-1)
+```
+```{r}
+#What will show in head(exp_vector,-1)
+tail(exp_vector,-1)
+```
+Now, let's us combine both and see the output:
+```{r}
+diff <- tail(exp_vector,-1)-head(exp_vector,-1)
+names(diff)<-c(1:length(diff))
+diff
+```
+The logic behind the method 2 is: First, our aim is to generate two new vector from ```exp_vector```. The index for ```tail(exp_vector,-1)``` is ```2  3  4  5  6  7  8  9 10 11 12``` and the index for ```head(exp_vector,-1)``` is ```1  2  3  4  5  6  7  8  9 10 11```. We can see that the ```tail(exp_vector,-1)``` is from 2 to 12 while ```head(exp_vector,-1)``` is from 1 to 11. If we doing ```tail(exp_vector,-1)-head(exp_vector,-1)``` is mean that the index 2 in ```tail(exp_vector,-1)``` which is 0 is minus the index 1 in ```head(exp_vector,-1)``` which is also 0. Thus, this is identical with our pseudocode shown before. Therefor we can compute the different between each row/elements by using method 2.  
+
+The only difference between this two method is the length of output. We can leave the output like this or we can insert into the data frame. Note that the length of every attributes in the data frame must be same. If using method 2, we need to insert NA last of ```incidence``` vector:
 ```{r}
 incidence[length(incidence)+1] <- NA
 length(incidence)==length(x$confirmed)

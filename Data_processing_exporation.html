@@ -352,17 +352,54 @@ for(i in 1:length(x$confirmed)){
   incidence &lt;- append(incidence,temp)
 }
 length(incidence)</code></pre>
-<pre><code>## [1] 552</code></pre>
+<pre><code>## [1] 553</code></pre>
 <pre class="r"><code>length(incidence)==length(x$confirmed)</code></pre>
 <pre><code>## [1] TRUE</code></pre>
 <p>Or we can use the properties of data frame:</p>
 <pre class="r"><code>#Method 2
 incidence &lt;-tail(x$confirmed,-1) - head(x$confirmed,-1)
 length(incidence)</code></pre>
-<pre><code>## [1] 551</code></pre>
+<pre><code>## [1] 552</code></pre>
 <pre class="r"><code>length(incidence)==length(x$confirmed)</code></pre>
 <pre><code>## [1] FALSE</code></pre>
-<p>The only difference between this two method is the length of output. We can leave the output like this or we can insert into the dataframe. Note that the length of every attributes in the data frame must be same. If using method 2, we need to insert NA last of <code>incidence</code> vector:</p>
+<p>In <strong>method 2</strong>, the <code>tail(x$confirmed,-1)</code> is removed the first row/element of <code>x$confirmed</code> while <code>head(x$confirmed,-1)</code> is removed the last row/element of <code>x$confirmed</code>. To calculate the difference between the row/element, we will using <strong>next</strong> value minus <strong>previous</strong> value. Let’s say now we have 12 elements in a vector named <code>exp_vector</code>:</p>
+<pre class="r"><code>exp_vector &lt;- c(0,0,0,3,4,4,4,7,8,8,8,8)
+exp_vector</code></pre>
+<pre><code>##  [1] 0 0 0 3 4 4 4 7 8 8 8 8</code></pre>
+<p>We try to assign the index as the name for each element in <code>exp_vector</code>:</p>
+<pre class="r"><code>names(exp_vector)&lt;-c(1:12)
+exp_vector</code></pre>
+<pre><code>##  1  2  3  4  5  6  7  8  9 10 11 12 
+##  0  0  0  3  4  4  4  7  8  8  8  8</code></pre>
+<p>We want to compute the different between each element in <code>exp_vector</code>, the pseudocode is look like below:</p>
+<pre><code>d1 &lt;- exp_vector[2]-exp_vector[1]
+d2 &lt;- exp_vector[3]-exp_vector[2]
+d3 &lt;- exp_vector[4]-exp_vector[3]
+...
+
+d11 &lt;- exp_vector[12]-exp_vector[11]</code></pre>
+<p>Let we using method 2 above to compute the difference between each element in <code>exp_vector</code>:</p>
+<pre><code>tail(val,-1) - head(val,-1)</code></pre>
+<p>We try to devide the code and see it one by one:</p>
+<pre class="r"><code>exp_vector</code></pre>
+<pre><code>##  1  2  3  4  5  6  7  8  9 10 11 12 
+##  0  0  0  3  4  4  4  7  8  8  8  8</code></pre>
+<pre class="r"><code>#What will show in tail(exp_vector,-1)
+tail(exp_vector,-1)</code></pre>
+<pre><code>##  2  3  4  5  6  7  8  9 10 11 12 
+##  0  0  3  4  4  4  7  8  8  8  8</code></pre>
+<pre class="r"><code>#What will show in head(exp_vector,-1)
+tail(exp_vector,-1)</code></pre>
+<pre><code>##  2  3  4  5  6  7  8  9 10 11 12 
+##  0  0  3  4  4  4  7  8  8  8  8</code></pre>
+<p>Now, let’s us combine both and see the output:</p>
+<pre class="r"><code>diff &lt;- tail(exp_vector,-1)-head(exp_vector,-1)
+names(diff)&lt;-c(1:length(diff))
+diff</code></pre>
+<pre><code>##  1  2  3  4  5  6  7  8  9 10 11 
+##  0  0  3  1  0  0  3  1  0  0  0</code></pre>
+<p>The logic behind the method 2 is: First, our aim is to generate two new vector from <code>exp_vector</code>. The index for <code>tail(exp_vector,-1)</code> is <code>2  3  4  5  6  7  8  9 10 11 12</code> and the index for <code>head(exp_vector,-1)</code> is <code>1  2  3  4  5  6  7  8  9 10 11</code>. We can see that the <code>tail(exp_vector,-1)</code> is from 2 to 12 while <code>head(exp_vector,-1)</code> is from 1 to 11. If we doing <code>tail(exp_vector,-1)-head(exp_vector,-1)</code> is mean that the index 2 in <code>tail(exp_vector,-1)</code> which is 0 is minus the index 1 in <code>head(exp_vector,-1)</code> which is also 0. Thus, this is identical with our pseudocode shown before. Therefor we can compute the different between each row/elements by using method 2.</p>
+<p>The only difference between this two method is the length of output. We can leave the output like this or we can insert into the data frame. Note that the length of every attributes in the data frame must be same. If using method 2, we need to insert NA last of <code>incidence</code> vector:</p>
 <pre class="r"><code>incidence[length(incidence)+1] &lt;- NA
 length(incidence)==length(x$confirmed)</code></pre>
 <pre><code>## [1] TRUE</code></pre>
@@ -428,7 +465,7 @@ names(x)</code></pre>
 <pre class="r"><code>head(x$active)</code></pre>
 <pre><code>## [1] 0 0 0 3 4 4</code></pre>
 <pre class="r"><code>tail(x$active)</code></pre>
-<pre><code>## [1] 137587 142051 147386 153633 160903 165840</code></pre>
+<pre><code>## [1] 142051 147386 153633 160903 165840 170224</code></pre>
 </div>
 </div>
 <div id="data-exploration" class="section level2">
@@ -464,7 +501,7 @@ head(x2020)</code></pre>
 ##   &lt;chr&gt; &lt;date&gt;        &lt;dbl&gt;   &lt;int&gt;     &lt;dbl&gt;     &lt;dbl&gt;  &lt;dbl&gt; &lt;dbl&gt; &lt;int&gt; &lt;int&gt;
 ## 1 MYS   2020-12-26       NA 3239706    103900     83414    451    NA    NA    NA
 ## 2 MYS   2020-12-27       NA 3257503    105096     84411    452    NA    NA    NA
-## 3 MYS   2020-12-28       NA 3271880    106690     85592    455    NA    NA    NA
+## 3 MYS   2020-12-28       NA 3271880    106692     85592    455    NA    NA    NA
 ## 4 MYS   2020-12-29       NA 3291834    108615     86715    457    NA    NA    NA
 ## 5 MYS   2020-12-30       NA 3317646    110485     87460    463    NA    NA    NA
 ## 6 MYS   2020-12-31       NA 3344327    113010     88941    471    NA    NA    NA
@@ -507,12 +544,12 @@ head(x2021)</code></pre>
 ## # Groups:   id [1]
 ##   id    date       vaccines   tests confirmed recovered deaths  hosp  vent   icu
 ##   &lt;chr&gt; &lt;date&gt;        &lt;dbl&gt;   &lt;int&gt;     &lt;dbl&gt;     &lt;dbl&gt;  &lt;dbl&gt; &lt;dbl&gt; &lt;int&gt; &lt;int&gt;
-## 1 MYS   2021-07-21 15529433 NA         951884    806857   7440    NA    NA    NA
-## 2 MYS   2021-07-22 16037614  1.68e7    964918    815293   7574    NA    NA    NA
-## 3 MYS   2021-07-23 16500564 NA         980491    825387   7718    NA    NA    NA
-## 4 MYS   2021-07-24 16918418 NA         996393    834858   7902    NA    NA    NA
-## 5 MYS   2021-07-25 17317553 NA        1013438    844541   7994    NA    NA    NA
-## 6 MYS   2021-07-26 17839476 NA        1027954    853913   8201    NA    NA    NA
+## 1 MYS   2021-07-22 16037614  1.68e7    964918    815293   7574    NA    NA    NA
+## 2 MYS   2021-07-23 16500564 NA         980491    825387   7718    NA    NA    NA
+## 3 MYS   2021-07-24 16918418 NA         996393    834858   7902    NA    NA    NA
+## 4 MYS   2021-07-25 17317553 NA        1013438    844541   7994    NA    NA    NA
+## 5 MYS   2021-07-26 17839476 NA        1027954    853913   8201    NA    NA    NA
+## 6 MYS   2021-07-27 18393347 NA        1044071    865439   8408    NA    NA    NA
 ## # ... with 28 more variables: population &lt;int&gt;, school_closing &lt;int&gt;,
 ## #   workplace_closing &lt;int&gt;, cancel_events &lt;int&gt;,
 ## #   gatherings_restrictions &lt;int&gt;, transport_closing &lt;int&gt;,
@@ -531,7 +568,7 @@ for(attrX in attr_list){
   barplot(x2020[[attrX]],space=0,xlab = NA,ylab = &#39;Total&#39;)
   mtext(names(x2020[attrX]),line=-1)
 }</code></pre>
-<p><img src="Data_processing_exporation_files/figure-html/unnamed-chunk-12-1.png" width="407.736" style="display: block; margin: auto;" /></p>
+<p><img src="Data_processing_exporation_files/figure-html/unnamed-chunk-17-1.png" width="407.736" style="display: block; margin: auto;" /></p>
 <div id="exersice" class="section level3">
 <h3>Exersice</h3>
 <p>Now let’s try with same attributes for year 2021</p>
@@ -542,7 +579,7 @@ for(attrX in attr_list){
   barplot(x2021[[attrX]],space=0,xlab = NA,ylab = &#39;Total&#39;)
   mtext(names(x2021[attrX]),line=-1)
 }</code></pre>
-<p><img src="Data_processing_exporation_files/figure-html/unnamed-chunk-13-1.png" width="407.736" style="display: block; margin: auto;" /></p>
+<p><img src="Data_processing_exporation_files/figure-html/unnamed-chunk-18-1.png" width="407.736" style="display: block; margin: auto;" /></p>
 </div>
 </div>
 <div id="data-analysis" class="section level2">
