@@ -20,8 +20,19 @@ knitr::opts_chunk$set(margin = TRUE, prompt = FALSE, comment = "##",
                       dev.args = list(pointsize = 11), fig.height = 3.5,
                       fig.width = 4.24725, fig.retina = 2, fig.align = "center")
 ```
-
+# Workshop
 |      Title       |  Presenter |
 |:------------------|:------------|
 |[Introduction to Disease Models](Materials/Lect_IntroDM1.pdf)|Jane Labadin|
 |[SIR Models](Materials/Lect_SIR.pdf)|Jane Labadin|
+|[Optimal Control Theory applied to COVID-19 social distancing interventions](Materials/Marc_Choisy.pdf)| Marc Choisy (Invited Speaker)
+
+# Group Presentation
+|      Title       |  Presenter |
+|:------------------|:------------|
+|[Modeling COVID-19 in Sabah](Materials/Group1.pptx)|Group 1|
+|[Modeling COVID-19 in Kelantan](Materials/Group2.pptx)|Group 2|
+|[Modeling COVID-19 in Kedah](Materials/Group4.pptx)|Group 3|
+|[Modeling COVID-19 in Johor](Materials/Group4.pptx)|Group 4|
+|[Modeling COVID-19 in Betong](Materials/Group4.pptx)|Group 5|
+|[Modeling COVID-19 with SIR and ARIMA](Materials/Group6.pptx)|Group 6|

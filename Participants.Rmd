@@ -20,24 +20,49 @@ Name | Role |Email | Affiliation
 ## Participants
 |Name | Email | Affiliation
 |:-------- | :---- | :----------
+|CHOO HUCK OOI|ooi.choo.huck@gmail.com|SARAWAK HEALTH DEPARTMENT
+|YASOKTARAN A/L ANANTHAN|yaso920130@gmail.com|DEPARTMENT OF PUBLIC HEALTH MEDICINE
+|DR HARISHAH TALIB|harishahbttalib@gmail.com|
+
+### Modeling COVID-19 in Sabah (Group 1)
+|Name | Email | Affiliation
+|:-------- | :---- | :----------
+|JESICA JENAH ANAK RAMPING|jesicajenah@gmail.com|UNIMAS
+|IZZATY BINTI HAMIDI|izzatyhamidi04@gmail.com|
+|WONG LIANG TUNG|20040007@siswa.unimas.my|UNIMAS
+
+### Modeling COVID-19 in Kelantan (Group 2)
+|Name | Email | Affiliation
+|:-------- | :---- | :----------
+|WAN MUHD NOOR AL HADI BIN AB RAZAK|drhadi.kkm@gmail.com|UNIMAS
+|LALITHA MALAR A/P MANIAM|lalithamalarmaniam@gmail.com|UNIMAS
+|YASSIMEAR ANAK UGAK|yassugak@gmail.com|UNIMAS
+
+### Modeling COVID-19 in Kedah (Group 3)
+|Name | Email | Affiliation
+|:-------- | :---- | :----------
 |AHMAD SALIMI BIN ABU BAKAR | asalimi79@gmail.com |UNIMAS
 |CHEAH YONG XIANG |cheah.yx@gmail.com|UNIMAS
-|CHOO HUCK OOI|ooi.choo.huck@gmail.com|SARAWAK HEALTH DEPARTMENT
-|DIANA JAWA|diana.jawa@moh.gov.my|SARAWAK HEALTH DEPARTMENT
-|IZZATY BINTI HAMIDI|izzatyhamidi04@gmail.com|
-|JESICA JENAH ANAK RAMPING|jesicajenah@gmail.com|UNIMAS
-|LALITHA MALAR A/P MANIAM|lalithamalarmaniam@gmail.com|UNIMAS
-|MARDHIYYAH AZMI|dee0521@gmail.com|UNIMAS
 |MICHEAL PELITINI ANAK UGAK|mikepelitini@gmail.com|UNIMAS
-|MUHAMMAD NAJIB BIN HASAN @ AHMAD|dr.najibhasan@gmail.com|MOH
-|NELSON LEAN BOON LEONG|nelsonlean88@gmail.com|UMS
-|PANGKAS|drjpangkas@gmail.com|PKB BETONG
-|SITI RASIDAH BT ABD GHANI|sitirasidah3006@gmail.com|
-|SUNITA SARA GILL BINTI SHAMSUL|sunitashamsul@gmail.com|
-|TAY CHEE WEE|chweetay@gmail.com|
+
+### Modeling COVID-19 in Johor (Group 4)
+|Name | Email | Affiliation
+|:-------- | :---- | :----------
 |TEOH WAN JOOL|twanjool@gmail.com|UNIMAS
-|WAN MUHD NOOR AL HADI BIN AB RAZAK|drhadi.kkm@gmail.com|UNIMAS
-|WONG LIANG TUNG|20040007@siswa.unimas.my|UNIMAS
-|YASOKTARAN A/L ANANTHAN|yaso920130@gmail.com|DEPARTMENT OF PUBLIC HEALTH MEDICINE
-|YASSIMEAR ANAK UGAK|yassugak@gmail.com|UNIMAS
-|DR HARISHAH TALIB|harishahbttalib@gmail.com|
+|MARDHIYYAH AZMI|dee0521@gmail.com|UNIMAS
+|MUHAMMAD NAJIB BIN HASAN @ AHMAD|dr.najibhasan@gmail.com|MOH
+
+### Modeling COVID-19 in Betong (Group 5)
+|Name | Email | Affiliation
+|:-------- | :---- | :----------
+|JOHNNY PANGKAS|drjpangkas@gmail.com|PKB BETONG
+|TAY CHEE WEE|chweetay@gmail.com|
+|DIANA JAWA|diana.jawa@moh.gov.my|SARAWAK HEALTH DEPARTMENT
+
+### Modeling COVID-19 with SIR and ARIMA (Group 6)
+|Name | Email | Affiliation
+|:-------- | :---- | :----------
+|NELSON LEAN BOON LEONG|nelsonlean88@gmail.com|UMS
+|SUNITA SARA GILL BINTI SHAMSUL|sunitashamsul@gmail.com|
+|SITI RASIDAH BT ABD GHANI|sitirasidah3006@gmail.com|
+
